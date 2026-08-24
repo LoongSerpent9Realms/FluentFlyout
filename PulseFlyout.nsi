@@ -5,7 +5,7 @@ InstallDir "$PROGRAMFILES64\PulseFlyout"
 InstallDirRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "InstallLocation"
 RequestExecutionLevel admin
 SetCompressor /SOLID lzma
-Icon "FluentFlyoutWPF\Resources\PulseFlyout.ico"
+Icon "FluentFlyoutWPF\Resources\FluentFlyout2.ico"
 VIProductVersion "2.14.0.0"
 VIAddVersionKey /LANG=1033 "ProductName" "PulseFlyout"
 VIAddVersionKey /LANG=1033 "CompanyName" "PulseFlyout Contributors"

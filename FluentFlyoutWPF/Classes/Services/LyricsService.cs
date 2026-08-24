@@ -21,16 +21,16 @@ public static class LyricsService
     public static int LastLyricsLength { get; private set; }
     public static int LastParsedLineCount { get; private set; }
     public static string LastParsedFirstLine { get; private set; } = "";
-    public static int? LastSongId { get; private set; }
+    public static long? LastSongId { get; private set; }
     public static string LastSongKey { get; private set; } = "";
     public static string LastSongLookupUrl { get; private set; } = "";
     public static string LastSongLookupSource { get; private set; } = "";
 
     // Shares the local player ID lookup with actions that must address a song
     // by ID (for example the authenticated like endpoint).
-    public static int? TryGetCurrentLocalSongId(string title) => TryGetLocalNetEaseSongId(title);
+    public static long? TryGetCurrentLocalSongId(string title) => TryGetLocalNetEaseSongId(title);
 
-    public static int? TryGetLastSongId(string title, string artist)
+    public static long? TryGetLastSongId(string title, string artist)
     {
         var key = BuildSongKey(title, artist);
         return string.Equals(LastSongKey, key, StringComparison.OrdinalIgnoreCase) ? LastSongId : null;
@@ -39,7 +39,7 @@ public static class LyricsService
     public static async Task<string?> GetLyricsAsync(string title, string artist, string? neteaseSongId = null, CancellationToken cancellationToken = default)
     {
         if (TryParseNetEaseSongId(neteaseSongId, out _)) { LastSongLookupSource = "媒体会话传入歌曲 ID"; LastSongLookupUrl = ""; }
-        int? parsedId;
+        long? parsedId;
         if (TryParseNetEaseSongId(neteaseSongId, out var suppliedId)) parsedId = suppliedId;
         else
         {
@@ -79,8 +79,12 @@ public static class LyricsService
     public static async Task<LyricsTrack?> GetLyricsTrackAsync(string title, string artist, string? neteaseSongId = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(title)) return null;
+        LastError = "";
+        LastLyricsLength = 0;
+        LastParsedLineCount = 0;
+        LastParsedFirstLine = "";
         if (TryParseNetEaseSongId(neteaseSongId, out _)) { LastSongLookupSource = "媒体会话传入歌曲 ID"; LastSongLookupUrl = ""; }
-        int? parsedId;
+        long? parsedId;
         if (TryParseNetEaseSongId(neteaseSongId, out var suppliedId)) parsedId = suppliedId;
         else
         {
@@ -114,7 +118,7 @@ public static class LyricsService
         return ParseTrack(result.SyncedLyrics) ?? ParseTrack(result.PlainLyrics);
     }
 
-    private static async Task<int?> SearchNetEaseSongIdAsync(string title, string artist, CancellationToken cancellationToken)
+    private static async Task<long?> SearchNetEaseSongIdAsync(string title, string artist, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(title)) return null;
         try
@@ -123,7 +127,9 @@ public static class LyricsService
             LastRequestUrl = $"{GetApiBaseUrl()}search?keywords={keywords}&limit=10";
             LastSongLookupUrl = LastRequestUrl;
             LastSongLookupSource = "网易云搜索 API";
-            using var response = await Client.GetAsync(LastRequestUrl, cancellationToken);
+            LastStatus = "网易云搜索请求中";
+            LastError = "";
+            using var response = await GetNeteaseResponseAsync(LastRequestUrl, cancellationToken);
             LastStatus = $"网易云搜索 HTTP {(int)response.StatusCode}";
             if (!response.IsSuccessStatusCode) return null;
 
@@ -142,36 +148,57 @@ public static class LyricsService
                 return new { song, index, score };
             }).OrderByDescending(x => x.score).ThenBy(x => x.index);
             foreach (var candidate in candidates)
-                if (candidate.song.TryGetProperty("id", out var id) && id.TryGetInt32(out var songId)) return songId;
+            {
+                // Do not use an arbitrary first search result. A wrong ID means wrong lyrics
+                // and can also make the authenticated favourite state point to another song.
+                if (candidate.score < 200) continue;
+                if (candidate.song.TryGetProperty("id", out var id) && id.TryGetInt64(out var songId)) return songId;
+            }
             return null;
         }
         catch (HttpRequestException ex) { LastStatus = "网易云搜索失败"; LastError = ex.Message; return null; }
-        catch (TaskCanceledException) { return null; }
+        catch (TaskCanceledException) { LastStatus = "网易云搜索已取消"; return null; }
         catch (JsonException ex) { LastStatus = "网易云搜索 JSON 解析失败"; LastError = ex.Message; return null; }
     }
 
     private static int ScoreSong(string name, string songArtist, string title, string artist)
     {
-        var score = string.Equals(Normalize(name), Normalize(title), StringComparison.OrdinalIgnoreCase) ? 100 : 0;
-        if (Normalize(name).Contains(Normalize(title), StringComparison.OrdinalIgnoreCase)) score += 55;
-        if (!string.IsNullOrWhiteSpace(artist) && songArtist.Contains(artist, StringComparison.OrdinalIgnoreCase)) score += 40;
+        var normalizedName = Normalize(name);
+        var normalizedTitle = Normalize(title);
+        var score = normalizedName == normalizedTitle ? 200 : 0;
+        if (score == 0 && StripTitleQualifier(normalizedName) == StripTitleQualifier(normalizedTitle)) score = 160;
+        if (score == 0 && (normalizedName.Contains(normalizedTitle, StringComparison.OrdinalIgnoreCase)
+            || normalizedTitle.Contains(normalizedName, StringComparison.OrdinalIgnoreCase))) score = 80;
+
+        var requestedArtists = SplitArtists(artist);
+        var matchedArtist = requestedArtists.Any(requested => SplitArtists(songArtist).Any(candidate =>
+            candidate == requested || candidate.Contains(requested, StringComparison.OrdinalIgnoreCase)
+            || requested.Contains(candidate, StringComparison.OrdinalIgnoreCase)));
+        if (matchedArtist) score += 50;
         if (name.Contains("伴奏", StringComparison.OrdinalIgnoreCase) || name.Contains("纯音乐", StringComparison.OrdinalIgnoreCase)
-            || name.Contains("instrumental", StringComparison.OrdinalIgnoreCase) || name.Contains("live", StringComparison.OrdinalIgnoreCase)) score -= 35;
+            || name.Contains("instrumental", StringComparison.OrdinalIgnoreCase)) score -= 100;
         return score;
     }
 
     private static string Normalize(string value) => value.Trim().Replace("（", "(").Replace("）", ")").ToLowerInvariant();
 
+    private static string StripTitleQualifier(string value) =>
+        System.Text.RegularExpressions.Regex.Replace(value, @"\s*\([^)]*\)", string.Empty).Trim();
+
+    private static IEnumerable<string> SplitArtists(string value) =>
+        System.Text.RegularExpressions.Regex.Split(Normalize(value), @"[\/／、,&，;；]+")
+            .Select(x => x.Trim()).Where(x => x.Length > 0);
+
     private static string BuildSongKey(string title, string artist) =>
         $"{title.Trim()}\u001f{artist.Trim()}";
 
-    private static void SetLastSongId(int? songId, string title, string artist)
+    private static void SetLastSongId(long? songId, string title, string artist)
     {
         LastSongId = songId;
         LastSongKey = songId is > 0 ? BuildSongKey(title, artist) : "";
     }
 
-    private static int? TryGetLocalNetEaseSongId(string title)
+    private static long? TryGetLocalNetEaseSongId(string title)
     {
         var roots = new[]
         {
@@ -203,21 +230,21 @@ public static class LyricsService
         return null;
     }
 
-    private static bool TryGetSongId(JsonElement value, out int songId)
+    private static bool TryGetSongId(JsonElement value, out long songId)
     {
         songId = 0;
         if (value.ValueKind == JsonValueKind.Number)
-            return value.TryGetInt32(out songId);
+            return value.TryGetInt64(out songId);
         if (value.ValueKind == JsonValueKind.String)
-            return int.TryParse(value.GetString(), out songId);
+            return long.TryParse(value.GetString(), out songId);
         return false;
     }
 
-    private static async Task<string?> GetVKeysLyricsAsync(int songId, CancellationToken cancellationToken)
+    private static async Task<string?> GetVKeysLyricsAsync(long songId, CancellationToken cancellationToken)
     {
         try
         {
-            using var response = await Client.GetAsync($"{GetApiBaseUrl()}lyric?id={songId}", cancellationToken);
+            using var response = await GetNeteaseResponseAsync($"{GetApiBaseUrl()}lyric?id={songId}", cancellationToken);
             if (!response.IsSuccessStatusCode) return null;
 
             using var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken: cancellationToken);
@@ -231,12 +258,12 @@ public static class LyricsService
         catch (InvalidOperationException) { return null; }
     }
 
-    private static async Task<string?> GetVKeysRawLyricsAsync(int songId, CancellationToken cancellationToken)
+    private static async Task<string?> GetVKeysRawLyricsAsync(long songId, CancellationToken cancellationToken)
     {
         try
         {
             LastRequestUrl = $"{GetApiBaseUrl()}lyric?id={songId}";
-            using var response = await Client.GetAsync(LastRequestUrl, cancellationToken);
+            using var response = await GetNeteaseResponseAsync(LastRequestUrl, cancellationToken);
             LastStatus = $"网易云歌词 HTTP {(int)response.StatusCode}";
             if (!response.IsSuccessStatusCode) return null;
             using var document = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync(cancellationToken), cancellationToken: cancellationToken);
@@ -320,8 +347,8 @@ public static class LyricsService
         }
     }
 
-    private static bool TryParseNetEaseSongId(string? value, out int songId) =>
-        int.TryParse(value, out songId) && songId > 0;
+    private static bool TryParseNetEaseSongId(string? value, out long songId) =>
+        long.TryParse(value, out songId) && songId > 0;
 
     private static async Task<LrcLibResult?> GetAsync(string url, CancellationToken cancellationToken)
     {
@@ -335,6 +362,30 @@ public static class LyricsService
         catch (TaskCanceledException) { return null; }
     }
 
+    private static async Task<HttpResponseMessage> GetNeteaseResponseAsync(string url, CancellationToken cancellationToken)
+    {
+        const int maxAttempts = 3;
+        for (var attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, AppendTimestamp(url));
+            var response = await Client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+            var status = (int)response.StatusCode;
+            if (response.IsSuccessStatusCode || attempt == maxAttempts - 1 || (status != 403 && status != 429 && status < 500))
+                return response;
+
+            response.Dispose();
+            await Task.Delay(TimeSpan.FromMilliseconds(250 * (attempt + 1)), cancellationToken);
+        }
+
+        throw new InvalidOperationException("Unreachable retry state.");
+    }
+
+    private static string AppendTimestamp(string url)
+    {
+        var separator = url.Contains('?') ? '&' : '?';
+        return $"{url}{separator}timestamp={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
+    }
+
     private static string StripTimestamps(string lyrics) => string.Join(Environment.NewLine,
         lyrics.Split('\n').Select(line =>
         {
@@ -345,7 +396,12 @@ public static class LyricsService
     private static HttpClient CreateClient()
     {
         var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("PulseFlyout/1.0");
+        // The provider now rejects the minimal desktop-client header with HTTP 403.
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36");
+        client.DefaultRequestHeaders.Referrer = new Uri("https://music.163.com/");
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/json, text/plain, */*");
+        client.DefaultRequestHeaders.TryAddWithoutValidation("Origin", "https://music.163.com");
+        client.DefaultRequestHeaders.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue { NoCache = true };
         return client;
     }
 

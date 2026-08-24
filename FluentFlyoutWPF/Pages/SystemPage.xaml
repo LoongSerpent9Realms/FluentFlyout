@@ -160,6 +160,19 @@
             </ui:CardControl>
 
             <TextBlock Text="扩展与接口" FontSize="14" FontWeight="SemiBold" Margin="0,12,0,6" />
+            <ui:CardControl x:Name="NeteaseAccountCard" Tag="Indexable" Icon="{ui:SymbolIcon ContactCard24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="网易云音乐账号" FontSize="14" />
+                        <TextBlock x:Name="NeteaseAccountSummary" Text="未登录" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Name="NeteaseAccountName" Text="未登录" VerticalAlignment="Center" Margin="0,0,12,0" />
+                    <ui:Button x:Name="NeteaseLoginButton" Content="登录" Click="NeteaseLoginButton_Click" />
+                    <ui:Button x:Name="NeteaseLogoutButton" Content="退出登录" Click="NeteaseLogoutButton_Click" Visibility="Collapsed" Margin="8,0,0,0" />
+                </StackPanel>
+            </ui:CardControl>
             <ui:CardControl x:Name="LyricsApiCard" Tag="Indexable" Icon="{ui:SymbolIcon MusicNote224}" Margin="0,0,0,3">
                 <ui:CardControl.Header>
                     <StackPanel>

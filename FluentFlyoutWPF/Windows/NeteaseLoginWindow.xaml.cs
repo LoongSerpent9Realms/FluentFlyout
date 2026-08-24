@@ -3,9 +3,8 @@
 
 using FluentFlyoutWPF.Classes.Services;
 using MicaWPF.Controls;
-using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
+using Microsoft.Web.WebView2.Core;
 
 namespace FluentFlyoutWPF.Windows;
 
@@ -36,63 +35,39 @@ public partial class NeteaseLoginWindow : MicaWindow
 
     private async Task BeginLoginAsync()
     {
-        var token = _cancellation.Token;
-        NeteaseMusicService.NeteaseQrCode? qr;
-        try { qr = await NeteaseMusicService.CreateQrCodeAsync(token); }
-        catch (OperationCanceledException) { return; }
-        if (qr is null)
+        try
         {
-            StatusText.Text = "二维码生成失败，请稍后重试";
-            return;
+            await LoginBrowser.EnsureCoreWebView2Async();
+            await LoginBrowser.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(@"
+                (() => {
+                    let sentCookie = '';
+                    setInterval(() => {
+                        const cookie = localStorage.getItem('cookie');
+                        if (cookie && cookie !== sentCookie) {
+                            sentCookie = cookie;
+                            chrome.webview.postMessage(cookie);
+                        }
+                    }, 500);
+                })();");
+            LoginBrowser.CoreWebView2.WebMessageReceived += LoginBrowser_WebMessageReceived;
+            LoginBrowser.CoreWebView2.Navigate("https://music.loongst.com/qrlogin.html");
         }
-
-        QrImage.Source = DecodeQrImage(qr.Base64Image);
-        while (!token.IsCancellationRequested)
+        catch (Exception)
         {
-            NeteaseMusicService.NeteaseQrLoginResult result;
-            try { result = await NeteaseMusicService.CheckQrCodeAsync(qr.Key, token); }
-            catch (OperationCanceledException) { return; }
-            switch (result.Status)
-            {
-                case NeteaseMusicService.NeteaseQrLoginStatus.WaitingForScan:
-                    StatusText.Text = "请使用网易云音乐扫码";
-                    break;
-                case NeteaseMusicService.NeteaseQrLoginStatus.WaitingForConfirmation:
-                    StatusText.Text = "已扫码，请在手机上确认登录";
-                    break;
-                case NeteaseMusicService.NeteaseQrLoginStatus.Authorized:
-                    StatusText.Text = "登录成功";
-                    try { await NeteaseMusicService.WarmLikeListAsync(token); }
-                    catch (OperationCanceledException) { return; }
-                    _completion.TrySetResult(true);
-                    await Task.Delay(450);
-                    Close();
-                    return;
-                case NeteaseMusicService.NeteaseQrLoginStatus.Expired:
-                    StatusText.Text = "二维码已过期，请关闭后重试";
-                    return;
-            }
-            try { await Task.Delay(3000, token); }
-            catch (OperationCanceledException) { return; }
+            StatusText.Text = "无法加载网易云登录页面，请确认已安装 Microsoft Edge WebView2 Runtime";
+            StatusText.Visibility = Visibility.Visible;
         }
     }
 
-    private static BitmapImage? DecodeQrImage(string value)
+    private async void LoginBrowser_WebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
     {
-        try
-        {
-            var comma = value.IndexOf(',');
-            var bytes = Convert.FromBase64String(comma >= 0 ? value[(comma + 1)..] : value);
-            using var stream = new MemoryStream(bytes);
-            var image = new BitmapImage();
-            image.BeginInit();
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.StreamSource = stream;
-            image.EndInit();
-            image.Freeze();
-            return image;
-        }
-        catch { return null; }
+        var cookie = e.TryGetWebMessageAsString();
+        if (string.IsNullOrWhiteSpace(cookie) || _cancellation.IsCancellationRequested) return;
+        NeteaseMusicService.SaveLoginCookie(cookie);
+        try { await NeteaseMusicService.WarmLikeListAsync(_cancellation.Token); }
+        catch (OperationCanceledException) { return; }
+        _completion.TrySetResult(true);
+        Close();
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();

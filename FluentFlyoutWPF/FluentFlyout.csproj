@@ -58,6 +58,7 @@
     <PackageReference Include="unchihugo.WPF-UI" Version="4.4.1" />
     <PackageReference Include="WPF-UI.Tray" Version="4.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3240.44" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="NLog.config">

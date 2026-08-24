@@ -3,6 +3,8 @@
 
 using FluentFlyout.Classes.Settings;
 using FluentFlyoutWPF.Classes.Utils;
+using FluentFlyoutWPF.Classes.Services;
+using FluentFlyoutWPF.Windows;
 using Microsoft.Win32;
 using NLog;
 using System.Diagnostics;
@@ -25,6 +27,29 @@ public partial class SystemPage : Page
         var configured = SettingsManager.Current.LyricsApiBaseUrl?.TrimEnd('/') + "/";
         LyricsApiPreset.SelectedIndex = string.Equals(configured, "https://music.loongst.com/", StringComparison.OrdinalIgnoreCase) ? 0 : 1;
         LyricsApiCustom.IsEnabled = LyricsApiPreset.SelectedIndex == 1;
+        Loaded += async (_, _) => await RefreshNeteaseAccountAsync();
+    }
+
+    private async Task RefreshNeteaseAccountAsync()
+    {
+        var account = await NeteaseMusicService.GetAccountAsync();
+        var loggedIn = account is not null || NeteaseMusicService.IsLoggedIn;
+        NeteaseAccountName.Text = account?.Name ?? (loggedIn ? "已登录网易云账号" : "未登录");
+        NeteaseAccountSummary.Text = loggedIn ? $"登录方式：网易云扫码{(account?.Id is > 0 ? $" · UID {account.Id}" : string.Empty)}" : "登录方式：网易云扫码";
+        NeteaseLoginButton.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
+        NeteaseLogoutButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private async void NeteaseLoginButton_Click(object sender, RoutedEventArgs e)
+    {
+        await NeteaseLoginWindow.ShowLoginAsync(Window.GetWindow(this)!);
+        await RefreshNeteaseAccountAsync();
+    }
+
+    private void NeteaseLogoutButton_Click(object sender, RoutedEventArgs e)
+    {
+        NeteaseMusicService.ClearLogin();
+        _ = RefreshNeteaseAccountAsync();
     }
 
     private void LyricsApiPreset_SelectionChanged(object sender, SelectionChangedEventArgs e)

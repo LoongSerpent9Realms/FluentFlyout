@@ -59,6 +59,7 @@ public partial class MainWindow : MicaWindow
     private readonly DispatcherTimer _lyricsDisplayTimer;
     private DateTime _lastLyricsAttemptUtc;
     private CancellationTokenSource? _lyricsLoadCts;
+    private string? _lyricsLoadKey;
     private string _lastAccentMediaKey = string.Empty;
     private string _animatedLyricsText = string.Empty;
     private int _animatedLyricsIndex;
@@ -1563,7 +1564,8 @@ public partial class MainWindow : MicaWindow
         Logger.Debug("Netease like event: {0}", message);
     }
 
-    private async Task UpdateNeteaseLikeStateAsync(string title, string artist, string songKey, CancellationToken cancellationToken)
+    private async Task UpdateNeteaseLikeStateAsync(string title, string artist, string songKey, CancellationToken cancellationToken,
+        bool refreshLikedSongs = false)
     {
         try
         {
@@ -1577,7 +1579,7 @@ public partial class MainWindow : MicaWindow
             var songId = await NeteaseMusicService.ResolveSongIdAsync(title, artist, cancellationToken)
                 ?? LyricsService.TryGetCurrentLocalSongId(title)
                 ?? LyricsService.TryGetLastSongId(title, artist);
-            var liked = songId is not null && await NeteaseMusicService.IsSongLikedAsync(songId.Value, cancellationToken);
+            var liked = songId is not null && await NeteaseMusicService.IsSongLikedAsync(songId.Value, cancellationToken, refreshLikedSongs);
             if (cancellationToken.IsCancellationRequested || !string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
                 return;
             if (!Dispatcher.CheckAccess())
@@ -1794,10 +1796,14 @@ public partial class MainWindow : MicaWindow
             _activeLyricsTitle = title;
             return;
         }
-        _lyricsLoadCts?.Cancel();
-        _lyricsLoadCts?.Dispose();
-        _lyricsLoadCts = new CancellationTokenSource();
-        var requestToken = _lyricsLoadCts.Token;
+        if (_lyricsLoadKey == key && _lyricsLoadCts is { IsCancellationRequested: false }) return;
+
+        var previousLoad = _lyricsLoadCts;
+        var requestCancellation = new CancellationTokenSource();
+        _lyricsLoadCts = requestCancellation;
+        _lyricsLoadKey = key;
+        previousLoad?.Cancel();
+        var requestToken = requestCancellation.Token;
         _lyricsCacheKey = key;
         _activeLyricsTrack = null;
         _activeLyricsTitle = title;
@@ -1805,25 +1811,48 @@ public partial class MainWindow : MicaWindow
         _estimatedPosition = TimeSpan.Zero;
         _estimatedPositionUpdatedUtc = DateTime.UtcNow;
         _lastLyricsAttemptUtc = DateTime.UtcNow;
-        LyricsService.LyricsTrack? track;
         try
         {
-            track = await LyricsService.GetLyricsTrackAsync(title, artist, ExtractNetEaseSongId(session.Id), requestToken);
+            var track = await LyricsService.GetLyricsTrackAsync(title, artist, ExtractNetEaseSongId(session.Id), requestToken);
+            if (requestToken.IsCancellationRequested) return;
+            if (track is not null) _lyricsCache[key] = track;
+            RefreshNeteaseLikeStateAfterLyricsLookup(session, title, artist, key);
+            if (_lyricsCacheKey == key)
+            {
+                _activeLyricsTrack = track;
+                _activeLyricsTitle = title;
+                if (_lyricsWindow is { IsVisible: true })
+                    _lyricsWindow.UpdateTrack(title, artist, track, () => GetNativePlaybackPosition(session));
+                UpdateLyricsDisplay();
+            }
         }
         catch (OperationCanceledException)
         {
             return;
         }
-        if (requestToken.IsCancellationRequested) return;
-        if (track is not null) _lyricsCache[key] = track;
-        if (_lyricsCacheKey == key)
+        finally
         {
-            _activeLyricsTrack = track;
-            _activeLyricsTitle = title;
-            if (_lyricsWindow is { IsVisible: true })
-                _lyricsWindow.UpdateTrack(title, artist, track, () => GetNativePlaybackPosition(session));
-            UpdateLyricsDisplay();
+            if (ReferenceEquals(_lyricsLoadCts, requestCancellation))
+            {
+                _lyricsLoadCts = null;
+                _lyricsLoadKey = null;
+            }
+            requestCancellation.Dispose();
         }
+    }
+
+    private void RefreshNeteaseLikeStateAfterLyricsLookup(MediaSession session, string title, string artist, string lyricsKey)
+    {
+        if (!IsNeteaseSession(session) || !NeteaseMusicService.IsLoggedIn) return;
+        var songKey = BuildNeteaseSongKey(title, artist);
+        if (!string.Equals(songKey, lyricsKey, StringComparison.Ordinal)
+            || !string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal)
+            || LyricsService.TryGetLastSongId(title, artist) is not > 0) return;
+
+        // Lyrics lookup may resolve the ID after the initial heart-state lookup ran.
+        // Reuse its cancellation token so a subsequent song cannot receive this state.
+        if (_neteaseLikeStateCts is { IsCancellationRequested: false } stateCts)
+            _ = UpdateNeteaseLikeStateAsync(title, artist, songKey, stateCts.Token, refreshLikedSongs: true);
     }
 
     private void UpdateDesktopLyricsWindow()

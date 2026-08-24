@@ -27,18 +27,27 @@ public static class NeteaseMusicService
 
     public static bool IsLoggedIn => !string.IsNullOrWhiteSpace(GetCookie());
 
-    /// <summary>Fetches and locally caches the authenticated user's liked song IDs.</summary>
-    public static async Task<IReadOnlySet<int>> GetLikedSongIdsAsync(bool refresh = false, CancellationToken cancellationToken = default)
+    public static async Task<NeteaseAccount?> GetAccountAsync(CancellationToken cancellationToken = default)
     {
-        if (!IsLoggedIn) return (IReadOnlySet<int>)new HashSet<int>();
+        if (!IsLoggedIn) return null;
+        var response = await GetJsonAsync<AccountResponse>("/user/account", cancellationToken, addTimestamp: true, authenticated: true);
+        var id = response?.Account?.Id ?? response?.Profile?.UserId;
+        var name = response?.Profile?.Nickname ?? response?.Account?.UserName;
+        return id is > 0 || !string.IsNullOrWhiteSpace(name) ? new NeteaseAccount(id, name) : null;
+    }
+
+    /// <summary>Fetches and locally caches the authenticated user's liked song IDs.</summary>
+    public static async Task<IReadOnlySet<long>> GetLikedSongIdsAsync(bool refresh = false, CancellationToken cancellationToken = default)
+    {
+        if (!IsLoggedIn) return (IReadOnlySet<long>)new HashSet<long>();
         if (!refresh && TryLoadLikeList(out var cached) && cached is not null) return cached.Ids.ToHashSet();
 
         var account = await GetJsonAsync<AccountResponse>("/user/account", cancellationToken, addTimestamp: true, authenticated: true);
         var uid = account?.Account?.Id ?? account?.Profile?.UserId;
-        if (uid is null || uid <= 0) return new HashSet<int>();
+        if (uid is null || uid <= 0) return new HashSet<long>();
 
         var response = await GetJsonAsync<LikeListResponse>($"/likelist?uid={uid.Value}", cancellationToken, addTimestamp: true, authenticated: true);
-        var ids = response?.Ids?.Where(id => id > 0).ToHashSet() ?? new HashSet<int>();
+        var ids = response?.Ids?.Where(id => id > 0).ToHashSet() ?? new HashSet<long>();
         SaveLikeList(new LikeListCache(uid.Value, ids.ToArray()));
         return ids;
     }
@@ -47,32 +56,34 @@ public static class NeteaseMusicService
     public static async Task WarmLikeListAsync(CancellationToken cancellationToken = default) =>
         _ = await GetLikedSongIdsAsync(refresh: true, cancellationToken);
 
-    public static async Task<bool> IsSongLikedAsync(int songId, CancellationToken cancellationToken = default)
+    public static async Task<bool> IsSongLikedAsync(long songId, CancellationToken cancellationToken = default, bool refresh = false)
     {
         if (songId <= 0 || !IsLoggedIn) return false;
-        var ids = await GetLikedSongIdsAsync(cancellationToken: cancellationToken);
+        var ids = await GetLikedSongIdsAsync(refresh, cancellationToken);
         return ids.Contains(songId);
     }
 
     public static async Task<NeteaseQrCode?> CreateQrCodeAsync(CancellationToken cancellationToken = default)
     {
-        var key = await GetJsonAsync<QrKeyResponse>("/login/qr/key", cancellationToken, addTimestamp: true);
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var key = await GetJsonAsync<QrKeyResponse>($"/login/qr/key?timestamp={timestamp}", cancellationToken);
         var unikey = key?.Data?.Unikey;
         if (string.IsNullOrWhiteSpace(unikey)) return null;
 
         var qr = await GetJsonAsync<QrCreateResponse>(
-            $"/login/qr/create?key={Uri.EscapeDataString(unikey)}&qrimg=true",
-            cancellationToken, addTimestamp: true);
+            $"/login/qr/create?key={Uri.EscapeDataString(unikey)}&platform=web&qrimg=true&timestamp={timestamp}&ua=pc",
+            cancellationToken);
         var qrimg = qr?.Data?.Qrimg;
-        if (string.IsNullOrWhiteSpace(qrimg)) return null;
-        return new NeteaseQrCode(unikey, qrimg);
+        var qrurl = qr?.Data?.Qrurl;
+        if (string.IsNullOrWhiteSpace(qrimg) && string.IsNullOrWhiteSpace(qrurl)) return null;
+        return new NeteaseQrCode(unikey, qrimg, qrurl);
     }
 
     public static async Task<NeteaseQrLoginResult> CheckQrCodeAsync(string key, CancellationToken cancellationToken = default)
     {
         var result = await GetJsonAsync<QrCheckResponse>(
-            $"/login/qr/check?key={Uri.EscapeDataString(key)}",
-            cancellationToken, addTimestamp: true);
+            $"/login/qr/check?key={Uri.EscapeDataString(key)}&timestamp={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}&ua=pc",
+            cancellationToken);
         var status = result?.Code switch
         {
             803 => NeteaseQrLoginStatus.Authorized,
@@ -86,7 +97,7 @@ public static class NeteaseMusicService
         return new NeteaseQrLoginResult(status);
     }
 
-    public static async Task<int?> ResolveSongIdAsync(string title, string artist, CancellationToken cancellationToken = default)
+    public static async Task<long?> ResolveSongIdAsync(string title, string artist, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(title)) return null;
         var keywords = Uri.EscapeDataString($"{title} {artist}".Trim());
@@ -97,29 +108,43 @@ public static class NeteaseMusicService
             .Select((song, index) => new { Song = song, Index = index, Score = ScoreSong(song, title, artist) })
             .OrderByDescending(x => x.Score)
             .ThenBy(x => x.Index)
-            .First().Song;
+            .FirstOrDefault(x => x.Score >= 200)?.Song;
+        if (selected is null) return null;
         Logger.Debug("Netease search selected: {0} ({1}) for '{2}' / '{3}'", selected.Name, selected.Id, title, artist);
         return selected.Id is > 0 ? selected.Id.Value : null;
     }
 
     private static int ScoreSong(Song song, string title, string artist)
     {
-        var score = 0;
         var name = song.Name ?? string.Empty;
-        var normalizedTitle = Normalize(title);
         var normalizedName = Normalize(name);
-        if (string.Equals(normalizedName, normalizedTitle, StringComparison.OrdinalIgnoreCase)) score += 100;
-        else if (normalizedName.Contains(normalizedTitle, StringComparison.OrdinalIgnoreCase)) score += 55;
-        if (!string.IsNullOrWhiteSpace(artist) && (song.Artists ?? []).Any(x => (x.Name ?? string.Empty).Contains(artist, StringComparison.OrdinalIgnoreCase))) score += 40;
+        var normalizedTitle = Normalize(title);
+        var score = normalizedName == normalizedTitle ? 200 : 0;
+        if (score == 0 && StripTitleQualifier(normalizedName) == StripTitleQualifier(normalizedTitle)) score = 160;
+        if (score == 0 && (normalizedName.Contains(normalizedTitle, StringComparison.OrdinalIgnoreCase)
+            || normalizedTitle.Contains(normalizedName, StringComparison.OrdinalIgnoreCase))) score = 80;
+
+        var requestedArtists = SplitArtists(artist);
+        var songArtists = (song.Artists ?? []).SelectMany(x => SplitArtists(x.Name ?? string.Empty)).ToArray();
+        if (requestedArtists.Any(requested => songArtists.Any(candidate => candidate == requested
+            || candidate.Contains(requested, StringComparison.OrdinalIgnoreCase)
+            || requested.Contains(candidate, StringComparison.OrdinalIgnoreCase)))) score += 50;
         if (name.Contains("伴奏", StringComparison.OrdinalIgnoreCase) || name.Contains("纯音乐", StringComparison.OrdinalIgnoreCase)
-            || name.Contains("instrumental", StringComparison.OrdinalIgnoreCase) || name.Contains("live", StringComparison.OrdinalIgnoreCase)) score -= 35;
+            || name.Contains("instrumental", StringComparison.OrdinalIgnoreCase)) score -= 100;
         return score;
     }
 
     private static string Normalize(string value) =>
         value.Trim().Replace("（", "(").Replace("）", ")").ToLowerInvariant();
 
-    public static async Task<bool> LikeAsync(int songId, bool like = true, CancellationToken cancellationToken = default)
+    private static string StripTitleQualifier(string value) =>
+        System.Text.RegularExpressions.Regex.Replace(value, @"\s*\([^)]*\)", string.Empty).Trim();
+
+    private static IEnumerable<string> SplitArtists(string value) =>
+        System.Text.RegularExpressions.Regex.Split(Normalize(value), @"[\/／、,&，;；]+")
+            .Select(x => x.Trim()).Where(x => x.Length > 0);
+
+    public static async Task<bool> LikeAsync(long songId, bool like = true, CancellationToken cancellationToken = default)
     {
         if (songId <= 0 || !IsLoggedIn) return false;
         var result = await GetJsonAsync<CodeResponse>(
@@ -146,6 +171,11 @@ public static class NeteaseMusicService
         _likeList = null;
         try { if (File.Exists(CookiePath)) File.Delete(CookiePath); } catch { }
         try { if (File.Exists(LikeListPath)) File.Delete(LikeListPath); } catch { }
+    }
+
+    public static void SaveLoginCookie(string cookie)
+    {
+        if (!string.IsNullOrWhiteSpace(cookie)) SaveCookie(cookie);
     }
 
     private static bool TryLoadLikeList(out LikeListCache? cache)
@@ -227,11 +257,15 @@ public static class NeteaseMusicService
     private static HttpClient CreateClient()
     {
         var client = new HttpClient { Timeout = TimeSpan.FromSeconds(15) };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("PulseFlyout/1.0");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0 Safari/537.36");
+        client.DefaultRequestHeaders.Referrer = new Uri("https://music.163.com/");
+        client.DefaultRequestHeaders.Accept.ParseAdd("application/json, text/plain, */*");
+        client.DefaultRequestHeaders.TryAddWithoutValidation("Origin", "https://music.163.com");
         return client;
     }
 
-    public sealed record NeteaseQrCode(string Key, string Base64Image);
+    public sealed record NeteaseQrCode(string Key, string? Base64Image, string? QrUrl);
+    public sealed record NeteaseAccount(int? Id, string? Name);
     public sealed record NeteaseQrLoginResult(NeteaseQrLoginStatus Status);
     public enum NeteaseQrLoginStatus { Unknown, WaitingForScan, WaitingForConfirmation, Authorized, Expired }
 
@@ -239,19 +273,19 @@ public static class NeteaseMusicService
     private sealed class QrCreateResponse { public QrCreateData? Data { get; set; } }
     private sealed class QrCheckResponse { public int Code { get; set; } public string? Cookie { get; set; } }
     private sealed class QrKeyData { public string? Unikey { get; set; } }
-    private sealed class QrCreateData { public string? Qrimg { get; set; } }
+    private sealed class QrCreateData { public string? Qrimg { get; set; } public string? Qrurl { get; set; } }
     private sealed class AccountResponse { public AccountData? Account { get; set; } public ProfileData? Profile { get; set; } }
-    private sealed class AccountData { public int Id { get; set; } }
-    private sealed class ProfileData { public int UserId { get; set; } }
-    private sealed class LikeListResponse { public List<int>? Ids { get; set; } }
-    private sealed record LikeListCache(int Uid, int[] Ids);
+    private sealed class AccountData { public int Id { get; set; } public string? UserName { get; set; } }
+    private sealed class ProfileData { public int UserId { get; set; } public string? Nickname { get; set; } }
+    private sealed class LikeListResponse { public List<long>? Ids { get; set; } }
+    private sealed record LikeListCache(int Uid, long[] Ids);
     private sealed class CodeResponse { public int Code { get; set; } }
     private sealed class SearchResponse { public SearchResult? Result { get; set; } }
     private sealed class SearchResult { public List<Song>? Songs { get; set; } }
     private sealed class Song
     {
         [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
-        public int? Id { get; set; }
+        public long? Id { get; set; }
         public string? Name { get; set; }
         public List<SongArtist>? Artists { get; set; }
     }
