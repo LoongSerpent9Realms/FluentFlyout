@@ -78,27 +78,11 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 </details>
 
 ## Nasıl kurulur 📥
-### Hangi sürümü seçmelisiniz?
-**Microsoft Store sürümü** otomatik güncellemeler sunar, ancak bazı ekstra özellikleri açmak için tek seferlik bir satın alma gerektirir.  
-**GitHub sürümü** tamamen ücretsiz ve açık kaynaklıdır, ancak güncellemeleri manuel olarak yapmanız gerekir.  
-Projenin modeli hakkında daha fazla bilgi için aşağıdaki [Sürdürülebilirlik & Microsoft Store](#sürdürülebilirlik--microsoft-store-) bölümünü okuyun.
+1. [En son Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) sayfasını açın.
+2. **`PulseFlyout-2.14.0-Setup.exe`** dosyasını indirin ve çalıştırın.
+3. Yükleyici adımlarını izleyin. Mevcut bir kurulum otomatik olarak güncellenir.
 
-### Microsoft Store kullanarak
-<a href="https://apps.microsoft.com/detail/9n45nsm4tnbp?referrer=appbadge&cid=GitHub_README_2&mode=direct">
-	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
-</a>
-
-> PulseFlyout Ayarlarını mı arıyorsunuz? Sistem tepsisi simgesine tıklayarak erişebilirsiniz.
-
-### .msixbundle yükleyicisi ile
-1. [En son sürüm](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) sayfasına gidin
-2. **“*.cer”** dosyasını indirin *(gerçek sertifikalar oldukça pahalıdır)*
-3. Sertifikayı açın ve **“Sertifikayı Yükle…”** seçeneğine tıklayın
-4. Sertifika İçe Aktarma Sihirbazı’nda **“Yerel Bilgisayar”** seçeneğini seçin, **“İleri”** deyin ve Yönetici izni verin
-5. **“Tüm sertifikaları aşağıdaki depoya yerleştir”** seçeneğini seçin, ardından **“Gözat…”**, **“Güvenilen Kök Sertifika Yetkilileri”**ni seçip **“Tamam”** deyin
-6. Son olarak **“İleri”**, ardından **“Bitir”**e basın. Onay isteyebilir, **Evet** deyin
-7. **“*.msixbundle”** dosyasını indirin
-8. Uygulama Yükleyici açılacaktır; **“Yükle”**ye ya da daha önce PulseFlyout kuruluysa **“Güncelle”**ye basın
+> PulseFlyout Ayarlarını mı arıyorsunuz? Sistem tepsisi simgesine tıklayın.
 
 ## Katkıda Bulunma 💖
 Katkıda bulunmak isteyen herkes için kapımız açık! Başlamak için [CONTRIBUTING.md](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) dosyasına göz atın.  

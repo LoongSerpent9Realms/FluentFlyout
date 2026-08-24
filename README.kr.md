@@ -90,27 +90,11 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 </details>
 
 ## 설치 방법 📥
-### 어떤 버전을 선택해야 할까요?
-**Microsoft Store 버전**은 자동 업데이트를 제공하지만, 몇 가지 추가 기능을 잠금 해제하려면 일회성 구매가 필요합니다.  
-**GitHub 버전**은 완벽히 무료이며 오픈 소스이지만, 수동 업데이트가 필요합니다.  
-프로젝트 운영 모델에 대한 자세한 내용은 아래의 [지속 가능성 및 Microsoft Store](#sustainability--the-microsoft-store-) 섹션을 참고해 주세요.
+1. [최신 Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) 페이지로 이동합니다.
+2. **`PulseFlyout-2.14.0-Setup.exe`**를 다운로드하여 실행합니다.
+3. 설치 마법사의 안내를 따르세요. 기존 설치가 있으면 자동으로 업데이트됩니다.
 
-### Microsoft Store 사용
-<a href="https://apps.microsoft.com/detail/9n45nsm4tnbp?referrer=appbadge&cid=GitHub_README_2&mode=direct">
-	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
-</a>
-
-> PulseFlyout 설정을 찾고 계신가요? 시스템 트레이 아이콘을 클릭하여 설정에 액세스할 수 있습니다.
-
-### .msixbundle 설치 파일 사용
-1. [최신 릴리스(latest release)](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) 페이지로 이동합니다.
-2. **"*.cer"** 파일을 다운로드합니다. *(실제 인증서는 발급 비용이 많이 듭니다)*
-3. 인증서 파일을 열고 **"인증서 설치(Install Certificate...)"**를 누릅니다.
-4. 인증서 가져오기 마법사에서 **"로컬 컴퓨터(Local Machine)"**를 선택하고 **"다음(Next)"**을 누른 후 관리자 권한을 허용합니다.
-5. **"모든 인증서를 다음 저장소에 저장"**을 선택한 다음 **"찾아보기..."**를 누르고, **"신뢰할 수 있는 루트 인증 기관"**을 선택한 후 **"확인"**을 누릅니다.
-6. 마지막으로 **"다음"**을 누르고 **"마침"**을 누릅니다. 확인 창이 나타나면 **예(Yes)**를 누릅니다.
-7. **"*.msixbundle"** 파일을 다운로드합니다.
-8. 앱 설치 관리자가 나타나면 **"설치(Install)"**를 누르거나, PulseFlyout을 이전에 설치한 적이 있다면 **"업데이트(Update)"**를 누릅니다.
+> PulseFlyout 설정을 찾고 계신가요? 시스템 트레이 아이콘을 클릭하세요.
 
 ## 기여하기 💖
 가능한 어떤 방식이든 자유롭게 기여해 주세요! 시작하려면 [CONTRIBUTING.md](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX)를 확인해 보세요.

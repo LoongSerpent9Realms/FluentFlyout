@@ -60,24 +60,11 @@ PulseFlyout biedt het mediabediening en informatie in een mooie en moderne pop-u
 </details>
 
 ## Hoe te installeren
-### Via Microsoft Store (Aanbevolen)
-<a href="https://apps.microsoft.com/detail/9N45NSM4TNBP?mode=direct">
-	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
-</a>
+1. Ga naar de pagina met de [nieuwste Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest).
+2. Download en voer **`PulseFlyout-2.14.0-Setup.exe`** uit.
+3. Volg de installatiestappen. Een bestaande installatie wordt automatisch bijgewerkt.
 
-> Op zoek naar PulseFlyout-instellingen? U kunt het vinden door op het systeemvakpictogram te klikken
-### Via .msixbundle-installatie
-> [!Important]
-> Het wordt sterk aanbevolen om PulseFlyout vanuit de Microsoft Store te downloaden, omdat dit handiger is en automatische updates biedt
-1. Ga naar de [latest release](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) pagina
-2. Download het **"*.cer"** bestand
-3. Open het certificaat en druk op **"Certificaat installeren..."**
-4. Selecteer op de Wizard Certificaat **"Lokaal computer"**, druk op **"Volgende"** en verleen beheerdersrechten
-5. Plaats het certificaat in **"Vertrouwde basiscertificeringsinstanties"**
-6. Voltooi de installatie van het certificaat
-7. Download de **"*.msixbundle"**
-8. De Installer zal verschijnen, **Installeer** of **Update** als u PulseFlyout al eerder heeft geïnstalleerd
-9. Klaar! Probeer muziek af te spelen en gebruik uw mediatoetsen of volumeknoppen
+> Op zoek naar PulseFlyout-instellingen? Klik op het systeemvakpictogram.
 
 ## Aankomende functies 📝
 - [x] Instellingen

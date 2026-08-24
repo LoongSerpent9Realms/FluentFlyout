@@ -67,24 +67,11 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 </details>
 
 ## 怎么下载？
-### 安装选项
-**Microsoft Store 版本**提供自动更新，但需一次性付费解锁部分额外功能。  
-**GitHub 版本**完全免费且开源，但需手动更新。
+1. 前往 [最新 Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) 页面。
+2. 下载并运行 **`PulseFlyout-2.14.0-Setup.exe`**。
+3. 按照安装向导完成安装；已安装的版本会自动更新。
 
-### 通过 Microsoft Store 安装
-<a href="https://apps.microsoft.com/detail/9N45NSM4TNBP?mode=direct">
-	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
-</a>
-
-> 在寻找 PulseFlyout 设置吗？点击系统托盘图标来访问设置。
-### 用 .msixbundle 安装程序（如果 Microsoft Store 不可用）
-1. 前往 [最新发布](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) 页面
-2. 下载 **"*.cer"** 文件
-3. 打开证书，并使用管理员权限进行安装
-4. 将证书放入 **"受信任的根证书颁发机构"** 中
-5. 下载 **"*.msixbundle"**
-6. 应用安装程序将弹出，点击 **"安装"**，如果之前已安装 PulseFlyout，点击 **"更新"**
-7. 完成！播放音乐，试试按下您的媒体或音量键
+> 在寻找 PulseFlyout 设置吗？点击系统托盘图标即可访问。
 
 ## 即将推出的功能 📝
 - [x] 设置
