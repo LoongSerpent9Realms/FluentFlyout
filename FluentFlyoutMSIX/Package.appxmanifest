@@ -9,13 +9,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="unchihugo.FluentFlyout"
+    Name="PulseFlyout"
     Publisher="CN=49793F74-1457-4B66-A672-4ED3A640FC76"
     Version="2.14.0.0" />
 
   <Properties>
-    <DisplayName>FluentFlyout</DisplayName>
-    <PublisherDisplayName>unchihugo</PublisherDisplayName>
+    <DisplayName>PulseFlyout</DisplayName>
+    <PublisherDisplayName>PulseFlyout Contributors</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -57,10 +57,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="FluentFlyout"
+        DisplayName="PulseFlyout"
         BackgroundColor="transparent"
-        Square150x150Logo="Images\Square150x150Logo.png" Square44x44Logo="Images\FluentFlyout.png" Description="FluentFlyout is a simple and modern audio flyout for Windows, built with Fluent 2 Design principles. The UI seemingly blends in with Windows 10/11, providing you an uninterrupted, clean, and native-like experience when controlling your media.">
-        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  ShortName="FluentFlyout" Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png">
+        Square150x150Logo="Images\Square150x150Logo.png" Square44x44Logo="Images\FluentFlyout.png" Description="PulseFlyout is a simple and modern audio flyout for Windows, built with Fluent 2 Design principles. The UI seemingly blends in with Windows 10/11, providing you an uninterrupted, clean, and native-like experience when controlling your media.">
+        <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  ShortName="PulseFlyout" Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="wide310x150Logo"/>
             <uap:ShowOn Tile="square150x150Logo"/>
@@ -73,7 +73,7 @@
 				<desktop:StartupTask
 				  TaskId="FluentFlyoutStartup"
 				  Enabled="true"
-				  DisplayName="FluentFlyout"/>
+				  DisplayName="PulseFlyout"/>
 			</desktop:Extension>
 
 			<desktop:Extension Category="windows.toastNotificationActivation">

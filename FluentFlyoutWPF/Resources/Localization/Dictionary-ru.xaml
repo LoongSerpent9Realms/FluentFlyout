@@ -21,7 +21,7 @@
     <system:String x:Key="AnimationSpeedOff">Откл.</system:String>
     <system:String x:Key="EasingLinear" xml:space="preserve"> Линейное</system:String>
     <system:String x:Key="EasingSine" xml:space="preserve"> Синусоидальное</system:String>
-    <system:String x:Key="TitleText">Настройки FluentFlyout</system:String>
+    <system:String x:Key="TitleText">Настройки PulseFlyout</system:String>
     <system:String x:Key="MediaFlyoutTitle">Плеер</system:String>
     <system:String x:Key="MediaFlyoutDescription">При прослушивании медиа нажмите любую медиа-клавишу или кнопку регулировки громкости (воспроизведение/пауза, увеличение/уменьшение громкости и т. д.) на вашей клавиатуре, чтобы отобразить плеер. Отображает информацию об играющем медиа, а также элементы управления воспроизведением и многое другое.</system:String>
     <system:String x:Key="TextBlockText1">Включить всплывающий плеер</system:String>
@@ -66,7 +66,7 @@
     <system:String x:Key="LockKeysBoldUIDescription">Выделяет символ и шрифт во всплывающем элементе</system:String>
     <system:String x:Key="EnableInsertKeyTitle">Включить уведомление для клавиши Insert</system:String>
     <system:String x:Key="EnableInsertKeyDescription">Определяет, будет ли нажатие на клавишу Insert (вставка/замена) отображать уведомление</system:String>
-    <system:String x:Key="LaunchOnStartupDescription">Запускать FluentFlyout свёрнутым в трей при входе в Windows</system:String>
+    <system:String x:Key="LaunchOnStartupDescription">Запускать PulseFlyout свёрнутым в трей при входе в Windows</system:String>
     <system:String x:Key="StartupAppsHyperlinkText">Настройки автозагрузки приложений</system:String>
     <system:String x:Key="StartupAppsSettingsInfo">Если эта настройка не работает как ожидалось, проверьте</system:String>
     <system:String x:Key="TrayIconLeftClickBehaviorTitle">Действие по левому клику на иконку в трее</system:String>
@@ -101,7 +101,7 @@
     <system:String x:Key="LockWindow_InsertPressed">Insert нажата</system:String>
     <system:String x:Key="LockWindow_LockOn">вкл.</system:String>
     <system:String x:Key="LockWindow_LockOff">выкл.</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">Закрыть FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">Закрыть PulseFlyout</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationTitle">Виджет</system:String>
     <system:String x:Key="TaskbarWidgetDescription">Компактный виджет, который находится на панели задач Windows и обеспечивает мгновенный доступ к управлению медиа. Нажмите на виджет для открытия всплывающего плеера.</system:String>
     <system:String x:Key="TaskbarWidgetEnabledTitle">Включить виджет</system:String>
@@ -117,9 +117,9 @@
     <system:String x:Key="TaskbarWidgetHideCompletelyTitle">Скрывать виджет, если нет активного медиа</system:String>
     <system:String x:Key="TaskbarWidgetHideCompletelyDescription">Полностью убирает виджет с панели задач, когда нет активных источников медиа</system:String>
     <system:String x:Key="PremiumFeatureTitle">Премиум функция</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Ваш разовый взнос помогает мне поддерживать FluentFlyout в рабочем состоянии и обновляться. Он навсегда открывает вам все премиум-функции.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Ваш разовый взнос помогает мне поддерживать PulseFlyout в рабочем состоянии и обновляться. Он навсегда открывает вам все премиум-функции.
         
-Примечание: FluentFlyout имеет открытый исходный код и все премиум-функции доступны бесплатно при ручной установки с GitHub. Однако устанавливать обновления для FluentFlyout вам придётся так же вручную.</system:String>
+Примечание: PulseFlyout имеет открытый исходный код и все премиум-функции доступны бесплатно при ручной установки с GitHub. Однако устанавливать обновления для PulseFlyout вам придётся так же вручную.</system:String>
     <system:String x:Key="PremiumLockedMessage">Эта функция является частью премиум-пакета</system:String>
     <system:String x:Key="PremiumUnlockedMessage">Все премиум-функции разблокированы. Спасибо за вашу поддержку!</system:String>
     <system:String x:Key="PremiumGitHubMessage">В версиях, скачанных с GitHub или собранных самостоятельно, премиум-функции активированы</system:String>
@@ -154,12 +154,12 @@
     <system:String x:Key="MediaFlyoutExcludeVolumeTitle">Исключить клавиши регулировки громкости</system:String>
     <system:String x:Key="MediaFlyoutExcludeVolumeDescription">Не отображает всплывающее меню при нажатии кнопок увеличения/уменьшения громкости/отключения звука</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ Познакомьтесь с нашими авторами</system:String>
-    <system:String x:Key="AboutContributorsDescription">Огромное спасибо всем замечательным людям, которые внесли свой вклад в разработку и успех FluentFlyout!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Огромное спасибо всем замечательным людям, которые внесли свой вклад в разработку и успех PulseFlyout!</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">Лицензии с открытым исходным кодом</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout скомпилирован с использованием следующих пакетов с открытым исходным кодом:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout скомпилирован с использованием следующих пакетов с открытым исходным кодом:</system:String>
     <system:String x:Key="TrayIcon_ViewLogsOption">Посмотреть журнал</system:String>
     <system:String x:Key="PixelsUnit">пикс.</system:String>
-    <system:String x:Key="UpdateToastTitle">Приложение FluentFlyout обновлено!</system:String>
+    <system:String x:Key="UpdateToastTitle">Приложение PulseFlyout обновлено!</system:String>
     <system:String x:Key="UpdateToastMessage">Ваша текущая версия: {0}.</system:String>
     <system:String x:Key="UpdateToastButton">Проверить наличие обновлений</system:String>
     <system:String x:Key="UpdateAvailable">Доступно обновление</system:String>
@@ -182,7 +182,7 @@
     <system:String x:Key="TaskbarVisualizerBaselineDescription">При нулевом уровне звука отображается тонкая линия</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">Чувствительность звука</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">Насколько громким должен быть звук, чтобы полоски начали двигаться</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Раскройте весь потенциал FluentFlyout:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Раскройте весь потенциал PulseFlyout:</system:String>
     <system:String x:Key="AllFuturePremiumFeatures">Все будущие Премиум функции</system:String>
     <system:String x:Key="BuyMeCoffeeLink">Купите мне кофе</system:String>
     <system:String x:Key="DevelopersTitle">Разработчики</system:String>
@@ -195,7 +195,7 @@
     <system:String x:Key="ShowUpdateNotificationsTitle">Отображать уведомления о наличии обновлений</system:String>
     <system:String x:Key="UpdatesSectionTitle">Обновления</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">Устройство вывода</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Измените источник звука для визуализатора, переключив устройство вывода в FluentFlyout.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Измените источник звука для визуализатора, переключив устройство вывода в PulseFlyout.</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Пиковый уровень звука</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">Насколько громким должен быть звук, чтобы полосы достигли максимальной высоты</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutTitle">Закрывать всплывающее окно при повторном нажатии</system:String>

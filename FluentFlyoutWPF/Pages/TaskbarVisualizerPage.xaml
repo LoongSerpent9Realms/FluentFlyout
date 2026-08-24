@@ -41,7 +41,7 @@
             </StackPanel>
 
             <!-- Premium Status InfoBar (only shown for Store versions) -->
-            <ui:InfoBar Grid.Row="1" Title="{DynamicResource PremiumUnlockedMessage}" Severity="Success" IsClosable="True" Margin="0,0,0,3">
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" Title="{DynamicResource PremiumUnlockedMessage}" Severity="Success" IsClosable="True" Margin="0,0,0,3">
                 <ui:InfoBar.Style>
                     <Style TargetType="ui:InfoBar" BasedOn="{StaticResource {x:Type ui:InfoBar}}">
                         <Setter Property="IsOpen" Value="False" />
@@ -59,7 +59,7 @@
             </ui:InfoBar>
 
             <!-- Premium Locked InfoBar (only shown for Store versions without premium) -->
-            <ui:InfoBar Grid.Row="1" IsOpen="True" Severity="Warning" IsClosable="False" Margin="0,0,0,3">
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" IsOpen="True" Severity="Warning" IsClosable="False" Margin="0,0,0,3">
                 <ui:InfoBar.Style>
                     <Style TargetType="ui:InfoBar">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -84,7 +84,7 @@
             </ui:InfoBar>
 
             <!-- GitHub Version InfoBar -->
-            <ui:InfoBar Grid.Row="1" Title="{DynamicResource PremiumGitHubMessage}" Severity="Informational" IsOpen="True" IsClosable="False" Margin="0,0,0,3" Visibility="{Binding IsStoreVersion, Converter={StaticResource BoolToCollapsedVisibleConverter}}" />
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" Title="{DynamicResource PremiumGitHubMessage}" Severity="Informational" IsOpen="True" IsClosable="False" Margin="0,0,0,3" />
         </Grid>
 
         <StackPanel Opacity="{Binding IsPremiumUnlocked, Converter={StaticResource BoolToFullHalfOpacityConverter}}">
@@ -93,7 +93,6 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource TaskbarVisualizerEnabledTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
-                            <fluentflyoutcontrols:AccentBadge Margin="6,0,0,0" />
                         </StackPanel>
                         <TextBlock Text="{DynamicResource TaskbarVisualizerEnabledDescription}" FontSize="12" Opacity="0.5" />
                     </StackPanel>

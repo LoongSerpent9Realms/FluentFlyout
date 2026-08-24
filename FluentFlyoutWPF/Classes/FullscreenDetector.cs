@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -20,6 +20,11 @@ internal class FullscreenDetector
     public static bool IsFullscreenApplicationRunning()
     {
         if (!SettingsManager.Current.DisableIfFullscreen) return false;
+        return IsFullscreenApplicationActive();
+    }
+
+    public static bool IsFullscreenApplicationActive()
+    {
         try
         {
             QUERY_USER_NOTIFICATION_STATE state;

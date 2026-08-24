@@ -34,7 +34,6 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource AcrylicBlurOpacityTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
-                            <fluentflyoutcontrols:AccentBadge Margin="6,0,0,0" />
                         </StackPanel>
                         <TextBlock Text="{DynamicResource AcrylicBlurOpacityDescription}" FontSize="12" Opacity="0.5" />
                     </StackPanel>
@@ -153,13 +152,35 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource HideTrayIconTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
-                            <fluentflyoutcontrols:AccentBadge Margin="6,0,0,0" />
                         </StackPanel>
                         <TextBlock Text="{DynamicResource HideTrayIconDescription}" FontSize="12" Opacity="0.5" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch x:Name="NIconHideSwitch" IsChecked="{Binding NIconHide, Mode=TwoWay}" IsEnabled="{Binding IsPremiumUnlocked}" Click="ToggleSwitch_Click" />
             </ui:CardControl>
+
+            <TextBlock Text="扩展与接口" FontSize="14" FontWeight="SemiBold" Margin="0,12,0,6" />
+            <ui:CardControl x:Name="LyricsApiCard" Tag="Indexable" Icon="{ui:SymbolIcon MusicNote224}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="歌词接口" FontSize="14" />
+                        <TextBlock Text="选择预设地址，或选择自定义后填写兼容的歌词 API。" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="LyricsApiPreset" Width="220" SelectionChanged="LyricsApiPreset_SelectionChanged">
+                        <ComboBoxItem Content="网易云（NetEase）" Tag="https://music.loongst.com/" />
+                        <ComboBoxItem Content="自定义地址" Tag="custom" />
+                    </ComboBox>
+                    <TextBox x:Name="LyricsApiCustom" Width="360" Margin="10,0,0,0" Text="{Binding LyricsApiBaseUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" />
+                </StackPanel>
+            </ui:CardControl>
+            <ui:CardAction x:Name="PluginsCard" Tag="Indexable" Margin="0,0,0,3" IsChevronVisible="True" Click="PluginsCard_Click">
+                <StackPanel>
+                    <TextBlock Text="插件管理" FontSize="14" />
+                    <TextBlock Text="创建、安装和查看插件扩展。" FontSize="12" Opacity="0.5" />
+                </StackPanel>
+            </ui:CardAction>
 
             <!-- back up & restore section -->
             <TextBlock Text="{DynamicResource BackupRestoreSectionTitle}" FontSize="14" FontWeight="SemiBold" Margin="0,12,0,6" />

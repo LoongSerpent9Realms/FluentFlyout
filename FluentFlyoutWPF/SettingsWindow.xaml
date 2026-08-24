@@ -9,7 +9,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     mc:Ignorable="d"
     Height="700" MinHeight="300" MinWidth="750" Width="900"
-    Title="FluentFlyout" Icon="/Resources/FluentFlyout2.ico"
+    Title="PulseFlyout" Icon="/Resources/PulseFlyout.png"
     TextOptions.TextRenderingMode="ClearType" TextOptions.TextFormattingMode="Ideal"
     FontFamily="{Binding FontFamily}"
 	FlowDirection="{Binding FlowDirection}"
@@ -31,13 +31,13 @@
 
 		<ui:TitleBar
             x:Name="TitleBar"
-            Title="FluentFlyout"
+            Title="PulseFlyout"
             Grid.Row="0"
             Panel.ZIndex="1"
 			HorizontalContentAlignment="Center"
 			VerticalContentAlignment="Center">
 			<ui:TitleBar.Icon>
-				<ui:ImageIcon Source="/Resources/FluentFlyout2.ico" />
+				<ui:ImageIcon Source="/Resources/PulseFlyout.png" />
 			</ui:TitleBar.Icon>
 			<ui:TitleBar.Resources>
 				<Style TargetType="{x:Type ui:TitleBarButton}"
@@ -83,6 +83,8 @@
 				<ui:NavigationViewItem Content="{DynamicResource MediaFlyoutTitle}" Icon="{ui:SymbolIcon VideoPlayPause24}" TargetPageType="{x:Type pages:MediaFlyoutPage}" />
 				<ui:NavigationViewItem Content="{DynamicResource VolumeFlyoutTitle}" Icon="{ui:SymbolIcon Speaker224}" TargetPageType="{x:Type pages:VolumeMixerPage}" />
 				<ui:NavigationViewItem Content="{DynamicResource TaskbarWidgetCustomizationTitle}" Icon="{ui:SymbolIcon TextboxAlignBottom24}" TargetPageType="{x:Type pages:TaskbarWidgetPage}" />
+				<ui:NavigationViewItem Content="桌面歌词" Icon="{ui:SymbolIcon TextBulletListSquare24}" TargetPageType="{x:Type pages:DesktopLyricsPage}" />
+				<ui:NavigationViewItem Content="插件" Icon="{ui:SymbolIcon PuzzlePiece24}" TargetPageType="{x:Type pages:PluginsPage}" />
 				<ui:NavigationViewItem Content="{DynamicResource TaskbarVisualizerTitle}" Icon="{ui:SymbolIcon SoundWaveCircle24}" TargetPageType="{x:Type pages:TaskbarVisualizerPage}" />
 				<ui:NavigationViewItem Content="{DynamicResource NextUpCustomizationTitle}" Icon="{ui:SymbolIcon MusicNote2Play20}" TargetPageType="{x:Type pages:NextUpPage}" />
 				<ui:NavigationViewItem Content="{DynamicResource LockKeysCustomizationTitle}" Icon="{ui:SymbolIcon LockMultiple24}" TargetPageType="{x:Type pages:LockKeysPage}" />

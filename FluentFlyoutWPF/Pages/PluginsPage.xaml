@@ -1,0 +1,34 @@
+<Page x:Class="FluentFlyoutWPF.Pages.PluginsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel MaxWidth="760" Margin="28">
+            <TextBlock Text="插件" FontSize="28" FontWeight="SemiBold" />
+            <TextBlock Text="管理 PulseFlyout 的扩展，以及查看插件安装目录。" Margin="0,8,0,20" Opacity="0.72" TextWrapping="Wrap" />
+            <ui:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="插件目录" FontWeight="SemiBold" />
+                    <TextBlock x:Name="PluginDirectoryText" Margin="0,6,0,10" TextWrapping="Wrap" Opacity="0.72" />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="打开插件目录" Click="OpenPluginDirectory_Click" HorizontalAlignment="Left" />
+                        <ui:Button Content="创建插件项目" Click="CreatePlugin_Click" Margin="10,0,0,0" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
+            <TextBlock Text="已加载插件" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
+            <ListView x:Name="PluginList" MinHeight="120">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="4,8">
+                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Version}" Opacity="0.7" />
+                            <TextBlock Text="{Binding Id}" Opacity="0.55" FontSize="12" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock x:Name="EmptyText" Text="尚未加载插件。将插件文件夹放入上面的目录后重启应用。" Margin="4,12,0,0" Opacity="0.65" TextWrapping="Wrap" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>

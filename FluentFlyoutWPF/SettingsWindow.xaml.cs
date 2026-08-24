@@ -1,9 +1,11 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes;
 using FluentFlyout.Classes.Settings;
 using FluentFlyoutWPF.Pages;
+using FluentFlyoutWPF.Classes.Plugins;
+using FluentFlyout.PluginApi;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -181,6 +183,13 @@ public partial class SettingsWindow : FluentWindow
     {
         RootNavigation.IsPaneOpen = false;
 
+        foreach (var pluginPage in PluginManager.Current.Pages)
+        {
+            var item = new NavigationViewItem { Content = pluginPage.Title, Tag = pluginPage };
+            item.Click += PluginPage_Click;
+            RootNavigation.MenuItems.Add(item);
+        }
+
         _currentPageType = typeof(HomePage);
         RootNavigation.Navigate(_currentPageType);
 
@@ -237,6 +246,13 @@ public partial class SettingsWindow : FluentWindow
         };
 
         BuildSearchItems();
+    }
+
+    private void PluginPage_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not NavigationViewItem { Tag: PluginPage page }) return;
+        try { PluginPageHost.CurrentFactory = page.CreateView; RootNavigation.Navigate(typeof(PluginPageHost)); }
+        catch (Exception ex) { Logger.Error(ex, "Failed to create plugin page {0}", page.Id); }
     }
 
     private void SettingsWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

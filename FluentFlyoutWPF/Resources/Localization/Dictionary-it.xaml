@@ -5,7 +5,7 @@
     <system:String x:Key="LockWindow_InsertPressed">Insert Premuto</system:String>
     <system:String x:Key="LockWindow_LockOn">on</system:String>
     <system:String x:Key="LockWindow_LockOff">off</system:String>
-    <system:String x:Key="TitleText">Impostazioni di FluentFlyout</system:String>
+    <system:String x:Key="TitleText">Impostazioni di PulseFlyout</system:String>
     <system:String x:Key="MediaFlyoutTitle">Flyout media</system:String>
     <system:String x:Key="MediaFlyoutDescription">Quando ascolti un contenuto multimediale, premi un qualsiasi tasto controllo multimediale o volume (Play/Pausa, Volume su/Volume Giù, ecc...) sulla tua tastiera per mostrare il flyout. Mostra le informazioni del contenuto assieme ai controlli per la riproduzione e altro.</system:String>
     <system:String x:Key="TextBlockText1">Abilita il Media Flyout</system:String>
@@ -59,7 +59,7 @@ nasconde ripeti, riproduzione casuale e le informazioni del player</system:Strin
     <system:String x:Key="TaskbarWidgetHideCompletelyTitle">Nascondi quando nessun contenuto è presente</system:String>
     <system:String x:Key="TaskbarWidgetHideCompletelyDescription">Nasconde l’intero widget in assenza di contenuti multimediali, invece di mostrare un’icona multimediale</system:String>
     <system:String x:Key="PremiumFeatureTitle">Funzionalità Premium</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Il tuo contributo una tantum mi aiuta a mantenere FluentFlyout attivo e aggiornato. Sblocca immediatamente tutte le funzionalità premium di personalizzazione, per sempre.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Il tuo contributo una tantum mi aiuta a mantenere PulseFlyout attivo e aggiornato. Sblocca immediatamente tutte le funzionalità premium di personalizzazione, per sempre.
 
 Nota: essendo un progetto open-source, queste funzionalità sono comunque disponibili gratuitamente con l’installazione manuale su GitHub. Ma aggiornamenti e installazione devono essere gestiti manualmente.</system:String>
     <system:String x:Key="PremiumLockedMessage">Questa funzionalità fa parte del pacchetto premium</system:String>
@@ -130,7 +130,7 @@ Puoi contribuire alla traduzione su</system:String>
     <system:String x:Key="TrayIcon_SettingsOption">Impostazioni</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">Repository</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">Segnala problema</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">Chiudi FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">Chiudi PulseFlyout</system:String>
     <system:String x:Key="TaskbarWidgetControlsTitle">Controlli Multimediali Widget</system:String>
     <system:String x:Key="TaskbarWidgetControlsDescription">Mostra i pulsanti di controllo dei contenuti multimediali sul widget</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedTitle">Animazioni Widget</system:String>
@@ -143,7 +143,7 @@ Puoi contribuire alla traduzione su</system:String>
     <system:String x:Key="TaskbarWidgetManualPaddingDescription">Aggiunge un spaziamento personalizzato (predefinito: 0px)</system:String>
     <system:String x:Key="TrayIcon_ViewLogsOption">Visualizza i log</system:String>
     <system:String x:Key="PixelsUnit">px</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout è stato aggiornato!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout è stato aggiornato!</system:String>
     <system:String x:Key="UpdateToastMessage">La tua versione attuale: {0}.</system:String>
     <system:String x:Key="UpdateToastButton">Controlla aggiornamenti</system:String>
     <system:String x:Key="HomeTitle">Home</system:String>
@@ -156,9 +156,9 @@ Puoi contribuire alla traduzione su</system:String>
     <system:String x:Key="HomeDashboardTitle">Dashboard</system:String>
     <system:String x:Key="SystemConfigure">Configura</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ I Nostri Collaboratori</system:String>
-    <system:String x:Key="AboutContributorsDescription">Grazie mille a tutte le straordinarie persone che hanno contribuito allo sviluppo e al successo di FluentFlyout!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Grazie mille a tutte le straordinarie persone che hanno contribuito allo sviluppo e al successo di PulseFlyout!</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">Licenze Open Source</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout è compilato con i seguenti pacchetti open source:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout è compilato con i seguenti pacchetti open source:</system:String>
     <system:String x:Key="AboutTitle">Info</system:String>
     <system:String x:Key="UpdateAvailable">Aggiornamento disponibile</system:String>
     <system:String x:Key="UpToDate">Aggiornato</system:String>
@@ -182,7 +182,7 @@ Puoi contribuire alla traduzione su</system:String>
     <system:String x:Key="TaskbarVisualizerBaselineDescription">Visualizza una sottile linea quando il livello dell'audio è a zero</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">Sensibilità Audio</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">Quanto deve essere forte il volume prima che le barre inizino a muoversi</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Sblocca l'esperienza FluentFlyout completa:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Sblocca l'esperienza PulseFlyout completa:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">Attiva il Widget della Barra delle Applicazioni e Visualizzatore</system:String>
     <system:String x:Key="HideTrayIconPerk">Nascondi l'Icona nel'Area di Notifica</system:String>
     <system:String x:Key="AllFuturePremiumFeatures">Tutte le funzionalità premium future</system:String>
@@ -197,7 +197,7 @@ Puoi contribuire alla traduzione su</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">Dispositivo di Uscita</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Soglia del Picco Audio</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">Quanto deve essere forte l'audio affinché le barre raggiungano l'altezza massima</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Cambia la sorgente del visualizzatore modificando il dispositivo di uscita di FluentFlyout.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Cambia la sorgente del visualizzatore modificando il dispositivo di uscita di PulseFlyout.</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutTitle">Chiudi Flyout al Secondo Clic</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutDescription">Chiude il flyout se è già aperto quando si clicca il widget della barra delle applicazioni</system:String>
     <system:String x:Key="BackupRestoreSectionTitle">Backup e ripristino</system:String>

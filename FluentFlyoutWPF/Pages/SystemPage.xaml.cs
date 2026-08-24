@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
 
 namespace FluentFlyoutWPF.Pages;
@@ -21,7 +22,24 @@ public partial class SystemPage : Page
         InitializeComponent();
         DataContext = SettingsManager.Current;
         UpdateMonitorList();
+        var configured = SettingsManager.Current.LyricsApiBaseUrl?.TrimEnd('/') + "/";
+        LyricsApiPreset.SelectedIndex = string.Equals(configured, "https://music.loongst.com/", StringComparison.OrdinalIgnoreCase) ? 0 : 1;
+        LyricsApiCustom.IsEnabled = LyricsApiPreset.SelectedIndex == 1;
     }
+
+    private void LyricsApiPreset_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (LyricsApiPreset.SelectedItem is not ComboBoxItem item) return;
+        if (string.Equals(item.Tag?.ToString(), "custom", StringComparison.OrdinalIgnoreCase))
+        {
+            LyricsApiCustom.IsEnabled = true;
+            return;
+        }
+        LyricsApiCustom.IsEnabled = false;
+        SettingsManager.Current.LyricsApiBaseUrl = item.Tag?.ToString() ?? "https://music.loongst.com/";
+    }
+
+    private void PluginsCard_Click(object sender, RoutedEventArgs e) => SettingsWindow.NavigateToPage(typeof(PluginsPage));
 
     private void StartupSwitch_Click(object sender, RoutedEventArgs e)
     {
@@ -34,7 +52,7 @@ public partial class SystemPage : Page
         {
             using var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             if (key == null) return;
-            const string appName = "FluentFlyout";
+            const string appName = "PulseFlyout";
             var executablePath = Environment.ProcessPath;
 
             if (enable)
@@ -104,7 +122,7 @@ public partial class SystemPage : Page
     {
         var saveFileDialog = new Microsoft.Win32.SaveFileDialog
         {
-            FileName = $"FluentFlyout_Settings_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}",
+            FileName = $"PulseFlyout_Settings_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}",
             DefaultExt = ".xml",
             Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*"
         };

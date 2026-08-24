@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using System.IO;
@@ -18,31 +18,31 @@ namespace FluentFlyoutWPF.Classes.Utils
             {
                 path = Path.Combine(ApplicationData.Current.LocalCacheFolder.Path,
                     "Roaming",
-                    "FluentFlyout");
+                    "PulseFlyout");
                 if (Directory.Exists(path))
                     return path;
             }
             catch { }
 
-            // if that doesn't work, check %appData%\FluentFlyout
+            // if that doesn't work, check %appData%\PulseFlyout
             try
             {
                 path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "FluentFlyout");
+                    "PulseFlyout");
                 if (Directory.Exists(path))
                     return path;
             }
             catch { }
 
             // if neither of those exist, return hardcoded path
-            // %localAppData%\Packages\unchihugo.FluentFlyout_69b7b6qge1ahj\LocalCache\Roaming\FluentFlyout
+            // %localAppData%\Packages\unchihugo.PulseFlyout_69b7b6qge1ahj\LocalCache\Roaming\PulseFlyout
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Packages",
-                "unchihugo.FluentFlyout_69b7b6qge1ahj",
+                "unchihugo.PulseFlyout_69b7b6qge1ahj",
                 "LocalCache",
                 "Roaming",
-                "FluentFlyout"
+                "PulseFlyout"
             );
         }
     }

@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">Configurações do FluentFlyout</system:String>
+    <system:String x:Key="TitleText">Configurações do PulseFlyout</system:String>
     <system:String x:Key="MediaFlyoutTitle">Personalização do painel de mídia</system:String>
     <system:String x:Key="TextBlockText1">Habilitar Painel de mídia</system:String>
     <system:String x:Key="TextBlockText3">Exibir submenu quando você apertar uma tecla de mídia</system:String>
@@ -53,9 +53,9 @@ esconde os botões de repetir, aleatório e as informações do player</system:S
     <system:String x:Key="HideTrayIconTitle">Esconder totalmente o ícone da bandeja</system:String>
     <system:String x:Key="EnableLockKeysDescription">Mostra se a tecla de bloqueio selecionada está ativada ou desativada</system:String>
     <system:String x:Key="HideTrayIconDescription">Acesse as configurações ao iniciar o programa duas vezes</system:String>
-    <system:String x:Key="AboutContributorsDescription">Agradecemos muito a todas as pessoas incríveis que ajudaram no desenvolvimento e no sucesso do FluentFlyout!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Agradecemos muito a todas as pessoas incríveis que ajudaram no desenvolvimento e no sucesso do PulseFlyout!</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ Conheça nossos colaboradores</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">O FluentFlyout é desenvolvido com os seguintes pacotes de código aberto:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">O PulseFlyout é desenvolvido com os seguintes pacotes de código aberto:</system:String>
     <system:String x:Key="Disabled">Desabilitado</system:String>
     <system:String x:Key="LockKeysBoldUITitle">Símbolo e fonte em negrito</system:String>
     <system:String x:Key="EnableInsertKeyDescription">Determina se a tecla Insert/Sobrescrever mostrará o painel</system:String>
@@ -71,7 +71,7 @@ Você pode ajudar a contribuir com traduções em</system:String>
     <system:String x:Key="UpdateAvailableNotificationTitle">Atualização disponível!</system:String>
     <system:String x:Key="UpdateAvailableNotificationMessage">Uma nova versão ({0}) está disponível.</system:String>
     <system:String x:Key="UpdateAvailableNotificationButton">Baixar atualização</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">Sair do FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">Sair do PulseFlyout</system:String>
     <system:String x:Key="LockWindow_NumLock">Num Lock</system:String>
     <system:String x:Key="LockWindow_ScrollLock">Scroll Lock</system:String>
     <system:String x:Key="LockWindow_InsertPressed">Tecla Insert pressionada</system:String>
@@ -133,7 +133,7 @@ ou avalie na Microsoft Store!</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedTitle">Animações do widget</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedDescription">Ativar animações sutis no widget</system:String>
     <system:String x:Key="PremiumFeatureTitle">Recursos Premium</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Sua contribuição única me ajuda a manter o FluentFlyout vivo e atualizado. Ela desbloqueia instantaneamente todos os recursos premium de personalização, para sempre
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Sua contribuição única me ajuda a manter o PulseFlyout vivo e atualizado. Ela desbloqueia instantaneamente todos os recursos premium de personalização, para sempre
 
 Nota: Como um projeto de código aberto, esses recursos também estão disponíveis gratuitamente por meio do instalador manual no GitHub. A única diferença é que as atualizações e a instalação precisam ser feitas manualmente.</system:String>
     <system:String x:Key="PremiumLockedMessage">Este recurso faz parte do pacote premium</system:String>
@@ -161,7 +161,7 @@ Nota: Como um projeto de código aberto, esses recursos também estão disponív
     <system:String x:Key="SystemConfigure">Configurar</system:String>
     <system:String x:Key="AboutTitle">Sobre</system:String>
     <system:String x:Key="PixelsUnit">px</system:String>
-    <system:String x:Key="UpdateToastTitle">O FluentFlyout foi atualizado!</system:String>
+    <system:String x:Key="UpdateToastTitle">O PulseFlyout foi atualizado!</system:String>
     <system:String x:Key="UpdateToastMessage">Você agora está na versão {0}.</system:String>
     <system:String x:Key="UpdateToastButton">Ver atualizações</system:String>
     <system:String x:Key="UpdateAvailable">Atualização disponível</system:String>
@@ -182,7 +182,7 @@ Nota: Como um projeto de código aberto, esses recursos também estão disponív
     <system:String x:Key="TaskbarVisualizerBaselineDescription">Exibe uma linha fina quando os níveis de áudio estão em zero</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">Sensibilidade de áudio</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">Quão alto o áudio precisa estar para que as barras comecem a se mover</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Desbloqueie a experiência completa do FluentFlyout:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Desbloqueie a experiência completa do PulseFlyout:</system:String>
     <system:String x:Key="AllFuturePremiumFeatures">Todos os futuros recursos Premium</system:String>
     <system:String x:Key="DevelopersTitle">Desenvolvedores</system:String>
     <system:String x:Key="TranslatorsTitle">Tradutores</system:String>
@@ -195,7 +195,7 @@ Nota: Como um projeto de código aberto, esses recursos também estão disponív
     <system:String x:Key="UpdatesSectionTitle">Atualizações</system:String>
     <system:String x:Key="ShowUpdateNotificationsTitle">Mostrar notificações para novas atualizações</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">Dispositivo de Saída</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Altere o que o visualizador capta alternando o dispositivo de saída do FluentFlyout.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Altere o que o visualizador capta alternando o dispositivo de saída do PulseFlyout.</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutTitle">Fechar flyout ao clicar novamente</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutDescription">Fechar o flyout se ele já estiver aberto ao clicar no widget da barra de tarefas</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Limite de pico de áudio</system:String>

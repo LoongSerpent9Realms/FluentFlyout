@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">הגדרות FluentFlyout</system:String>
+    <system:String x:Key="TitleText">הגדרות PulseFlyout</system:String>
     <system:String x:Key="BackgroundBlurOption1" xml:space="preserve"> ללא</system:String>
     <system:String x:Key="CompactLayoutTitle">פריסה קומפקטית</system:String>
     <system:String x:Key="NextUpDescription" xml:space="preserve">חלון נשלף מציג אתה הבא כאשר שיר או סרטון מסתיים. מופיע רק אם הפריט הבא מתנגן אוטומטית, אם ילחץ ידנית הבא או הקודם, יופיע במקום זאת התפריט הנשלף הראשי.</system:String>
@@ -92,7 +92,7 @@
     <system:String x:Key="TaskbarWidgetControlsDescription">הצג כפתורי שליטה על המדיה בווידג'ט</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedTitle">אנימציות ווידג'ט</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedDescription">הפעלת אנימציות עדינות לווידג'ט</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">תרומה חד־פעמית שלך עוזרת לשמור על FluentFlyout חי ומעודכן. היא פותחת את כל אפשרויות הפרימיום לנצח.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">תרומה חד־פעמית שלך עוזרת לשמור על PulseFlyout חי ומעודכן. היא פותחת את כל אפשרויות הפרימיום לנצח.
         
 הערה: כפרויקט קוד פתוח, אפשרויות אלו זמינות גם בחינם דרך התקנה ידנית מ-GitHub. ההבדל הוא שאם עושים כך, העדכונים וההתקנה צריכים להתבצע באופן ידני.</system:String>
     <system:String x:Key="PremiumLockedMessage">תכונה זו היא חלק מחבילת הפרימיום</system:String>
@@ -137,13 +137,13 @@
 או השאירו ביקורת בחנות מיקרוסופט!</system:String>
     <system:String x:Key="AppLanguageDescription" xml:space="preserve">אם השפה שלכם אינה מופיעה או שהיא לא מלאה, היא תוגדר כברירת מחדל לאנגלית.
 תוכלו לעזור בתרומת תרגומים ב-</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">צא מ-FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">צא מ-PulseFlyout</system:String>
     <system:String x:Key="TaskbarWidgetPaddingTitle">כפתור רווח אוטומטי לווידג'טים של Windows</system:String>
     <system:String x:Key="TaskbarWidgetControlsTitle">בקרות מדיה של ווידג'ט</system:String>
     <system:String x:Key="EnableInsertKeyTitle">הפעל את חלונית מקש ה-Insert</system:String>
     <system:String x:Key="EnableInsertKeyDescription">קובע אם לחיצה על מקש ההכנסה/החלפה תציג את החלון הנשלף</system:String>
     <system:String x:Key="LockWindow_InsertPressed">מקש ה-Insert לחוץ</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout עודכן!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout עודכן!</system:String>
     <system:String x:Key="UpdateToastButton">הצג עדכונים</system:String>
     <system:String x:Key="UpdateToastMessage">{0} דוגמה לשומר מקום: "v1.2.3". מחרוזת זו תהפוך ל-"You are now on v1.2.3." באנגלית.</system:String>
     <system:String x:Key="HomeTitle">בית</system:String>
@@ -157,8 +157,8 @@
     <system:String x:Key="AboutContributorsTitle">❤️ הכירו את התורמים שלנו</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">רישיונות קוד פתוח</system:String>
     <system:String x:Key="MediaFlyoutAlwaysDisplayDescription">החלון הנשלף נשאר פתוח עד שתלחצו על כפתור הסגירה</system:String>
-    <system:String x:Key="AboutContributorsDescription">תודה ענקית לכל האנשים המדהימים שתרמו לפיתוח ולהצלחת FluentFlyout!</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout בנויה עם חבילות הקוד הפתוח הבאות:</system:String>
+    <system:String x:Key="AboutContributorsDescription">תודה ענקית לכל האנשים המדהימים שתרמו לפיתוח ולהצלחת PulseFlyout!</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout בנויה עם חבילות הקוד הפתוח הבאות:</system:String>
     <system:String x:Key="AcrylicBlurOpacityDescription">כוונון אפקט השקיפות של Acrylic flyouts (ברירת מחדל: 175)</system:String>
     <system:String x:Key="UpdateAvailable">עדכון זמין</system:String>
     <system:String x:Key="UpToDate">עדכני</system:String>
@@ -190,10 +190,10 @@
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">סף עוצמת השיא</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">כמה חזק צריך להיות הקול כדי שהפסים יגיעו לגובה מלא</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">התקן פלט</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">שנה את מקור השמע שהוויזואליזר מאזין לו על ידי החלפת מכשיר הפלט של FluentFlyout.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">שנה את מקור השמע שהוויזואליזר מאזין לו על ידי החלפת מכשיר הפלט של PulseFlyout.</system:String>
     <system:String x:Key="TaskbarVisualizerClickableTitle">לחץ לפתיחת ההגדרות</system:String>
     <system:String x:Key="TaskbarVisualizerClickableDescription">לחיצה על הוויזואליזר תפתח את דף ההגדרות שלו</system:String>
-    <system:String x:Key="UnlockFullExperienceText">פתח את חוויית FluentFlyout המלאה:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">פתח את חוויית PulseFlyout המלאה:</system:String>
     <system:String x:Key="HideTrayIconPerk">הסתר את סמל המגש</system:String>
     <system:String x:Key="AllFuturePremiumFeatures">כל תכונות הפרימיום העתידיות</system:String>
     <system:String x:Key="LockKeysCursorUITitle">מסך יעד מועדף</system:String>

@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Windows.Media.Control;
 using Wpf.Ui.Controls;
 
@@ -59,6 +60,10 @@ public partial class TaskbarWidgetControl : UserControl
     // reference to main window for flyout functions
     private MainWindow? _mainWindow;
     private bool _isPaused;
+    private string? _lyricsText;
+    private DispatcherTimer? _lyricsWordTimer;
+    private string _animatedLyricsText = string.Empty;
+    private int _lyricsAnimationIndex;
     private bool _isVertical;
     private bool _isSmallTaskbar;
 
@@ -124,7 +129,7 @@ public partial class TaskbarWidgetControl : UserControl
         SongImageBorder.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
         SongImageBorder.RenderTransform = (Transform?)counterRotate ?? Transform.Identity;
 
-        foreach (var button in new Wpf.Ui.Controls.Button[] { PreviousButton, PlayPauseButton, NextButton })
+        foreach (var button in new Wpf.Ui.Controls.Button[] { PreviousButton, PlayPauseButton, NextButton, LikeButton, LyricsButton })
         {
             button.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
             button.RenderTransform = (Transform?)counterRotate ?? Transform.Identity;
@@ -134,6 +139,8 @@ public partial class TaskbarWidgetControl : UserControl
     public void SetSmallTaskbarMode(bool isSmallTaskbar)
     {
         _isSmallTaskbar = isSmallTaskbar;
+        SongInfoStackPanel.VerticalAlignment = isSmallTaskbar ? VerticalAlignment.Top : VerticalAlignment.Center;
+        SongInfoStackPanel.Margin = isSmallTaskbar ? new Thickness(8, 4, 0, 0) : new Thickness(8, 0, 0, 0);
         SongArtistContainer.Visibility = !isSmallTaskbar && !_isVertical && !string.IsNullOrEmpty(_actualArtist)
             ? Visibility.Visible
             : Visibility.Collapsed;
@@ -144,7 +151,7 @@ public partial class TaskbarWidgetControl : UserControl
         SongImagePlaceholder.FontSize = isSmallTaskbar ? SmallPlaceholderIconSize : DefaultPlaceholderIconSize;
 
         double controlButtonSize = isSmallTaskbar ? SmallControlButtonSize : DefaultControlButtonSize;
-        foreach (var button in new Wpf.Ui.Controls.Button[] { PreviousButton, PlayPauseButton, NextButton })
+        foreach (var button in new Wpf.Ui.Controls.Button[] { PreviousButton, PlayPauseButton, NextButton, LikeButton, LyricsButton })
         {
             button.Width = controlButtonSize;
             button.Height = controlButtonSize;
@@ -155,6 +162,15 @@ public partial class TaskbarWidgetControl : UserControl
     {
         _mainWindow = mainWindow;
     }
+
+    public void SetLikeVisual(bool liked)
+    {
+        LikeIcon.Opacity = liked ? 1 : 0.5;
+        LikeIcon.Filled = liked;
+        LikeButton.ToolTip = liked ? "当前歌曲已喜欢" : "喜欢当前歌曲";
+    }
+
+    public void SetLikeVisibility(bool visible) => LikeButton.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
 
     public void ApplyWindowsTheme()
     {
@@ -170,6 +186,7 @@ public partial class TaskbarWidgetControl : UserControl
         PreviousButton.Foreground = foreground;
         PlayPauseButton.Foreground = foreground;
         NextButton.Foreground = foreground;
+        LikeButton.Foreground = foreground;
     }
 
     private void Grid_MouseEnter(object sender, MouseEventArgs e)
@@ -321,7 +338,9 @@ public partial class TaskbarWidgetControl : UserControl
         // add space for playback controls if enabled and visible
         if (SettingsManager.Current.TaskbarWidgetControlsEnabled && ControlsStackPanel.Visibility == Visibility.Visible)
         {
-            double controlsWidth = PreviousButton.Width + PlayPauseButton.Width + NextButton.Width;
+            double controlsWidth = PreviousButton.Width + PlayPauseButton.Width + NextButton.Width
+                + (LikeButton.Visibility == Visibility.Visible ? LikeButton.Width : 0)
+                + (LyricsButton.Visibility == Visibility.Visible ? LyricsButton.Width : 0);
             if (!_isVertical)
                 controlsWidth += ControlsStackPanel.Margin.Left + ControlsStackPanel.Margin.Right;
 
@@ -347,6 +366,13 @@ public partial class TaskbarWidgetControl : UserControl
     private void UpdateMarquee(System.Windows.Controls.TextBlock textBlock, Canvas container, double textWidth, double availableWidth, bool isEnabled)
     {
         if (textBlock.RenderTransform as TranslateTransform is not { } transform) return;
+
+        // The lyric reveal owns the title text until it completes; marquee updates
+        // must not replace its partial frame with the regular song title.
+        if (textBlock == SongTitle && _lyricsText != null)
+        {
+            return;
+        }
 
         int speed = SettingsManager.Current.TaskbarWidgetScrollingTextSpeed;
         bool loopForever = SettingsManager.Current.TaskbarWidgetScrollingTextLoopForever;
@@ -494,6 +520,7 @@ public partial class TaskbarWidgetControl : UserControl
             {
                 _actualTitle = string.Empty;
                 _actualArtist = string.Empty;
+                _lyricsText = null;
 
                 if (SettingsManager.Current.TaskbarWidgetHideCompletely)
                 {
@@ -567,8 +594,9 @@ public partial class TaskbarWidgetControl : UserControl
 
                 _actualTitle = newTitle;
                 _actualArtist = newArtist;
+                _lyricsText = null;
 
-                SongTitle.Text = _actualTitle;
+                SongTitle.Text = _lyricsText ?? _actualTitle;
                 SongArtist.Text = _actualArtist;
             }
 
@@ -629,6 +657,101 @@ public partial class TaskbarWidgetControl : UserControl
         });
     }
 
+    public void SetLyricsText(string text)
+    {
+        void Apply()
+        {
+            if (!SettingsManager.Current.TaskbarLyricsEnabled) return;
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                _lyricsText = text;
+                AnimateLyricsText(text);
+                SongArtist.Text = $"{_actualTitle} - {_actualArtist}";
+            }
+        }
+
+        if (Dispatcher.CheckAccess()) Apply();
+        else Dispatcher.BeginInvoke(Apply, DispatcherPriority.Render);
+    }
+
+    private void AnimateLyricsText(string text)
+    {
+        if (string.Equals(_animatedLyricsText, text, StringComparison.Ordinal)) return;
+        _animatedLyricsText = text;
+        _lyricsWordTimer?.Stop();
+
+        if (!SettingsManager.Current.TaskbarLyricsWordAnimationEnabled)
+        {
+            SongTitle.Text = text;
+            StartLyricsMarquee();
+            return;
+        }
+
+        var tokens = text.Any(char.IsWhiteSpace)
+            ? System.Text.RegularExpressions.Regex.Matches(text, @"\s+|[^\s]+\s*").Select(x => x.Value).ToArray()
+            : text.Select(x => x.ToString()).ToArray();
+        _lyricsAnimationIndex = 0;
+
+        SongTitle.Text = string.Empty;
+        // Keep the title on a fixed baseline while lyrics are revealed. The
+        // previous vertical bounce made the taskbar title visibly jump.
+        if (SongTitle.RenderTransform is TranslateTransform transform)
+        {
+            transform.BeginAnimation(TranslateTransform.YProperty, null);
+            transform.Y = 0;
+        }
+
+        _lyricsWordTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(35) };
+        _lyricsWordTimer.Tick += (_, _) =>
+        {
+            if (_lyricsAnimationIndex >= tokens.Length)
+            {
+                _lyricsWordTimer?.Stop();
+                SongTitle.Text = text;
+                StartLyricsMarquee();
+                return;
+            }
+            SongTitle.Text += tokens[_lyricsAnimationIndex++];
+        };
+        _lyricsWordTimer.Start();
+    }
+
+    private void StartLyricsMarquee()
+    {
+        if (SongTitle.RenderTransform is not TranslateTransform transform)
+            return;
+
+        transform.BeginAnimation(TranslateTransform.XProperty, null);
+        transform.X = 0;
+        // Let the TextBlock measure its full lyric line; SongTitleContainer
+        // remains the clipping viewport for the marquee.
+        SongTitle.Width = double.NaN;
+        SongTitle.TextTrimming = TextTrimming.None;
+        SongTitleContainer.ClipToBounds = true;
+
+        if (!SettingsManager.Current.TaskbarLyricsScrollingEnabled || SongTitleContainer.ActualWidth <= 0)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(StartLyricsMarquee));
+            return;
+        }
+
+        var textWidth = StringWidth.GetStringWidth(SongTitle.Text, 400);
+        var distance = textWidth - SongTitleContainer.ActualWidth + 12;
+        if (distance <= 0)
+            return;
+
+        var spacer = "    ";
+        SongTitle.Text = SongTitle.Text + spacer + SongTitle.Text;
+        var cycleWidth = textWidth + StringWidth.GetStringWidth(spacer, 400);
+        transform.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation
+        {
+            From = 0,
+            To = -cycleWidth,
+            Duration = TimeSpan.FromSeconds(Math.Max(4, cycleWidth / 22)),
+            RepeatBehavior = RepeatBehavior.Forever
+        });
+    }
+
     private async void AnimateEntrance()
     {
         try
@@ -644,19 +767,10 @@ public partial class TaskbarWidgetControl : UserControl
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
             };
 
-            DoubleAnimation translateAnimation = new()
-            {
-                From = -10,
-                To = 0,
-                Duration = TimeSpan.FromMilliseconds(msDuration),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-
-            // Apply animations
+            // Keep the title region stationary. Media sessions can publish the same
+            // metadata more than once, and replaying a horizontal entrance animation
+            // makes the title visibly jitter in the taskbar widget.
             SongInfoStackPanel.BeginAnimation(OpacityProperty, opacityAnimation);
-            TranslateTransform translateTransform = new();
-            SongInfoStackPanel.RenderTransform = translateTransform;
-            translateTransform.BeginAnimation(TranslateTransform.XProperty, translateAnimation);
 
             // don't play ControlsStackPanel animation if it's not enabled
             if (!SettingsManager.Current.TaskbarWidgetControlsEnabled)
@@ -665,7 +779,13 @@ public partial class TaskbarWidgetControl : UserControl
             ControlsStackPanel.BeginAnimation(OpacityProperty, opacityAnimation);
             TranslateTransform translateTransform2 = new();
             ControlsStackPanel.RenderTransform = translateTransform2;
-            translateTransform2.BeginAnimation(TranslateTransform.XProperty, translateAnimation);
+            translateTransform2.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation
+            {
+                From = -10,
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(msDuration),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+            });
         }
         catch (Exception ex)
         {
@@ -702,5 +822,19 @@ public partial class TaskbarWidgetControl : UserControl
         if (focusedSession == null) return;
 
         await focusedSession.ControlSession.TrySkipNextAsync();
+    }
+
+    private async void Lyrics_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        if (_mainWindow != null)
+            await _mainWindow.ShowLyricsForActiveSessionAsync();
+    }
+
+    private async void Like_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        if (_mainWindow != null)
+            await _mainWindow.ToggleNeteaseLikeAsync();
     }
 }

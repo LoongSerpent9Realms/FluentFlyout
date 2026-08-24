@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -61,6 +61,10 @@ public partial class UserSettings : ObservableObject
     /// </summary>
     [ObservableProperty]
     public partial bool PlayerInfoEnabled { get; set; }
+
+    /// <summary>Whether the media flyout shows the NetEase like button.</summary>
+    [ObservableProperty]
+    public partial bool MediaFlyoutNeteaseLikeEnabled { get; set; }
 
     /// <summary>
     /// Enable repeat button
@@ -359,6 +363,10 @@ public partial class UserSettings : ObservableObject
     [ObservableProperty]
     public partial bool TaskbarWidgetEnabled { get; set; }
 
+    /// <summary>Whether the taskbar widget shows the NetEase like button.</summary>
+    [ObservableProperty]
+    public partial bool TaskbarWidgetNeteaseLikeEnabled { get; set; }
+
     /// <summary>
     /// Widget Target Display
     /// </summary>
@@ -470,6 +478,34 @@ public partial class UserSettings : ObservableObject
     [ObservableProperty]
     public partial bool TaskbarWidgetScrollingTextLoopForever { get; set; }
 
+    /// <summary>Whether synchronized lyrics are shown in the media surfaces.</summary>
+    [ObservableProperty]
+    public partial bool TaskbarLyricsEnabled { get; set; }
+
+    /// <summary>Whether lyrics are revealed word-by-word (or character-by-character).</summary>
+    [ObservableProperty]
+    public partial bool TaskbarLyricsWordAnimationEnabled { get; set; }
+
+    /// <summary>Whether long lyrics scroll in the taskbar widget.</summary>
+    [ObservableProperty]
+    public partial bool TaskbarLyricsScrollingEnabled { get; set; }
+
+    [ObservableProperty]
+    public partial bool DesktopLyricsEnabled { get; set; }
+
+    [ObservableProperty]
+    public partial bool DesktopLyricsAutoShow { get; set; }
+
+    [ObservableProperty]
+    public partial bool DesktopLyricsClickThrough { get; set; }
+
+    [ObservableProperty]
+    public partial int DesktopLyricsTheme { get; set; }
+
+    /// <summary>Base URL used for lyric search and lyric retrieval.</summary>
+    [ObservableProperty]
+    public partial string LyricsApiBaseUrl { get; set; }
+
     /// <summary>
     /// Gets or sets the speed of the taskbar widget scrolling text.
     /// </summary>
@@ -531,6 +567,14 @@ public partial class UserSettings : ObservableObject
     /// </summary>
     [ObservableProperty]
     public partial ObservableCollection<string> BlockedApps { get; set; }
+
+    /// <summary>Display name or session id of the media app preferred by the flyout.</summary>
+    [ObservableProperty]
+    public partial string PreferredMediaApp { get; set; }
+
+    /// <summary>Media app priority order used when multiple sessions are available.</summary>
+    [ObservableProperty]
+    public partial ObservableCollection<string> PreferredMediaAppOrder { get; set; }
 
     /// <summary>
     /// Position of the visualizer, where 0 and 1 are to the left or right of the widget.
@@ -697,6 +741,7 @@ public partial class UserSettings : ObservableObject
         Position = 0;
         FlyoutAnimationSpeed = 2;
         PlayerInfoEnabled = true;
+        MediaFlyoutNeteaseLikeEnabled = true;
         RepeatEnabled = false;
         ShuffleEnabled = false;
         Startup = true;
@@ -734,6 +779,7 @@ public partial class UserSettings : ObservableObject
         LockKeysAcrylicWindowEnabled = true;
         VolumeMixerAcrylicWindowEnabled = true;
         TaskbarWidgetEnabled = false;
+        TaskbarWidgetNeteaseLikeEnabled = true;
         TaskbarWidgetSelectedMonitor = 0;
         TaskbarWidgetPosition = 0;
         TaskbarWidgetPadding = true;
@@ -748,6 +794,14 @@ public partial class UserSettings : ObservableObject
         TaskbarWidgetScrollingEnabled = false;
         TaskbarWidgetScrollingTextSpeed = 20;
         TaskbarWidgetScrollingTextLoopForever = false;
+        TaskbarLyricsEnabled = true;
+        TaskbarLyricsWordAnimationEnabled = true;
+        TaskbarLyricsScrollingEnabled = true;
+        DesktopLyricsEnabled = true;
+        DesktopLyricsAutoShow = false;
+        DesktopLyricsClickThrough = false;
+        DesktopLyricsTheme = 0;
+        LyricsApiBaseUrl = "https://music.loongst.com/";
         TaskbarVisualizerEnabled = false;
         AppFilteringEnabled = false;
         AppFilteringMode = 0;
@@ -773,6 +827,8 @@ public partial class UserSettings : ObservableObject
         AnonymousTelemetryAllowed = true;
         AllowedApps = [];
         BlockedApps = [];
+        PreferredMediaApp = string.Empty;
+        PreferredMediaAppOrder = [];
 
         PropertyChanged += OnPropertyChangedSaveSettings;
     }
@@ -1025,6 +1081,12 @@ public partial class UserSettings : ObservableObject
 
         MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
         mainWindow?.RefreshFilteredMedia();
+    }
+
+    partial void OnPreferredMediaAppChanged(string oldValue, string newValue)
+    {
+        if (oldValue == newValue || _initializing) return;
+        (Application.Current.MainWindow as MainWindow)?.RefreshFilteredMedia();
     }
 
     partial void OnVolumeMixerHighlightActiveAppsChanged(bool oldValue, bool newValue)

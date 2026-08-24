@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyoutWPF.ViewModels;
@@ -17,7 +17,7 @@ public class SettingsManager
 
     private static string SettingsFilePath => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "FluentFlyout",
+        "PulseFlyout",
         "settings.xml"
     );
 

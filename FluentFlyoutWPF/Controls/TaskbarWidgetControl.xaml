@@ -8,6 +8,7 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance viewModels:UserSettings}"
              Height="40" Width="100"
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
              TextOptions.TextRenderingMode="ClearType" TextOptions.TextFormattingMode="Ideal"
              FontFamily="{Binding FontFamily}"
              FlowDirection="{Binding FlowDirection}">
@@ -19,9 +20,9 @@
                 </Image.Effect>
             </Image>
             <Border Name="TopBorder" BorderThickness="0,1.25,0,0" CornerRadius="5" Margin="0,0,0,1.25">
-                <Grid Name="MainGrid" HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="0,0.5">
+                <Grid Name="MainGrid" HorizontalAlignment="Left" VerticalAlignment="Center" UseLayoutRounding="True" SnapsToDevicePixels="True" RenderTransformOrigin="0,0.5">
                     <Grid.RenderTransform>
-                        <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                        <ScaleTransform ScaleX="0.9" ScaleY="1" />
                     </Grid.RenderTransform>
                     <StackPanel Name="MainStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Width="Auto" Margin="4,0,-100,0">
                         <Border Name="SongImageBorder" CornerRadius="5" ClipToBounds="True" Width="36" Height="36" Panel.ZIndex="2">
@@ -33,7 +34,7 @@
                             </Border.Background>
                         </Border>
 
-                        <StackPanel Name="SongInfoStackPanel" Orientation="Vertical" VerticalAlignment="Center" Width="Auto" Margin="8,0,0,0" 
+                        <StackPanel Name="SongInfoStackPanel" Orientation="Vertical" VerticalAlignment="Center" UseLayoutRounding="True" SnapsToDevicePixels="True" Width="Auto" Margin="8,0,0,0" 
                                     ToolTipService.InitialShowDelay="800"
                                     ToolTipService.Placement="RelativePoint"
                                     ToolTipService.VerticalOffset="-16">
@@ -67,6 +68,12 @@
                             <ui:Button Name="PreviousButton" Appearance="Transparent" Icon="{ui:SymbolIcon Previous20, Filled=True}" Height="32" Width="32" Padding="0" BorderThickness="0" Margin="0,0,0,-1" Click="Previous_Click"/>
                             <ui:Button Name="PlayPauseButton" Appearance="Transparent" Icon="{ui:SymbolIcon Pause16, Filled=True}" Height="32" Width="32" Padding="0" BorderThickness="0" Margin="0,0,0,-1" Click="PlayPause_Click"/>
                             <ui:Button Name="NextButton" Appearance="Transparent" Icon="{ui:SymbolIcon Next20, Filled=True}" Height="32" Width="32" Padding="0" BorderThickness="0" Margin="0,0,0,-1" Click="Next_Click"/>
+                            <ui:Button Name="LikeButton" Visibility="Collapsed" Appearance="Transparent" Height="32" Width="32" Padding="0" BorderThickness="0" Margin="0,0,0,-1" Click="Like_Click" ToolTip="喜欢当前歌曲">
+                                <ui:SymbolIcon Name="LikeIcon" Symbol="Heart24" FontSize="18" />
+                            </ui:Button>
+                        <ui:Button Name="LyricsButton" Visibility="Collapsed" Appearance="Transparent" Height="32" Width="32" Padding="0" BorderThickness="0" Margin="0,0,0,-1" Click="Lyrics_Click" ToolTip="{DynamicResource LyricsButtonToolTip}">
+                                <ui:SymbolIcon Symbol="TextBulletListSquare24" FontSize="18" />
+                            </ui:Button>
                         </StackPanel>
 
                     </StackPanel>

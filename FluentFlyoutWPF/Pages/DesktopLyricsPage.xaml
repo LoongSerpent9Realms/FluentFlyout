@@ -1,0 +1,38 @@
+<Page x:Class="FluentFlyoutWPF.Pages.DesktopLyricsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:viewModels="clr-namespace:FluentFlyoutWPF.ViewModels"
+      mc:Ignorable="d" Title="DesktopLyricsPage" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      d:DataContext="{d:DesignInstance viewModels:UserSettings}">
+    <StackPanel MaxWidth="1000" Margin="16">
+        <TextBlock Text="桌面歌词" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20" />
+        <TextBlock Text="独立的双栏歌词窗口，可手动打开，也可在全屏应用时自动显示。" Opacity="0.65" Margin="0,0,0,18" TextWrapping="Wrap" />
+        <ui:Button Content="立即打开桌面歌词" Appearance="Primary" HorizontalAlignment="Left" Padding="18,8" Margin="0,0,0,16" Click="OpenLyrics_Click" />
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon TextBulletListSquare24}" Margin="0,0,0,3">
+            <ui:CardControl.Header><StackPanel><TextBlock Text="启用桌面歌词" FontSize="14" /><TextBlock Text="允许通过媒体栏歌词按钮手动打开窗口。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsEnabled, Mode=TwoWay}" />
+        </ui:CardControl>
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon FullScreenMaximize24}" Margin="0,0,0,3">
+            <ui:CardControl.Header><StackPanel><TextBlock Text="全屏时自动显示" FontSize="14" /><TextBlock Text="检测到独占全屏应用时自动打开，退出全屏后自动关闭。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsAutoShow, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" />
+        </ui:CardControl>
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon CursorClick24}" Margin="0,0,0,12">
+            <ui:CardControl.Header><StackPanel><TextBlock Text="鼠标穿透" FontSize="14" /><TextBlock Text="歌词窗口不拦截底层应用的鼠标操作。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsClickThrough, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" />
+        </ui:CardControl>
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon ColorBackground24}" Margin="0,0,0,3">
+            <ui:CardControl.Header>
+                <StackPanel><TextBlock Text="歌词主题" FontSize="14" /><TextBlock Text="选择桌面歌词窗口的颜色和对比度。" FontSize="12" Opacity="0.5" /></StackPanel>
+            </ui:CardControl.Header>
+            <ComboBox SelectedIndex="{Binding DesktopLyricsTheme, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" Width="180">
+                <ComboBoxItem Content="深色玻璃" />
+                <ComboBoxItem Content="浅色纸张" />
+                <ComboBoxItem Content="霓虹夜色" />
+                <ComboBoxItem Content="极简黑白" />
+            </ComboBox>
+        </ui:CardControl>
+    </StackPanel>
+</Page>

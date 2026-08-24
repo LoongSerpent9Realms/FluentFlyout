@@ -1,0 +1,50 @@
+<Window x:Class="FluentFlyoutWPF.Windows.LyricsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{DynamicResource LyricsWindowTitle}" Width="620" Height="260"
+        MinWidth="420" MinHeight="180" WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False" Background="Transparent" AllowsTransparency="True" WindowStyle="None"
+        ResizeMode="CanResize" Topmost="True" ShowActivated="False">
+    <Border x:Name="LyricsSurface" Padding="24,18" CornerRadius="12" BorderBrush="#55FFFFFF" BorderThickness="1"
+            MouseLeftButtonDown="WindowDrag_MouseLeftButtonDown"
+            MouseEnter="LyricsBorder_MouseEnter" MouseLeave="LyricsBorder_MouseLeave">
+      <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Panel.ZIndex="2">
+          <Button x:Name="LockButton" Width="28" Height="28" Visibility="Collapsed" Click="LockButton_Click"
+                  ToolTip="锁定并开启鼠标穿透" Background="#55000000" BorderThickness="0" Foreground="White" FontSize="15" Padding="0">
+            <TextBlock Text="&#xE72E;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Button>
+          <Button x:Name="CloseButton" Width="28" Height="28" Margin="6,0,0,0" Visibility="Collapsed" Click="CloseButton_Click"
+                  ToolTip="关闭桌面歌词" Background="#55000000" BorderThickness="0" Foreground="White" FontSize="15" Padding="0">
+            <TextBlock Text="&#xE711;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Button>
+        </StackPanel>
+        <StackPanel Margin="0,0,0,12">
+            <TextBlock x:Name="SongTitleText" Foreground="White" FontSize="18" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="SongArtistText" Foreground="#B8FFFFFF" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+        </StackPanel>
+        <Grid Grid.Row="1">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="18" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <TextBlock x:Name="CurrentLineText" Foreground="#FFFFFFFF" FontSize="22" FontWeight="SemiBold"
+                     TextWrapping="Wrap" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                     RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform><TranslateTransform x:Name="CurrentLineOffset" /></TextBlock.RenderTransform>
+          </TextBlock>
+          <Border Grid.Column="1" Width="1" Background="#44FFFFFF" />
+          <TextBlock x:Name="NextLineText" Grid.Column="2" Foreground="#99FFFFFF" FontSize="17"
+                     TextWrapping="Wrap" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                     RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform><TranslateTransform x:Name="NextLineOffset" /></TextBlock.RenderTransform>
+          </TextBlock>
+        </Grid>
+      </Grid>
+    </Border>
+</Window>

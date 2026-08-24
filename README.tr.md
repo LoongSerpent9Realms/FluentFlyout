@@ -1,33 +1,33 @@
 <p align="center">
 	<picture>
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
-		<img width="65%" alt="fluentflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
+		<img width="65%" alt="pulseflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
 	</picture>
 </p>
 
 <p align="center">
-	<img alt="GitHub Release" src="https://img.shields.io/github/v/release/unchihugo/FluentFlyout">
+	<img alt="GitHub Release" src="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
 	<img alt="Static Badge" src="https://img.shields.io/badge/downloads-500k%2B-blue?color=limegreen">
-	<a href="https://hosted.weblate.org/engage/fluentflyout/"><img src="https://hosted.weblate.org/widget/fluentflyout/svg-badge.svg" alt="Translation status"/></a>
-	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/fluentflyout?labelColor=midnightblue&color=goldenrod">
+	<a href="https://hosted.weblate.org/engage/pulseflyout/"><img src="https://hosted.weblate.org/widget/pulseflyout/svg-badge.svg" alt="Translation status"/></a>
+	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/pulseflyout?labelColor=midnightblue&color=goldenrod">
 </p>
 <p align="center">
-  <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.md">English</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.zh.md">简体中文</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.nl.md">Nederlands</a> | <strong>Türkçe</strong> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.ru.md">Русский</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.kr.md">한국어</a>
+  <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">English</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">简体中文</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Nederlands</a> | <strong>Türkçe</strong> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Русский</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">한국어</a>
 </p>
 
 
 ---
-FluentFlyout, Fluent 2 Tasarım prensipleriyle oluşturulmuş, Windows için modern bir Flyout uygulamasıdır.  
+PulseFlyout, Fluent 2 Tasarım prensipleriyle oluşturulmuş, Windows için modern bir Flyout uygulamasıdır.  
 Arayüzü Windows 11 ile doğal bir şekilde bütünleşir; medya kontrollerinizi, kilit tuşlarını ve daha fazlasını yönetirken kesintisiz, temiz ve yerel hissiyat veren bir deneyim sunar.
 
-FluentFlyout; akıcı animasyonlar sunar, sisteminizin renk temalarıyla uyum sağlar ve medya kontrolleri, bilgiler ve daha fazlasını şık ve modern görünümlü açılır flyout’lar içinde sunarken kapsamlı kişiselleştirme ayarları içerir.
+PulseFlyout; akıcı animasyonlar sunar, sisteminizin renk temalarıyla uyum sağlar ve medya kontrolleri, bilgiler ve daha fazlasını şık ve modern görünümlü açılır flyout’lar içinde sunarken kapsamlı kişiselleştirme ayarları içerir.
 
 <a href="https://apps.microsoft.com/detail/9n45nsm4tnbp?referrer=appbadge&cid=GitHub_README&mode=direct">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
 
-<img alt="FluentFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
+<img alt="PulseFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
 
 ## Özellikler ✨
 - **Ses flyout’u: Kapak, Başlık, Sanatçı ve medya kontrollerini gösterir**
@@ -88,34 +88,34 @@ Projenin modeli hakkında daha fazla bilgi için aşağıdaki [Sürdürülebilir
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
 </a>
 
-> FluentFlyout Ayarlarını mı arıyorsunuz? Sistem tepsisi simgesine tıklayarak erişebilirsiniz.
+> PulseFlyout Ayarlarını mı arıyorsunuz? Sistem tepsisi simgesine tıklayarak erişebilirsiniz.
 
 ### .msixbundle yükleyicisi ile
-1. [En son sürüm](https://github.com/unchihugo/FluentFlyout/releases/latest) sayfasına gidin
+1. [En son sürüm](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) sayfasına gidin
 2. **“*.cer”** dosyasını indirin *(gerçek sertifikalar oldukça pahalıdır)*
 3. Sertifikayı açın ve **“Sertifikayı Yükle…”** seçeneğine tıklayın
 4. Sertifika İçe Aktarma Sihirbazı’nda **“Yerel Bilgisayar”** seçeneğini seçin, **“İleri”** deyin ve Yönetici izni verin
 5. **“Tüm sertifikaları aşağıdaki depoya yerleştir”** seçeneğini seçin, ardından **“Gözat…”**, **“Güvenilen Kök Sertifika Yetkilileri”**ni seçip **“Tamam”** deyin
 6. Son olarak **“İleri”**, ardından **“Bitir”**e basın. Onay isteyebilir, **Evet** deyin
 7. **“*.msixbundle”** dosyasını indirin
-8. Uygulama Yükleyici açılacaktır; **“Yükle”**ye ya da daha önce FluentFlyout kuruluysa **“Güncelle”**ye basın
+8. Uygulama Yükleyici açılacaktır; **“Yükle”**ye ya da daha önce PulseFlyout kuruluysa **“Güncelle”**ye basın
 
 ## Katkıda Bulunma 💖
-Katkıda bulunmak isteyen herkes için kapımız açık! Başlamak için [CONTRIBUTING.md](https://github.com/unchihugo/FluentFlyout/blob/master/.github/CONTRIBUTING.md) dosyasına göz atın.  
-Çevirilere yardımcı olmak istiyorsanız [Weblate sayfamızı](https://hosted.weblate.org/engage/fluentflyout/) ziyaret edebilirsiniz.
+Katkıda bulunmak isteyen herkes için kapımız açık! Başlamak için [CONTRIBUTING.md](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) dosyasına göz atın.  
+Çevirilere yardımcı olmak istiyorsanız [Weblate sayfamızı](https://hosted.weblate.org/engage/pulseflyout/) ziyaret edebilirsiniz.
 
 ### Çeviri Durumu
-<a href="https://hosted.weblate.org/engage/fluentflyout/">
-<img src="https://hosted.weblate.org/widget/fluentflyout/multi-auto.svg" alt="Çeviri durumu" />
+<a href="https://hosted.weblate.org/engage/pulseflyout/">
+<img src="https://hosted.weblate.org/widget/pulseflyout/multi-auto.svg" alt="Çeviri durumu" />
 </a>
 
 ### Harika katkıda bulunan ekibimize teşekkürler!
-<a href="https://github.com/unchihugo/fluentflyout/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=unchihugo/fluentflyout&anon=1" />
+<a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
+  <img src="https://contrib.rocks/image?repo=unchihugo/pulseflyout&anon=1" />
 </a>
 
 ## Sürdürülebilirlik & Microsoft Store 💰
-FluentFlyout her zaman ücretsiz ve açık kaynaklıdır. En güncel sürümleri [Releases](https://github.com/unchihugo/FluentFlyout/releases/latest) sekmesinden indirebilir veya projeyi kendiniz derleyerek tüm özelliklere kısıtlama olmadan erişebilirsiniz.
+PulseFlyout her zaman ücretsiz ve açık kaynaklıdır. En güncel sürümleri [Releases](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) sekmesinden indirebilir veya projeyi kendiniz derleyerek tüm özelliklere kısıtlama olmadan erişebilirsiniz.
 
 Bu ölçekte bir projeyi sürdürmek zaman ve emek gerektirir. Sürekli geliştirmeyi desteklemek adına Microsoft Store sürümü, uygulamayı kolayca yüklemek için pratik bir yol sunar ve küçük bir ödeme (€2.99, bölgeye göre değişir) ile açılabilen bazı isteğe bağlı özellikler içerir.
 

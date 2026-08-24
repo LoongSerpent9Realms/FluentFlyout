@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace FluentFlyoutWPF.Classes.Clients;
 
-public sealed class FluentFlyoutApiClient
+public sealed class PulseFlyoutApiClient
 {
     private static readonly object _lock = new();
     private static readonly TimeSpan _timeout = TimeSpan.FromSeconds(2);
@@ -17,7 +17,7 @@ public sealed class FluentFlyoutApiClient
     private static int _consecutiveTimeouts;
     private static HttpClient _client;
 
-    static FluentFlyoutApiClient()
+    static PulseFlyoutApiClient()
     {
         _client = CreateClient();
     }
@@ -90,7 +90,7 @@ public sealed class FluentFlyoutApiClient
         string normalizedVersion = string.IsNullOrWhiteSpace(appVersion) ? "unknown" : appVersion;
 
         _client.DefaultRequestHeaders.UserAgent.Clear();
-        _client.DefaultRequestHeaders.UserAgent.ParseAdd($"FluentFlyout/{normalizedVersion}");
+        _client.DefaultRequestHeaders.UserAgent.ParseAdd($"PulseFlyout/{normalizedVersion}");
     }
 
     private static void RenewClient()

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -50,7 +50,7 @@ internal class ExperimentsService
         var result = new ExperimentsResult();
         try
         {
-            var response = await FluentFlyoutApiClient.GetStringAsync(ApiEndpoint);
+            var response = await PulseFlyoutApiClient.GetStringAsync(ApiEndpoint);
             var experimentDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Experiment>>(response);
             if (experimentDict != null)
             {

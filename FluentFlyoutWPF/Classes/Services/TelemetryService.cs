@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -32,7 +32,7 @@ public static class TelemetryService
                 appVersion,
             };
 
-            await FluentFlyoutApiClient.PostAsJsonAsync(ApiEndpoint, telemetryData);
+            await PulseFlyoutApiClient.PostAsJsonAsync(ApiEndpoint, telemetryData);
         }
         catch (TaskCanceledException ex)
         {

@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">FluentFlyout-Einstellungen</system:String>
+    <system:String x:Key="TitleText">PulseFlyout-Einstellungen</system:String>
     <system:String x:Key="TextBlockText2">Wähle aus einer Reihe moderner Hintergrundstile</system:String>
     <system:String x:Key="BackgroundBlurOption2" xml:space="preserve"> Stil 1 (Cover Glow)</system:String>
     <system:String x:Key="BackgroundBlurOption3" xml:space="preserve"> Stil 2 (Rising Glow)</system:String>
@@ -40,7 +40,7 @@ verbirgt autom. Wiederholung, Shuffle und Player-Information</system:String>
     <system:String x:Key="TaskbarWidgetVisualIssuesWarning">Passe die folgenden Optionen an, falls visuelle Probleme auftreten.</system:String>
     <system:String x:Key="TaskbarWidgetPaddingDescription">Schalte diese Funktion ein, falls Du Windows-Widgets eingeschaltet hast</system:String>
     <system:String x:Key="TaskbarWidgetBackgroundBlurTitle">Hintergrund-Unschärfe</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Dein einmaliger Beitrag hilft mir, FluentFlyout zu entwickeln und zu aktualisieren. Der Beitrag schaltet sofort und für immer alle Premium-Anpassungsoptionen frei.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Dein einmaliger Beitrag hilft mir, PulseFlyout zu entwickeln und zu aktualisieren. Der Beitrag schaltet sofort und für immer alle Premium-Anpassungsoptionen frei.
         
 Anmerkung: Als Open-Source-Projekt sind diese Funktionen auch kostenlos verfügbar, wenn Du das manuelle Installationsprogramm auf GitHub nutzt. Der einzige Nachteil besteht darin, dass dabei Aktualisierungen sowie die erstmalige Installation manuell durchgeführt werden müssen.</system:String>
     <system:String x:Key="PremiumLockedMessage">Diese Funktion ist Teil des Premium-Pakets</system:String>
@@ -48,7 +48,7 @@ Anmerkung: Als Open-Source-Projekt sind diese Funktionen auch kostenlos verfügb
     <system:String x:Key="PremiumGitHubMessage">Premium-Funktionen sind in der Version auf GitHub sowie in selbst kompilierten Versionen bereits freigeschaltet</system:String>
     <system:String x:Key="TrayIcon_SettingsOption">Einstellungen</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">Fehler melden</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">FluentFlyout beenden</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">PulseFlyout beenden</system:String>
     <system:String x:Key="LaunchOnStartupTitle">Beim Start starten</system:String>
     <system:String x:Key="EasingQuadratic" xml:space="preserve"> Quadratisch</system:String>
     <system:String x:Key="EasingCubic" xml:space="preserve"> Kubisch</system:String>
@@ -137,7 +137,7 @@ Du kannst helfen, die App zu übersetzen auf</system:String>
     <system:String x:Key="MediaFlyoutDescription">Beim Abspielen von Medien kannst du eine beliebige Medien- oder Lautstärketaste (Play/Pause, Lauter/Leiser usw.) auf der Tastatur drücken, um das Flyout anzuzeigen. Zeigt Medieninformationen sowie Wiedergabesteuerungen und weitere Optionen.</system:String>
     <system:String x:Key="LockKeysBoldUIDescription">Hebt das Flyout-Symbol und die Schrift hervor</system:String>
     <system:String x:Key="UpdateAvailableNotificationButton">Aktualisierung herunterladen</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout wurde aktualisiert!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout wurde aktualisiert!</system:String>
     <system:String x:Key="UpdateToastButton">Aktualisierungen ansehen</system:String>
     <system:String x:Key="UpdateAvailable">Aktualisierung verfügbar</system:String>
     <system:String x:Key="UpToDate">Auf dem neuesten Stand</system:String>
@@ -172,7 +172,7 @@ Du kannst helfen, die App zu übersetzen auf</system:String>
     <system:String x:Key="TaskbarVisualizerBaselineDescription">Zeigt eine dünne Linie an, wenn kein Ton anliegt</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">Audio-Empfindlichkeit</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">Legt fest, wie laut der Ton sein muss, bevor sich die Balken bewegen</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Schalte das volle FluentFlyout-Erlebnis frei:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Schalte das volle PulseFlyout-Erlebnis frei:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">Taskleisten-Widget</system:String>
     <system:String x:Key="AcrylicBlurOpacityPerk">Deckkraft der Acryl-Unschärfe anpassen</system:String>
     <system:String x:Key="HideTrayIconPerk">Symbol im Infobereich ausblenden</system:String>
@@ -186,11 +186,11 @@ Du kannst helfen, die App zu übersetzen auf</system:String>
     <system:String x:Key="SystemConfigure">Konfigurieren</system:String>
     <system:String x:Key="AboutTitle">Über</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ Unsere Mitwirkenden</system:String>
-    <system:String x:Key="AboutContributorsDescription">Ein großes Dankeschön an all die großartigen Menschen, die zur Entwicklung und zum Erfolg von FluentFlyout beigetragen haben!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Ein großes Dankeschön an all die großartigen Menschen, die zur Entwicklung und zum Erfolg von PulseFlyout beigetragen haben!</system:String>
     <system:String x:Key="DevelopersTitle">Entwickler</system:String>
     <system:String x:Key="TranslatorsTitle">Übersetzer</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">Open-Source-Lizenzen</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout nutzt die folgenden Open-Source-Pakete:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout nutzt die folgenden Open-Source-Pakete:</system:String>
     <system:String x:Key="SponsorMeLink">Unterstütze mich</system:String>
     <system:String x:Key="BuyMeCoffeeLink">Einen Kaffee kaufen</system:String>
     <system:String x:Key="UpdateToastMessage">Du benutzt jetzt Version {0}.</system:String>
@@ -200,7 +200,7 @@ Du kannst helfen, die App zu übersetzen auf</system:String>
     <system:String x:Key="TaskbarWidgetCloseableFlyoutDescription">Schließe das Flyout, wenn es bereits geöffnet ist, indem Du auf das Taskleisten-Widget klickst.</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Audio-Spitzenschwellenwert</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">Legt fest, wie laut der Ton sein muss, damit die Balken ihre maximale Höhe erreichen</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Ändere, worauf der Visualizer reagiert, indem Du das Ausgabegerät von FluentFlyout umschaltest.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Ändere, worauf der Visualizer reagiert, indem Du das Ausgabegerät von PulseFlyout umschaltest.</system:String>
     <system:String x:Key="BackupRestoreSectionTitle">Sichern &amp; Wiederherstellen</system:String>
     <system:String x:Key="BackupRestoreCardTitle">Sichern und Wiederherstellen der Einstellungen</system:String>
     <system:String x:Key="ExportSettings">Einstellungen exportieren</system:String>

@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">FluentFlyout 설정</system:String>
+    <system:String x:Key="TitleText">PulseFlyout 설정</system:String>
     <system:String x:Key="MediaFlyoutTitle">미디어 Flyout</system:String>
     <system:String x:Key="MediaFlyoutDescription">미디어를 재생할 때 키보드의 미디어 또는 볼륨 키 (재생/일시정지, 볼륨 높이기/낮추기 등)를 눌러 Flyout을 표시합니다. 재생 제어 기능과 함께 미디어 정보를 표시합니다.</system:String>
     <system:String x:Key="TextBlockText1">미디어 Flyout 활성화</system:String>
@@ -101,7 +101,7 @@
     <system:String x:Key="TrayIcon_SettingsOption">설정</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">저장소</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">오류 보고</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">FluentFlyout 종료</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">PulseFlyout 종료</system:String>
     <system:String x:Key="HomeTitle">홈</system:String>
     <system:String x:Key="Enabled">사용 중</system:String>
     <system:String x:Key="Disabled">사용 안함</system:String>
@@ -154,9 +154,9 @@
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">오디오 피크 임계값</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">바가 최대 높이에 도달하기 위한 음량</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">출력 장치</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">FluentFlyout의 오디오 출력 장치를 변경해 비주얼라이저가 표시하는 오디오 장치를 변경합니다.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">PulseFlyout의 오디오 출력 장치를 변경해 비주얼라이저가 표시하는 오디오 장치를 변경합니다.</system:String>
     <system:String x:Key="PremiumFeatureTitle">프리미엄 기능</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">후원은 FluentFlyout의 지속적인 개발과 업데이트에 큰 힘이 됩니다. 후원 즉시 모든 프리미엄 커스텀 기능을 영구적으로 이용하실 수 있습니다.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">후원은 PulseFlyout의 지속적인 개발과 업데이트에 큰 힘이 됩니다. 후원 즉시 모든 프리미엄 커스텀 기능을 영구적으로 이용하실 수 있습니다.
         
 참고: 본 프로젝트는 오픈 소스로 운영되므로, GitHub의 수동 설치 파일을 통해 해당 기능들을 무료로 이용하실 수 있습니다. 다만, 이 경우 설치와 업데이트를 직접 수동으로 진행해야 합니다.</system:String>
     <system:String x:Key="PremiumLockedMessage">프리미엄 패키지에 포함된 기능</system:String>
@@ -166,7 +166,7 @@
     <system:String x:Key="PremiumPurchaseSuccess">프리미엄 기능이 활성화되었습니다!</system:String>
     <system:String x:Key="PremiumPurchaseFailed">구매에 실패하였습니다. 다시 시도해주세요.</system:String>
     <system:String x:Key="PremiumPurchaseCancelled">구매가 취소되었습니다.</system:String>
-    <system:String x:Key="UnlockFullExperienceText">FluentFlyout의 모든 기능을 경험해 보세요:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">PulseFlyout의 모든 기능을 경험해 보세요:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">작업표시줄 위젯과 음악 비주얼라이저</system:String>
     <system:String x:Key="AcrylicBlurOpacityPerk">아크릴 블러 효과 조정</system:String>
     <system:String x:Key="HideTrayIconPerk">트레이 아이콘 숨기기</system:String>
@@ -188,17 +188,17 @@
     <system:String x:Key="SystemConfigure">설정 및 구성</system:String>
     <system:String x:Key="AboutTitle">정보</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ 제작에 도움을 주신 분들</system:String>
-    <system:String x:Key="AboutContributorsDescription">FluentFlyout의 개발과 성공에 기여해 주신 모든 멋진 분들께 진심으로 감사의 인사를 전합니다!</system:String>
+    <system:String x:Key="AboutContributorsDescription">PulseFlyout의 개발과 성공에 기여해 주신 모든 멋진 분들께 진심으로 감사의 인사를 전합니다!</system:String>
     <system:String x:Key="DevelopersTitle">개발</system:String>
     <system:String x:Key="TranslatorsTitle">번역</system:String>
     <system:String x:Key="AboutPremiumTitle">프리미엄 기능</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">오픈 소스 라이선스</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout는 다음의 오픈 소스 패키지들을 사용하여 제작되었습니다:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout는 다음의 오픈 소스 패키지들을 사용하여 제작되었습니다:</system:String>
     <system:String x:Key="SponsorMeLink">후원하기</system:String>
     <system:String x:Key="BuyMeCoffeeLink">커피 한 잔 사주기</system:String>
     <system:String x:Key="TrayIcon_ViewLogsOption">로그 보기</system:String>
     <system:String x:Key="PixelsUnit">px</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout이 업데이트되었습니다!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout이 업데이트되었습니다!</system:String>
     <system:String x:Key="UpdateToastMessage">현재 버전은 {0} 입니다.</system:String>
     <system:String x:Key="UpdateToastButton">업데이트 보기</system:String>
     <system:String x:Key="UpdateAvailable">업데이트 가능</system:String>

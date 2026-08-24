@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
-    <System:String x:Key="TitleText">FluentFlyout Settings</System:String>
+    <System:String x:Key="TitleText">PulseFlyout Settings</System:String>
     <System:String x:Key="HomeTitle">Home</System:String>
     <System:String x:Key="Enabled">Enabled</System:String>
     <System:String x:Key="Disabled">Disabled</System:String>
@@ -9,6 +9,9 @@
     <System:String x:Key="OnboardingStepsCounter">Step {0} of {1}</System:String>
     <System:String x:Key="MediaFlyoutTitle">Media Flyout</System:String>
     <System:String x:Key="MediaFlyoutDescription">When listening to media, press any media or volume key (play/pause, volume up/down, etc.) on your keyboard to display the flyout. Displays media info, along with playback controls and more.</System:String>
+    <System:String x:Key="LyricsButtonToolTip">Get lyrics</System:String>
+    <System:String x:Key="LyricsWindowTitle">Lyrics</System:String>
+    <System:String x:Key="LyricsNotFound">Lyrics could not be found for this song.</System:String>
     <System:String x:Key="TextBlockText1">Enable Media Flyout</System:String>
     <System:String x:Key="TextBlockText3">Display a flyout when you press a media key</System:String>
     <System:String x:Key="MediaFlyoutExcludeVolumeTitle">Exclude Volume Keys</System:String>
@@ -97,11 +100,11 @@ hides repeat, shuffle and player info</System:String>
     <System:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Audio Peak Threshold</System:String>
     <System:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">How loud audio must be for the bars to reach their maximum height</System:String>
     <System:String x:Key="TaskbarVisualizerOutputDeviceTitle">Output Device</System:String>
-    <System:String x:Key="TaskbarVisualizerOutputDeviceDescription">Change what the visualizer listens to by switching FluentFlyout's output device.</System:String>
+    <System:String x:Key="TaskbarVisualizerOutputDeviceDescription">Change what the visualizer listens to by switching PulseFlyout's output device.</System:String>
     <System:String x:Key="TaskbarVisualizerClickableTitle">Click to open Settings</System:String>
     <System:String x:Key="TaskbarVisualizerClickableDescription">Clicking the visualizer will open its settings page</System:String>
     <System:String x:Key="PremiumFeatureTitle">Premium Feature</System:String>
-    <System:String x:Key="PremiumFeatureDescription" xml:space="preserve">Your one-time contribution helps me keep FluentFlyout alive and updated. It instantly unlocks all premium customization features, forever.
+    <System:String x:Key="PremiumFeatureDescription" xml:space="preserve">Your one-time contribution helps me keep PulseFlyout alive and updated. It instantly unlocks all premium customization features, forever.
         
 Note: As an open-source project, these features are also available for free via the manual installer on GitHub. The only trade-off is that updates and installation must be done manually.</System:String>
     <System:String x:Key="PremiumLockedMessage">This feature is part of the premium package</System:String>
@@ -111,7 +114,7 @@ Note: As an open-source project, these features are also available for free via 
     <System:String x:Key="PremiumPurchaseSuccess">Premium unlocked successfully!</System:String>
     <System:String x:Key="PremiumPurchaseFailed">Purchase failed. Please try again.</System:String>
     <System:String x:Key="PremiumPurchaseCancelled">Purchase cancelled.</System:String>
-    <System:String x:Key="UnlockFullExperienceText">Unlock the full FluentFlyout experience:</System:String>
+    <System:String x:Key="UnlockFullExperienceText">Unlock the full PulseFlyout experience:</System:String>
     <System:String x:Key="TaskbarWidgetCustomizationPerk">Enable the Taskbar Widget and Visualizer</System:String>
     <System:String x:Key="AcrylicBlurOpacityPerk">Adjust the Acrylic blur effect</System:String>
     <System:String x:Key="HideTrayIconPerk">Hide the tray icon</System:String>
@@ -208,12 +211,12 @@ Note: As an open-source project, these features are also available for free via 
     <System:String x:Key="RemoveButton">Remove</System:String>
     <System:String x:Key="AboutTitle">About</System:String>
     <System:String x:Key="AboutContributorsTitle">❤️ Meet Our Contributors</System:String>
-    <System:String x:Key="AboutContributorsDescription">A big thank you to all the amazing people who have contributed to FluentFlyout's development and success!</System:String>
+    <System:String x:Key="AboutContributorsDescription">A big thank you to all the amazing people who have contributed to PulseFlyout's development and success!</System:String>
     <System:String x:Key="DevelopersTitle">Developers</System:String>
     <System:String x:Key="TranslatorsTitle">Translators</System:String>
     <System:String x:Key="AboutPremiumTitle">About Premium</System:String>
     <System:String x:Key="AboutOpenSourceLicensesTitle">Open Source Licenses</System:String>
-    <System:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout is built with the following open source packages:</System:String>
+    <System:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout is built with the following open source packages:</System:String>
     <System:String x:Key="EnjoyingAppText" xml:space="preserve">Enjoying the app? Star it on GitHub,
 or leave a review on Microsoft Store!</System:String>
     <System:String x:Key="GitHubRepoLink">GitHub Repository</System:String>
@@ -235,9 +238,9 @@ You can help contribute translations on</System:String>
     <System:String x:Key="TrayIcon_GitHubRepositoryOption">Repository</System:String>
     <System:String x:Key="TrayIcon_ViewLogsOption">View logs</System:String>
     <System:String x:Key="TrayIcon_ReportBugOption">Report bug</System:String>
-    <System:String x:Key="TrayIcon_QuitOption">Quit FluentFlyout</System:String>
+    <System:String x:Key="TrayIcon_QuitOption">Quit PulseFlyout</System:String>
     <System:String x:Key="PixelsUnit">px</System:String>
-    <System:String x:Key="UpdateToastTitle">FluentFlyout has been updated!</System:String>
+    <System:String x:Key="UpdateToastTitle">PulseFlyout has been updated!</System:String>
     <System:String x:Key="UpdateToastMessage">You are now on {0}.</System:String>
     <System:String x:Key="UpdateToastButton">View Updates</System:String>
     <System:String x:Key="SearchSettings">Search settings</System:String>

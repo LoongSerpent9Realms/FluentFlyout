@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="HomeTitle">முகப்பு</system:String>
-    <system:String x:Key="TitleText">FluentFlyout அமைப்புகள்</system:String>
+    <system:String x:Key="TitleText">PulseFlyout அமைப்புகள்</system:String>
     <system:String x:Key="Enabled">செயலில் உள்ளது</system:String>
     <system:String x:Key="Disabled">செயலில் இல்லை</system:String>
     <system:String x:Key="MediaFlyoutTitle">மீடியா ஃப்ளையவுட்</system:String>
@@ -35,7 +35,7 @@
     <system:String x:Key="PositionTopRight" xml:space="preserve"> மேல் வலது</system:String>
     <system:String x:Key="LockWindow_LockOn">ஆன்</system:String>
     <system:String x:Key="LockWindow_LockOff">ஆஃப்</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout அப்டேட் செய்யப்பட்டுள்ளது!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout அப்டேட் செய்யப்பட்டுள்ளது!</system:String>
     <system:String x:Key="UpdateToastMessage">நீங்கள் இப்போது {0} பதிப்பில் உள்ளீர்கள்.</system:String>
     <system:String x:Key="UpdateToastButton">அப்டேட்களை காண்க</system:String>
     <system:String x:Key="LockWindow_CapsLock">கேப்ஸ் லாக்</system:String>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
@@ -15,18 +15,22 @@
     <Configurations>Debug;Release;GitHub Release</Configurations>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<Product>PulseFlyout</Product>
+	<AssemblyTitle>PulseFlyout</AssemblyTitle>
+	<Description>PulseFlyout is a GPL-3.0-or-later audio and media flyout for Windows.</Description>
 	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'GitHub Release'">
     <DefineConstants>GITHUB_RELEASE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+	<ProjectReference Include="..\FluentFlyout.PluginApi\FluentFlyout.PluginApi.csproj" />
     <Content Remove="C:\Users\hu8go\.nuget\packages\dubya.windowsmediacontroller\2.5.5\contentFiles\any\net6.0-windows10.0.22000\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="icon.ico" />
     <None Remove="NLog.config" />
-    <None Remove="Resources\FluentFlyout2.ico" />
+    <None Remove="Resources\PulseFlyout.ico" />
     <None Remove="Resources\FluentFlyoutBlack.png" />
     <None Remove="Resources\FluentFlyoutDemo3.1.png" />
     <None Remove="Resources\FluentFlyoutDemo4.1.png" />
@@ -36,16 +40,21 @@
     <None Remove="Resources\FluentFlyoutTaskbar-NoTitle-Zoomed.png" />
     <None Remove="Resources\FluentFlyoutVolumeDemo.png" />
     <None Remove="Resources\FluentFlyoutWhite.png" />
+    <None Remove="Resources\PulseFlyout.ico" />
+	<None Remove="Resources\PulseFlyout.png" />
     <None Remove="Resources\Onboarding\LockKeysFlyout.png" />
     <None Remove="Resources\Onboarding\MediaFlyout.png" />
     <None Remove="Resources\Onboarding\Taskbar.png" />
   </ItemGroup>
   <ItemGroup>
+	<Content Include="Resources\PulseFlyout.png">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
     <PackageReference Include="Dubya.WindowsMediaController" Version="2.5.6" />
-    <PackageReference Include="MicaWPF" Version="6.3.2" />
+    <PackageReference Include="MicaWPF" Version="7.1.0" />
 	<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
 	<PackageReference Include="NAudio" Version="2.3.0" />
-    <PackageReference Include="NLog" Version="6.1.3" />
+    <PackageReference Include="NLog" Version="6.2.0" />
     <PackageReference Include="unchihugo.WPF-UI" Version="4.4.1" />
     <PackageReference Include="WPF-UI.Tray" Version="4.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
@@ -54,7 +63,7 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\FluentFlyout2.ico">
+    <Content Include="Resources\PulseFlyout.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\FluentFlyoutDemo9.1.png">
@@ -97,6 +106,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+	<ProjectReference Include="..\FluentFlyout.PluginApi\FluentFlyout.PluginApi.csproj" />
     <ProjectReference Include="..\FluentFlyout.SourceGenerators\FluentFlyout.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <ItemGroup>

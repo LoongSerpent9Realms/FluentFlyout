@@ -33,6 +33,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,24">
                 <Border CornerRadius="10" ClipToBounds="True" Width="164" Height="98">
@@ -64,6 +65,15 @@
                     <ComboBoxItem Content="{DynamicResource BackgroundBlurOption3}" />
                     <ComboBoxItem Content="{DynamicResource BackgroundBlurOption4}" />
                 </ComboBox>
+            </ui:CardControl>
+            <ui:CardControl x:Name="MediaFlyoutNeteaseLikeCard" Tag="Indexable" Grid.Row="3" Icon="{ui:SymbolIcon Heart24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="显示网易云红心" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
+                        <TextBlock Text="仅在网易云音乐中显示媒体浮窗红心按钮" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch IsChecked="{Binding MediaFlyoutNeteaseLikeEnabled, Mode=TwoWay}" />
             </ui:CardControl>
             <ui:CardControl x:Name="CompactLayoutTitleCard" Tag="Indexable" Grid.Row="4" Icon="{ui:SymbolIcon ArrowAutofitWidth24}" Margin="0,0,0,3">
                 <ui:CardControl.Header>
@@ -166,7 +176,7 @@
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch Name="PauseOtherSessionsEnabledSwitch" IsChecked="{Binding PauseOtherSessionsEnabled, Mode=TwoWay}" />
             </ui:CardControl>
-            <ui:CardControl x:Name="MediaFlyoutExcludeVolumeTitleCard" Tag="Indexable" Grid.Row="15" Icon="{ui:SymbolIcon SpeakerOff24}" Margin="0,0,0,76">
+            <ui:CardControl x:Name="MediaFlyoutExcludeVolumeTitleCard" Tag="Indexable" Grid.Row="15" Icon="{ui:SymbolIcon SpeakerOff24}" Margin="0,0,0,12">
                 <ui:CardControl.Header>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{DynamicResource MediaFlyoutExcludeVolumeTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
@@ -174,6 +184,21 @@
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch Name="MediaFlyoutVolumeKeysExcludedSwitch" IsChecked="{Binding MediaFlyoutVolumeKeysExcluded, Mode=TwoWay}" />
+            </ui:CardControl>
+            <ui:CardControl x:Name="PreferredMediaAppCard" Tag="Indexable" Grid.Row="16" Icon="{ui:SymbolIcon Apps24}" Margin="0,0,0,76">
+                <ui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="优先媒体应用" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
+                        <TextBlock Text="浮窗、歌词和控制按钮按列表顺序选择媒体应用；当前应用无活跃播放时自动查找下一项" FontSize="12" Opacity="0.5" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ListBox x:Name="PreferredMediaAppListBox" Width="220" MinHeight="54" MaxHeight="120" DisplayMemberPath="." />
+                    <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
+                        <Button Content="上移" Click="MovePreferredMediaAppUp_Click" Margin="0,0,0,4" Padding="10,3" />
+                        <Button Content="下移" Click="MovePreferredMediaAppDown_Click" Padding="10,3" />
+                    </StackPanel>
+                </StackPanel>
             </ui:CardControl>
         </Grid>
     </StackPanel>

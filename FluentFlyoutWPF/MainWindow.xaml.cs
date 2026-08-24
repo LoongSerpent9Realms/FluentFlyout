@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes;
@@ -9,6 +9,8 @@ using FluentFlyout.Windows;
 using FluentFlyoutWPF.Classes;
 using FluentFlyoutWPF.Classes.Services;
 using FluentFlyoutWPF.Classes.Utils;
+using FluentFlyoutWPF.Classes.Plugins;
+using FluentFlyout.PluginApi;
 using FluentFlyoutWPF.ViewModels;
 using FluentFlyoutWPF.Windows;
 using MicaWPF.Controls;
@@ -24,8 +26,10 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.Text.RegularExpressions;
 using Windows.ApplicationModel;
 using Windows.Media.Control;
+using Windows.Storage.Streams;
 using static FluentFlyout.Classes.NativeMethods;
 using static FluentFlyoutWPF.Classes.Utils.MonitorUtil;
 using static WindowsMediaController.MediaManager;
@@ -35,6 +39,7 @@ namespace FluentFlyoutWPF;
 
 public partial class MainWindow : MicaWindow
 {
+    public static MainWindow? Current { get; private set; }
     private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
     private int WM_TASKBARCREATED, WM_SHELLHOOK;
@@ -43,6 +48,31 @@ public partial class MainWindow : MicaWindow
     private LowLevelKeyboardProc _hookProc;
 
     private CancellationTokenSource cts; // to close the flyout after a certain time
+    private LyricsWindow? _lyricsWindow;
+#if DEBUG
+    private LyricsDebugWindow? _lyricsDebugWindow;
+#endif
+    private readonly Dictionary<string, LyricsService.LyricsTrack?> _lyricsCache = new();
+    private string? _lyricsCacheKey;
+    private LyricsService.LyricsTrack? _activeLyricsTrack;
+    private string? _activeLyricsTitle;
+    private readonly DispatcherTimer _lyricsDisplayTimer;
+    private DateTime _lastLyricsAttemptUtc;
+    private CancellationTokenSource? _lyricsLoadCts;
+    private string _lastAccentMediaKey = string.Empty;
+    private string _animatedLyricsText = string.Empty;
+    private int _animatedLyricsIndex;
+    private DispatcherTimer? _lyricsWordTimer;
+    private GlobalSystemMediaTransportControlsSessionManager? _nativeSmtcManager;
+    // Some players (notably NetEase Cloud Music) expose a zeroed SMTC timeline.
+    // Keep a local monotonic estimate as a fallback so synced lyrics can advance.
+    private string? _estimatedPositionKey;
+    private TimeSpan _estimatedPosition;
+    private DateTime _estimatedPositionUpdatedUtc;
+    private string _lastNeteaseLikeEvent = "尚未点击红心";
+    private DateTime _lastNeteaseLikeEventUtc;
+    private string _neteaseLikeSongKey = string.Empty;
+    private CancellationTokenSource? _neteaseLikeStateCts;
     private long _lastFlyoutTime = 0;
 
     public readonly WindowsMediaController.MediaManager mediaManager = new();
@@ -60,7 +90,7 @@ public partial class MainWindow : MicaWindow
     private bool _acrylicEnabled = false; // default off to handle initialization
     private int _themeOption = SettingsManager.Current.AppTheme;
 
-    static Mutex singleton = new Mutex(true, "FluentFlyout"); // to prevent multiple instances of the app
+    static Mutex singleton = new Mutex(true, "PulseFlyout"); // to prevent multiple instances of the app
     private NextUpWindow? nextUpWindow = null; // to prevent multiple instances of NextUpWindow
     private string currentTitle = ""; // to prevent NextUpWindow from showing the same song
 
@@ -78,17 +108,28 @@ public partial class MainWindow : MicaWindow
     private VolumeMixerWindow? volumeMixerWindow;
 
     private readonly DispatcherTimer _displayRefreshTimer;
+    private readonly DispatcherTimer _mediaSelectionTimer;
     private string _pendingDisplayRefreshReason = "Unknown";
     private bool _displayRefreshInProgress;
     private bool _isCleaningUp;
+    private bool _fullscreenLyricsActive;
+    private bool _lyricsOpenedByFullscreen;
 
     internal static volatile bool ExplorerRestarting = false;
 
     public MainWindow()
     {
         DataContext = SettingsManager.Current;
+        SettingsManager.Current.PropertyChanged += SettingsManager_PropertyChanged;
         WindowHelper.SetNoActivate(this); // prevents some fullscreen apps from minimizing
         InitializeComponent();
+        BuildPluginTrayItems();
+        Current = this;
+#if DEBUG
+        Loaded += (_, _) => LyricsDebug_Click(this, new RoutedEventArgs());
+#else
+        NotifyIconLyricsDebug.Visibility = Visibility.Collapsed;
+#endif
         WindowHelper.SetTopmost(this); // more prevention of fullscreen apps minimizing
 
         _displayRefreshTimer = new DispatcherTimer(DispatcherPriority.Background)
@@ -96,6 +137,27 @@ public partial class MainWindow : MicaWindow
             Interval = TimeSpan.FromMilliseconds(1000)
         };
         _displayRefreshTimer.Tick += DisplayRefreshTimer_Tick;
+        _mediaSelectionTimer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        _mediaSelectionTimer.Tick += (_, _) => RefreshActiveMediaSelection();
+        _mediaSelectionTimer.Start();
+        _lyricsDisplayTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+        _lyricsDisplayTimer.Tick += async (_, _) =>
+        {
+            await UpdateFullscreenLyricsAsync();
+            UpdateDesktopLyricsWindow();
+            UpdateLyricsDisplay();
+            if (_activeLyricsTrack is null && DateTime.UtcNow - _lastLyricsAttemptUtc > TimeSpan.FromSeconds(5)
+                && GetActiveMediaSession() is { } retrySession)
+            {
+                var retryInfo = TryGetMediaProperties(retrySession.ControlSession);
+                if (retryInfo is not null) _ = PreloadLyricsAsync(retrySession, retryInfo.Title, retryInfo.Artist);
+            }
+        };
+        _lyricsDisplayTimer.Start();
+        _ = InitializeNativeSmtcAsync();
 
         if (!singleton.WaitOne(TimeSpan.Zero, true)) // if another instance is already running, close this one
         {
@@ -118,7 +180,7 @@ public partial class MainWindow : MicaWindow
             Environment.Exit(0);
         }
 
-        Logger.Info("Starting FluentFlyout MainWindow");
+        Logger.Info("Starting PulseFlyout MainWindow");
 
         // in the existing instance, listen for the signal to open settings
         Task.Run(() =>
@@ -158,7 +220,7 @@ public partial class MainWindow : MicaWindow
             RegistryKey? key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string? executablePath = Environment.ProcessPath;
             if (key != null && executablePath != null)
-                key.SetValue("FluentFlyout", executablePath);
+                key.SetValue("PulseFlyout", executablePath);
         }
 
         // display tray icon if enabled
@@ -315,21 +377,71 @@ public partial class MainWindow : MicaWindow
 
         if (validSessions.Count == 0) return null;
 
+        // A preferred app should only win while it has an active (playing) session.
+        // Paused/closed sessions are kept as a final fallback, otherwise they can
+        // mask another player that is currently active.
+        var activeSessions = validSessions.Where(IsActiveMediaSession).ToList();
+
+        var preferred = SettingsManager.Current.PreferredMediaApp;
+        IEnumerable<string> preferredApps = SettingsManager.Current.PreferredMediaAppOrder ?? [];
+        if (!preferredApps.Any() && !string.IsNullOrWhiteSpace(preferred))
+            preferredApps = preferredApps.Prepend(preferred).ToList();
+        if (preferredApps.Any())
+        {
+            foreach (var preferredApp in preferredApps)
+            {
+                var preferredSession = activeSessions.FirstOrDefault(session =>
+                {
+                    var appId = session.Id ?? string.Empty;
+                    var appName = MediaPlayerData.GetAndCacheMediaPlayerData(appId).Item1 ?? appId;
+                    return MatchesFilterEntry(preferredApp, appName, appId);
+                });
+                if (preferredSession != null) return preferredSession;
+            }
+        }
+
         var focused = mediaManager.GetFocusedSession();
-        if (focused != null && validSessions.Any(s => s.Id == focused.Id))
+        if (focused != null && activeSessions.Any(s => s.Id == focused.Id))
             return focused;
 
-        return validSessions.FirstOrDefault();
+        return activeSessions.FirstOrDefault()
+            ?? (focused != null && validSessions.Any(s => s.Id == focused.Id) ? focused : null)
+            ?? validSessions.FirstOrDefault();
+    }
+
+    private static bool IsActiveMediaSession(MediaSession session)
+    {
+        try
+        {
+            var status = session.ControlSession?.GetPlaybackInfo()?.PlaybackStatus;
+            return status is
+                GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing or
+                GlobalSystemMediaTransportControlsSessionPlaybackStatus.Changing;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public void RefreshFilteredMedia()
     {
+        RefreshActiveMediaSelection();
+    }
+
+    private string? _lastSelectedMediaSessionId;
+
+    private void RefreshActiveMediaSelection()
+    {
+        var activeSession = GetActiveMediaSession();
+        var activeId = activeSession?.Id;
+        var changed = !string.Equals(_lastSelectedMediaSessionId, activeId, StringComparison.Ordinal);
+        _lastSelectedMediaSessionId = activeId;
+
         UpdateTaskbar();
 
-        if (IsVisible)
+        if (IsVisible && changed)
         {
-            var activeSession = GetActiveMediaSession();
-
             // UpdateUI handles a null value internally so we haven't checked for null here.
             UpdateUI(activeSession!);
 
@@ -353,6 +465,15 @@ public partial class MainWindow : MicaWindow
         catch (COMException ex)
         {
             Logger.Error(ex, "Failed to retrieve data from the player");
+            return null;
+        }
+        catch (InvalidOperationException ex)
+        {
+            Logger.Debug(ex, "Media session became unavailable while reading properties");
+            return null;
+        }
+        catch (TaskCanceledException)
+        {
             return null;
         }
     }
@@ -608,9 +729,11 @@ public partial class MainWindow : MicaWindow
         if (songInfo == null)
             return;
 
+        _ = PreloadLyricsAsync(activeSession, songInfo.Title, songInfo.Artist);
+
         var playbackInfo = activeSession.ControlSession.GetPlaybackInfo();
         var thumbnail = BitmapHelper.GetThumbnail(songInfo.Thumbnail);
-        BitmapHelper.GetDominantColors(1);
+        UpdateAccentColorsIfNeeded(songInfo.Title, songInfo.Artist);
         taskbarWindow?.UpdateUi(songInfo.Title, songInfo.Artist, thumbnail, playbackInfo.PlaybackStatus, playbackInfo.Controls);
     }
 
@@ -618,7 +741,7 @@ public partial class MainWindow : MicaWindow
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = "https://github.com/unchihugo/FluentFlyout/issues/new/choose",
+            FileName = "https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX",
             UseShellExecute = true
         });
     }
@@ -627,7 +750,7 @@ public partial class MainWindow : MicaWindow
     {
         Process.Start(new ProcessStartInfo
         {
-            FileName = "https://github.com/unchihugo/FluentFlyout",
+            FileName = "https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX",
             UseShellExecute = true
         });
     }
@@ -657,6 +780,15 @@ public partial class MainWindow : MicaWindow
 
     private void CurrentSession_OnPlaybackStateChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionPlaybackInfo? playbackInfo = null)
     {
+        // WindowsMediaController raises callbacks from its worker threads. Keep all
+        // WPF state and window access on the owning dispatcher thread.
+        if (!Dispatcher.CheckAccess())
+        {
+            if (_isCleaningUp || Dispatcher.HasShutdownStarted) return;
+            _ = Dispatcher.BeginInvoke(() => CurrentSession_OnPlaybackStateChanged(mediaSession, playbackInfo));
+            return;
+        }
+
 #if DEBUG
         Logger.Debug("Playback state changed: " + mediaSession.Id + " " + mediaSession.ControlSession.GetPlaybackInfo().PlaybackStatus);
 #endif     
@@ -673,7 +805,7 @@ public partial class MainWindow : MicaWindow
         if (tbSongInfo != null)
         {
             var tbThumbnail = BitmapHelper.GetThumbnail(tbSongInfo.Thumbnail);
-            BitmapHelper.GetDominantColors(1);
+            UpdateAccentColorsIfNeeded(tbSongInfo.Title, tbSongInfo.Artist);
             var tbPlayback = focusedSession.ControlSession.GetPlaybackInfo();
 
             taskbarWindow?.UpdateUi(tbSongInfo.Title, tbSongInfo.Artist, tbThumbnail, tbPlayback?.PlaybackStatus, tbPlayback?.Controls);
@@ -691,6 +823,13 @@ public partial class MainWindow : MicaWindow
     private int previousMediaPropertyThumbnail = 0;
     private void MediaManager_OnAnyMediaPropertyChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionMediaProperties mediaProperties)
     {
+        if (!Dispatcher.CheckAccess())
+        {
+            if (_isCleaningUp || Dispatcher.HasShutdownStarted) return;
+            _ = Dispatcher.BeginInvoke(() => MediaManager_OnAnyMediaPropertyChanged(mediaSession, mediaProperties));
+            return;
+        }
+
         // sometimes mediaSession.ControlSession can be null
         if (mediaSession.ControlSession == null)
             return;
@@ -701,6 +840,7 @@ public partial class MainWindow : MicaWindow
         var currentActiveSession = GetActiveMediaSession();
         if (currentActiveSession == null)
         {
+            SetNeteaseLikeVisibility(false);
             taskbarWindow?.UpdateUi("-", "-", null, GlobalSystemMediaTransportControlsSessionPlaybackStatus.Closed);
             return;
         }
@@ -708,6 +848,12 @@ public partial class MainWindow : MicaWindow
         var songInfo = TryGetMediaProperties(currentActiveSession.ControlSession);
         if (songInfo == null)
             return;
+
+        SetNeteaseLikeVisibility(IsNeteaseSession(currentActiveSession));
+
+        _ = PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent("media-properties-changed", mediaSession.Id.ToString(), songInfo.Title, songInfo.Artist));
+
+        _ = PreloadLyricsAsync(currentActiveSession, songInfo.Title, songInfo.Artist);
 
         var playbackInfo = currentActiveSession.ControlSession.GetPlaybackInfo();
 
@@ -724,8 +870,15 @@ public partial class MainWindow : MicaWindow
         previousMediaProperty = check;
         previousMediaPropertyThumbnail = checkThumbnail;
 
+        _neteaseLikeSongKey = BuildNeteaseSongKey(songInfo.Title, songInfo.Artist);
+        _neteaseLikeStateCts?.Cancel();
+        _neteaseLikeStateCts?.Dispose();
+        _neteaseLikeStateCts = new CancellationTokenSource();
+        UpdateNeteaseLikeVisual(false);
+        _ = UpdateNeteaseLikeStateAsync(songInfo.Title, songInfo.Artist, _neteaseLikeSongKey, _neteaseLikeStateCts.Token);
+
         var thumbnail = BitmapHelper.GetThumbnail(songInfo.Thumbnail);
-        BitmapHelper.GetDominantColors(1);
+        UpdateAccentColorsIfNeeded(songInfo.Title, songInfo.Artist);
 
         taskbarWindow?.UpdateUi(songInfo.Title, songInfo.Artist, thumbnail, playbackInfo.PlaybackStatus, playbackInfo.Controls);
 
@@ -784,7 +937,15 @@ public partial class MainWindow : MicaWindow
 
     private void MediaManager_OnAnyTimelinePropertyChanged(MediaSession mediaSession, GlobalSystemMediaTransportControlsSessionTimelineProperties timelineProperties)
     {
+        if (!Dispatcher.CheckAccess())
+        {
+            if (_isCleaningUp || Dispatcher.HasShutdownStarted) return;
+            _ = Dispatcher.BeginInvoke(() => MediaManager_OnAnyTimelinePropertyChanged(mediaSession, timelineProperties));
+            return;
+        }
+
         _lastSelfUpdateTimestamp = DateTime.Now;
+        _ = PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent("timeline-changed", mediaSession.Id.ToString()));
 
         if (GetActiveMediaSession() is not { } session || session.Id != mediaSession.Id) return;
 
@@ -802,10 +963,32 @@ public partial class MainWindow : MicaWindow
 
     private void MediaManager_OnAnySessionClosed(MediaSession mediaSession)
     {
+        if (!Dispatcher.CheckAccess())
+        {
+            if (_isCleaningUp || Dispatcher.HasShutdownStarted) return;
+            _ = Dispatcher.BeginInvoke(() => MediaManager_OnAnySessionClosed(mediaSession));
+            return;
+        }
+
 #if DEBUG
         Logger.Debug("Session closed: " + (mediaSession.Id).ToString());
 #endif
         UpdateTaskbar();
+        _ = PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent("session-closed", mediaSession.Id.ToString()));
+    }
+
+    private void BuildPluginTrayItems()
+    {
+        foreach (var pluginItem in PluginManager.Current.TrayItems)
+        {
+            var menuItem = new Wpf.Ui.Controls.MenuItem { Header = pluginItem.Header, ToolTip = pluginItem.ToolTip };
+            menuItem.Click += async (_, _) =>
+            {
+                try { await pluginItem.Activate(); }
+                catch (Exception ex) { Logger.Error(ex, "Plugin tray action failed: {0}", pluginItem.Id); }
+            };
+            PluginTrayMenu.Items.Insert(Math.Max(0, PluginTrayMenu.Items.Count - 1), menuItem);
+        }
     }
 
     private static IntPtr SetHook(LowLevelKeyboardProc proc) // set the keyboard hook
@@ -814,7 +997,7 @@ public partial class MainWindow : MicaWindow
         using ProcessModule? curModule = curProcess.MainModule;
         if (curModule == null)
         {
-            Logger.Warn("Failed to set keyboard hook - FluentFlyout will now rely on WndProc only");
+            Logger.Warn("Failed to set keyboard hook - PulseFlyout will now rely on WndProc only");
             return IntPtr.Zero;
         }
         return SetWindowsHookEx(WH_KEYBOARD_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
@@ -1200,6 +1383,8 @@ public partial class MainWindow : MicaWindow
         {
             int extraWidth = SettingsManager.Current.RepeatEnabled ? 36 : 0;
             extraWidth += SettingsManager.Current.ShuffleEnabled ? 36 : 0;
+            extraWidth += 36; // lyrics button
+            extraWidth += NeteaseLikeButton.Visibility == Visibility.Visible ? 36 : 0;
             extraWidth += SettingsManager.Current.PlayerInfoEnabled ? 72 : 0;
             // keep minimum width at 72 even if all extra features are disabled to prevent the widget from being too small
             extraWidth = Math.Max(extraWidth, 72);
@@ -1213,7 +1398,7 @@ public partial class MainWindow : MicaWindow
                 BodyStackPanel.Orientation = Orientation.Horizontal;
                 BodyStackPanel.Width = 300;
                 ControlsStackPanel.Margin = new Thickness(0);
-                ControlsStackPanel.Width = 104;
+                ControlsStackPanel.Width = 140;
                 MediaIdButton.Visibility = Visibility.Collapsed;
                 SongImageBorder.Margin = new Thickness(0);
                 SongImageBorder.Height = 36;
@@ -1275,6 +1460,525 @@ public partial class MainWindow : MicaWindow
             var mediaProperties = TryGetMediaProperties(activeSession.ControlSession);
             await Task.Run(() => MediaPlayerData.TryActivateMediaPlayer(activeSession.Id, mediaProperties?.Title));
         }
+    }
+
+    private async void LyricsButton_Click(object sender, RoutedEventArgs e)
+    {
+        await ShowLyricsForActiveSessionAsync();
+    }
+
+    private async void NeteaseLikeButton_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+        await ToggleNeteaseLikeAsync();
+    }
+
+    public async Task ToggleNeteaseLikeAsync()
+    {
+        Logger.Debug("Netease like button clicked");
+        RecordNeteaseLikeEvent("红心按钮已点击");
+        if (GetActiveMediaSession() is not { } session)
+        {
+            NeteaseLikeButton.ToolTip = "当前没有可用的媒体会话";
+            RecordNeteaseLikeEvent("忽略：没有可用的媒体会话");
+            Logger.Debug("Netease like ignored: no active media session");
+            return;
+        }
+        var properties = TryGetMediaProperties(session.ControlSession);
+        if (properties is null || string.IsNullOrWhiteSpace(properties.Title))
+        {
+            NeteaseLikeButton.ToolTip = "无法读取当前歌曲信息";
+            RecordNeteaseLikeEvent("忽略：无法读取歌曲信息");
+            Logger.Debug("Netease like ignored: media properties unavailable");
+            return;
+        }
+
+        Logger.Debug("Netease like requested: '{0}' / '{1}'", properties.Title, properties.Artist);
+
+        NeteaseLikeButton.IsEnabled = false;
+        NeteaseLikeButton.ToolTip = "正在处理喜欢操作...";
+        try
+        {
+            if (!NeteaseMusicService.IsLoggedIn && !await NeteaseLoginWindow.ShowLoginAsync(this))
+            {
+                NeteaseLikeButton.ToolTip = "需要先登录网易云音乐";
+                RecordNeteaseLikeEvent("取消：网易云未登录或登录窗口未完成");
+                Logger.Debug("Netease like cancelled: login was not completed");
+                return;
+            }
+
+            var songKey = BuildNeteaseSongKey(properties.Title, properties.Artist);
+            var songId = await NeteaseMusicService.ResolveSongIdAsync(properties.Title, properties.Artist);
+            songId ??= LyricsService.TryGetCurrentLocalSongId(properties.Title);
+            songId ??= LyricsService.TryGetLastSongId(properties.Title, properties.Artist);
+            if (!string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
+            {
+                NeteaseLikeButton.ToolTip = "歌曲已切换，请重试";
+                return;
+            }
+            if (songId is not > 0)
+            {
+                NeteaseLikeButton.ToolTip = "当前媒体会话没有歌曲 ID";
+                RecordNeteaseLikeEvent($"失败：当前会话没有有效歌曲 ID（session={session.Id}）");
+                return;
+            }
+
+            RecordNeteaseLikeEvent($"请求：/like?id={songId}&like=true/false");
+            var resolvedSongId = songId.Value;
+            var wasLiked = await NeteaseMusicService.IsSongLikedAsync(resolvedSongId);
+            if (!string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
+            {
+                NeteaseLikeButton.ToolTip = "歌曲已切换，请重试";
+                return;
+            }
+            var success = await NeteaseMusicService.LikeAsync(resolvedSongId, like: !wasLiked);
+            Logger.Debug("Netease like result: songId={0}, action={1}, success={2}", songId, wasLiked ? "unlike" : "like", success);
+            if (success && string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
+            {
+                UpdateNeteaseLikeVisual(!wasLiked);
+                RecordNeteaseLikeEvent($"成功：{(wasLiked ? "取消喜欢" : "喜欢")}，请求参数 id={songId}&like={!wasLiked}");
+            }
+            else
+            {
+                NeteaseLikeButton.ToolTip = wasLiked ? "取消喜欢失败，请稍后重试" : "喜欢失败，请稍后重试";
+                RecordNeteaseLikeEvent($"失败：{(wasLiked ? "取消喜欢" : "喜欢")}请求未成功，参数 id={songId}&like={!wasLiked}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex, "Netease like request failed");
+            NeteaseLikeButton.ToolTip = "网易云请求失败，请稍后重试";
+            RecordNeteaseLikeEvent($"异常：{ex.GetType().Name} - {ex.Message}");
+        }
+        finally
+        {
+            NeteaseLikeButton.IsEnabled = true;
+        }
+    }
+
+    private void RecordNeteaseLikeEvent(string message)
+    {
+        _lastNeteaseLikeEvent = message;
+        _lastNeteaseLikeEventUtc = DateTime.Now;
+        Logger.Debug("Netease like event: {0}", message);
+    }
+
+    private async Task UpdateNeteaseLikeStateAsync(string title, string artist, string songKey, CancellationToken cancellationToken)
+    {
+        try
+        {
+            if (!NeteaseMusicService.IsLoggedIn)
+            {
+                NeteaseLikeIcon.Opacity = 0.5;
+                NeteaseLikeButton.ToolTip = "登录网易云后显示喜欢状态";
+                return;
+            }
+
+            var songId = await NeteaseMusicService.ResolveSongIdAsync(title, artist, cancellationToken)
+                ?? LyricsService.TryGetCurrentLocalSongId(title)
+                ?? LyricsService.TryGetLastSongId(title, artist);
+            var liked = songId is not null && await NeteaseMusicService.IsSongLikedAsync(songId.Value, cancellationToken);
+            if (cancellationToken.IsCancellationRequested || !string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
+                return;
+            if (!Dispatcher.CheckAccess())
+            {
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    if (string.Equals(_neteaseLikeSongKey, songKey, StringComparison.Ordinal))
+                        UpdateNeteaseLikeVisual(liked);
+                });
+                return;
+            }
+            UpdateNeteaseLikeVisual(liked);
+        }
+        catch (OperationCanceledException)
+        {
+            // A song change cancels the stale state lookup.
+        }
+    }
+
+    private static string BuildNeteaseSongKey(string title, string artist) =>
+        $"{title.Trim()}\u001f{artist.Trim()}";
+
+    private void UpdateNeteaseLikeVisual(bool liked)
+    {
+        NeteaseLikeIcon.Opacity = liked ? 1 : 0.5;
+        NeteaseLikeIcon.Filled = liked;
+        NeteaseLikeButton.ToolTip = liked ? "当前歌曲已喜欢" : "喜欢当前歌曲";
+        taskbarWindow?.SetLikeVisual(liked);
+    }
+
+    private static bool IsNeteaseSession(MediaSession session)
+    {
+        var appId = session.Id ?? string.Empty;
+        var appName = MediaPlayerData.GetAndCacheMediaPlayerData(appId).Item1 ?? appId;
+        return appId.Contains("netease", StringComparison.OrdinalIgnoreCase)
+            || appId.Contains("cloudmusic", StringComparison.OrdinalIgnoreCase)
+            || appName.Contains("网易云", StringComparison.OrdinalIgnoreCase)
+            || appName.Contains("NetEase", StringComparison.OrdinalIgnoreCase)
+            || appName.Contains("Cloud Music", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void SetNeteaseLikeVisibility(bool isNetease)
+    {
+        var mediaFlyoutVisible = isNetease && SettingsManager.Current.MediaFlyoutNeteaseLikeEnabled;
+        var taskbarVisible = isNetease && SettingsManager.Current.TaskbarWidgetNeteaseLikeEnabled;
+        NeteaseLikeButton.Visibility = mediaFlyoutVisible ? Visibility.Visible : Visibility.Collapsed;
+        taskbarWindow?.SetLikeVisibility(taskbarVisible);
+        UpdateUILayout();
+    }
+
+    private void LyricsDebug_Click(object sender, RoutedEventArgs e)
+    {
+#if DEBUG
+        if (_lyricsDebugWindow is { IsVisible: true }) { _lyricsDebugWindow.Activate(); return; }
+        _lyricsDebugWindow = new LyricsDebugWindow(() =>
+        {
+            var session = GetActiveMediaSession();
+            var info = session is null ? "当前会话: 无" : TryGetMediaProperties(session.ControlSession) is { } p
+                ? BuildLyricsDebugInfo(session, p.Title, p.Artist)
+                : "当前会话: 无媒体属性";
+            return info;
+        }) { Owner = this };
+        _lyricsDebugWindow.Closed += (_, _) => _lyricsDebugWindow = null;
+        _lyricsDebugWindow.Show();
+#else
+        // The menu item is hidden in Release builds, but its XAML event binding
+        // still needs a handler at compile time.
+        return;
+#endif
+    }
+
+#if DEBUG
+    private string BuildLyricsDebugInfo(MediaSession session, string title, string artist)
+    {
+        var control = session.ControlSession;
+        var media = TryGetMediaProperties(control);
+        return $"SessionId = {session.Id}\n\n"
+            + DumpObject("MediaProperties", media)
+            + $"歌词歌曲 ID = {LyricsService.LastSongId}\n"
+            + $"歌曲 ID 来源 = {LyricsService.LastSongLookupSource}\n"
+            + $"找歌请求地址 = {LyricsService.LastSongLookupUrl}\n"
+            + $"红心事件 = {_lastNeteaseLikeEventUtc:yyyy-MM-dd HH:mm:ss} {_lastNeteaseLikeEvent}\n"
+            + $"LyricsParsedLineCount = {LyricsService.LastParsedLineCount}\nLyricsParsedFirstLine = {LyricsService.LastParsedFirstLine}\n";
+    }
+
+    private static string DumpObject(string name, object? value)
+    {
+        var lines = new List<string> { $"[{name}]" };
+        DumpObjectProperties(value, lines, 0, new HashSet<object>(ReferenceEqualityComparer.Instance));
+        lines.Add(string.Empty);
+        return string.Join(Environment.NewLine, lines);
+    }
+
+    private static void DumpObjectProperties(object? value, List<string> lines, int depth, HashSet<object> visited)
+    {
+        if (value is null) { lines.Add("null"); return; }
+        if (depth > 4 || value is string || value.GetType().IsPrimitive || value is DateTime || value is DateTimeOffset || value is TimeSpan || value.GetType().IsEnum)
+        {
+            lines.Add(value.ToString() ?? "null");
+            return;
+        }
+        if (!visited.Add(value)) { lines.Add("<cycle>"); return; }
+        foreach (var property in value.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+        {
+            if (property.GetIndexParameters().Length != 0) continue;
+            object? propertyValue;
+            try { propertyValue = property.GetValue(value); }
+            catch (Exception ex) { lines.Add($"{property.Name} = <{ex.GetType().Name}>"); continue; }
+            lines.Add($"{new string(' ', (depth + 1) * 2)}{property.Name} =");
+            DumpObjectProperties(propertyValue, lines, depth + 1, visited);
+        }
+    }
+#endif
+
+    public async Task ShowLyricsForActiveSessionAsync()
+    {
+        var session = GetActiveMediaSession();
+        var properties = session is null ? null : TryGetMediaProperties(session.ControlSession);
+        if (properties is null || string.IsNullOrWhiteSpace(properties.Title))
+        {
+            if (_lyricsWindow is not { IsVisible: true })
+            {
+                _lyricsWindow = new LyricsWindow("暂无正在播放的歌曲", "播放音乐后歌词会自动更新", null);
+                _lyricsWindow.Closed += (_, _) => _lyricsWindow = null;
+                _lyricsWindow.Show();
+                WindowHelper.SetTopmost(_lyricsWindow);
+            }
+            return;
+        }
+
+        LyricsButton.IsEnabled = false;
+        try
+        {
+            var neteaseSongId = ExtractNetEaseSongId(session.Id);
+            var key = $"{properties.Title}\u001f{properties.Artist}";
+            LyricsService.LyricsTrack? track;
+            if (!_lyricsCache.TryGetValue(key, out track))
+            {
+                track = await LyricsService.GetLyricsTrackAsync(properties.Title, properties.Artist, neteaseSongId);
+                _lyricsCache[key] = track;
+            }
+            if (_lyricsWindow is { IsVisible: true })
+            {
+                _lyricsWindow.Activate();
+                return;
+            }
+
+            // Keep the lyrics view useful when the provider has no matching entry:
+            // show the SMTC metadata instead of interrupting playback with a dialog.
+            _lyricsWindow = new LyricsWindow(properties.Title, properties.Artist, track, () => GetNativePlaybackPosition(session));
+            _lyricsWindow.Closed += (_, _) => _lyricsWindow = null;
+            _lyricsWindow.Show();
+            WindowHelper.SetTopmost(_lyricsWindow);
+        }
+        finally
+        {
+            LyricsButton.IsEnabled = true;
+        }
+    }
+
+    private async Task UpdateFullscreenLyricsAsync()
+    {
+        var fullscreen = SettingsManager.Current.DesktopLyricsEnabled
+            && SettingsManager.Current.DesktopLyricsAutoShow
+            && FullscreenDetector.IsFullscreenApplicationActive();
+        if (fullscreen == _fullscreenLyricsActive) return;
+        _fullscreenLyricsActive = fullscreen;
+        if (fullscreen)
+        {
+            if (_lyricsWindow is not { IsVisible: true })
+            {
+                _lyricsOpenedByFullscreen = true;
+                await ShowLyricsForActiveSessionAsync();
+            }
+            return;
+        }
+
+        if (_lyricsOpenedByFullscreen && _lyricsWindow is { IsVisible: true })
+            _lyricsWindow.Close();
+        _lyricsOpenedByFullscreen = false;
+    }
+
+    private void SettingsManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(UserSettings.MediaFlyoutNeteaseLikeEnabled)
+            or nameof(UserSettings.TaskbarWidgetNeteaseLikeEnabled))
+        {
+            var session = GetActiveMediaSession();
+            SetNeteaseLikeVisibility(session is not null && IsNeteaseSession(session));
+            return;
+        }
+
+        if (e.PropertyName != nameof(SettingsManager.Current.DesktopLyricsEnabled)) return;
+        if (!SettingsManager.Current.DesktopLyricsEnabled && _lyricsWindow is { IsVisible: true })
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                if (_lyricsWindow is { IsVisible: true }) _lyricsWindow.Close();
+                _lyricsOpenedByFullscreen = false;
+                _fullscreenLyricsActive = false;
+            });
+        }
+    }
+
+    private async Task PreloadLyricsAsync(MediaSession session, string title, string artist)
+    {
+        if (string.IsNullOrWhiteSpace(title)) return;
+        var key = $"{title}\u001f{artist}";
+        if (_lyricsCacheKey == key && _activeLyricsTrack is not null) return;
+        if (_lyricsCache.TryGetValue(key, out var cached) && cached is not null)
+        {
+            _lyricsCacheKey = key;
+            _activeLyricsTrack = cached;
+            _activeLyricsTitle = title;
+            return;
+        }
+        _lyricsLoadCts?.Cancel();
+        _lyricsLoadCts?.Dispose();
+        _lyricsLoadCts = new CancellationTokenSource();
+        var requestToken = _lyricsLoadCts.Token;
+        _lyricsCacheKey = key;
+        _activeLyricsTrack = null;
+        _activeLyricsTitle = title;
+        _estimatedPositionKey = session.Id + "|" + title;
+        _estimatedPosition = TimeSpan.Zero;
+        _estimatedPositionUpdatedUtc = DateTime.UtcNow;
+        _lastLyricsAttemptUtc = DateTime.UtcNow;
+        LyricsService.LyricsTrack? track;
+        try
+        {
+            track = await LyricsService.GetLyricsTrackAsync(title, artist, ExtractNetEaseSongId(session.Id), requestToken);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+        if (requestToken.IsCancellationRequested) return;
+        if (track is not null) _lyricsCache[key] = track;
+        if (_lyricsCacheKey == key)
+        {
+            _activeLyricsTrack = track;
+            _activeLyricsTitle = title;
+            if (_lyricsWindow is { IsVisible: true })
+                _lyricsWindow.UpdateTrack(title, artist, track, () => GetNativePlaybackPosition(session));
+            UpdateLyricsDisplay();
+        }
+    }
+
+    private void UpdateDesktopLyricsWindow()
+    {
+        if (_lyricsWindow is not { IsVisible: true }) return;
+        var session = GetActiveMediaSession();
+        var properties = session is null ? null : TryGetMediaProperties(session.ControlSession);
+        if (session is null || properties is null || string.IsNullOrWhiteSpace(properties.Title)) return;
+        var key = $"{properties.Title}\u001f{properties.Artist}";
+        if (_lyricsCacheKey != key)
+        {
+            _ = PreloadLyricsAsync(session, properties.Title, properties.Artist);
+            return;
+        }
+        _lyricsWindow.UpdateTrack(properties.Title, properties.Artist, _activeLyricsTrack,
+            () => GetNativePlaybackPosition(session));
+    }
+
+    private void UpdateAccentColorsIfNeeded(string title, string artist)
+    {
+        var key = title + "\u001f" + artist;
+        if (key == _lastAccentMediaKey) return;
+        _lastAccentMediaKey = key;
+        BitmapHelper.GetDominantColors(1);
+    }
+
+    private void UpdateLyricsDisplay()
+    {
+        if (!SettingsManager.Current.TaskbarLyricsEnabled) return;
+        var session = GetActiveMediaSession();
+        if (session is null || _activeLyricsTrack is null || string.IsNullOrWhiteSpace(_activeLyricsTitle)) return;
+        var line = _activeLyricsTrack.GetCurrentLine(GetNativePlaybackPosition(session));
+        var text = string.IsNullOrWhiteSpace(line) ? _activeLyricsTitle : line;
+        if (!string.Equals(text, _animatedLyricsText, StringComparison.Ordinal))
+            AnimateLyricsText(text);
+        taskbarWindow?.SetLyricsText(text);
+    }
+
+    private void AnimateLyricsText(string text)
+    {
+        _animatedLyricsText = text;
+        _animatedLyricsIndex = 0;
+        _lyricsWordTimer?.Stop();
+
+        // Reveal words (or individual CJK characters when there are no spaces)
+        // while giving the title a short vertical bounce on each lyric change.
+        var tokens = text.Any(char.IsWhiteSpace)
+            ? Regex.Matches(text, @"\s+|[^\s]+\s*").Select(match => match.Value).ToArray()
+            : text.Select(character => character.ToString()).ToArray();
+        SongTitle.Text = string.Empty;
+        SongTitleOffset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(0, -4, TimeSpan.FromMilliseconds(110))
+        {
+            AutoReverse = true,
+            EasingFunction = new QuadraticEase()
+        });
+        _lyricsWordTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(55) };
+        _lyricsWordTimer.Tick += (_, _) =>
+        {
+            if (_animatedLyricsIndex >= tokens.Length)
+            {
+                _lyricsWordTimer?.Stop();
+                return;
+            }
+            SongTitle.Text += tokens[_animatedLyricsIndex++];
+        };
+        _lyricsWordTimer.Start();
+    }
+
+    private static TimeSpan GetPlaybackPosition(MediaSession session)
+    {
+        var timeline = session.ControlSession.GetTimelineProperties();
+        var position = timeline.Position;
+        if (session.ControlSession.GetPlaybackInfo()?.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing)
+            position += DateTimeOffset.Now - timeline.LastUpdatedTime;
+        return position < TimeSpan.Zero ? TimeSpan.Zero : position;
+    }
+
+    private TimeSpan GetNativePlaybackPosition(MediaSession fallbackSession)
+    {
+        try
+        {
+            var nativeSession = _nativeSmtcManager?.GetCurrentSession();
+            if (nativeSession is not null)
+            {
+                var timeline = nativeSession.GetTimelineProperties();
+                var position = timeline.Position;
+                if (timeline.EndTime > TimeSpan.Zero)
+                {
+                    if (nativeSession.GetPlaybackInfo()?.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing)
+                        position += DateTimeOffset.Now - timeline.LastUpdatedTime;
+                    return position < TimeSpan.Zero ? TimeSpan.Zero : position;
+                }
+            }
+        }
+        catch (Exception ex) { Logger.Debug(ex, "Native SMTC timeline unavailable"); }
+
+        // Windows.Media.Control may be unavailable while the legacy session still
+        // has a valid timeline, so use it before falling back to estimation.
+        try
+        {
+            var fallbackTimeline = fallbackSession.ControlSession.GetTimelineProperties();
+            if (fallbackTimeline.EndTime > TimeSpan.Zero)
+            {
+                var position = fallbackTimeline.Position;
+                if (fallbackSession.ControlSession.GetPlaybackInfo()?.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing)
+                    position += DateTimeOffset.Now - fallbackTimeline.LastUpdatedTime;
+                return position < TimeSpan.Zero ? TimeSpan.Zero : position;
+            }
+        }
+        catch (Exception ex) { Logger.Debug(ex, "Fallback SMTC timeline unavailable"); }
+
+        // The taskbar seek bar is refreshed from the same active session and can
+        // still hold the latest position while a provider temporarily omits its
+        // timeline end time. Use it before falling back to a local estimate.
+        try
+        {
+            if (_seekBarEnabled && Seekbar.Value > 0)
+                return TimeSpan.FromSeconds(Seekbar.Value);
+        }
+        catch (Exception ex) { Logger.Debug(ex, "Taskbar seekbar position unavailable"); }
+
+        var properties = TryGetMediaProperties(fallbackSession.ControlSession);
+        var key = fallbackSession.Id + "|" + (properties?.Title ?? string.Empty);
+        var now = DateTime.UtcNow;
+        if (!string.Equals(_estimatedPositionKey, key, StringComparison.Ordinal))
+        {
+            _estimatedPositionKey = key;
+            _estimatedPosition = TimeSpan.Zero;
+            _estimatedPositionUpdatedUtc = now;
+        }
+
+        var status = fallbackSession.ControlSession.GetPlaybackInfo()?.PlaybackStatus;
+        if (status == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing)
+        {
+            if (_estimatedPositionUpdatedUtc != default)
+                _estimatedPosition += now - _estimatedPositionUpdatedUtc;
+        }
+        _estimatedPositionUpdatedUtc = now;
+        return _estimatedPosition < TimeSpan.Zero ? TimeSpan.Zero : _estimatedPosition;
+    }
+
+    private async Task InitializeNativeSmtcAsync()
+    {
+        try
+        {
+            _nativeSmtcManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+        }
+        catch (Exception ex) { Logger.Debug(ex, "Native SMTC manager initialization unavailable"); }
+    }
+
+    private static string? ExtractNetEaseSongId(string sessionId)
+    {
+        if (Regex.IsMatch(sessionId, "^\\d+$")) return sessionId;
+        var match = Regex.Match(sessionId, "(?:netease|song|music)?[_-]?id[=:]?(\\d+)", RegexOptions.IgnoreCase);
+        return match.Success ? match.Groups[1].Value : null;
     }
 
     private async void Back_Click(object sender, RoutedEventArgs e)
@@ -1444,12 +2148,14 @@ public partial class MainWindow : MicaWindow
             _isCleaningUp = true;
             _displayRefreshTimer.Stop();
             _displayRefreshTimer.Tick -= DisplayRefreshTimer_Tick;
+            _mediaSelectionTimer.Stop();
 
             // unsubscribe from events
             mediaManager.OnAnyMediaPropertyChanged -= MediaManager_OnAnyMediaPropertyChanged;
             mediaManager.OnAnyPlaybackStateChanged -= CurrentSession_OnPlaybackStateChanged;
             mediaManager.OnAnyTimelinePropertyChanged -= MediaManager_OnAnyTimelinePropertyChanged;
             mediaManager.OnAnySessionClosed -= MediaManager_OnAnySessionClosed;
+            SettingsManager.Current.PropertyChanged -= SettingsManager_PropertyChanged;
 
             // dispose managed resources
             _positionTimer?.Change(Timeout.Infinite, Timeout.Infinite);
@@ -1480,6 +2186,9 @@ public partial class MainWindow : MicaWindow
 
             if (volumeMixerWindow?.IsLoaded == true)
                 volumeMixerWindow.Close();
+
+            if (_lyricsWindow?.IsLoaded == true)
+                _lyricsWindow.Close();
 
             // restore native volume OSD
             VolumeMixerWindow.ShowVolumeOsd();

@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -28,6 +28,7 @@ namespace FluentFlyoutWPF.Classes
         private WriteableBitmap? _bitmap;
         private bool _isRunning;
         private readonly object _lock = new();
+        private int _renderPending;
 
         private readonly int _fftLength = 4096;
         private int _fftPos = 0;
@@ -430,36 +431,49 @@ namespace FluentFlyoutWPF.Classes
             if (_bitmap == null)
                 return;
 
+            // Coalesce audio callbacks into one pending WPF render operation.
+            // Without this, dispatcher work can queue faster than it is painted,
+            // making the visualizer appear frozen on an old frame.
+            if (Interlocked.Exchange(ref _renderPending, 1) == 1)
+                return;
+
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                lock (_lock)
+                try
                 {
-                    if (_bitmap == null)
-                        return;
-
-                    _bitmap.Lock();
-
-                    try
+                    lock (_lock)
                     {
-                        unsafe
+                        if (_bitmap == null)
+                            return;
+
+                        _bitmap.Lock();
+
+                        try
                         {
-                            IntPtr pBackBuffer = _bitmap.BackBuffer;
-                            int stride = _bitmap.BackBufferStride;
-                            int bufferSize = stride * ImageHeight;
+                            unsafe
+                            {
+                                IntPtr pBackBuffer = _bitmap.BackBuffer;
+                                int stride = _bitmap.BackBufferStride;
+                                int bufferSize = stride * ImageHeight;
 
-                            Span<byte> buffer = new Span<byte>(pBackBuffer.ToPointer(), bufferSize);
+                                Span<byte> buffer = new Span<byte>(pBackBuffer.ToPointer(), bufferSize);
 
-                            buffer.Clear();
+                                buffer.Clear();
 
-                            DrawBars(stride, buffer);
+                                DrawBars(stride, buffer);
+                            }
+
+                            _bitmap.AddDirtyRect(new Int32Rect(0, 0, ImageWidth, ImageHeight));
                         }
-
-                        _bitmap.AddDirtyRect(new Int32Rect(0, 0, ImageWidth, ImageHeight));
+                        finally
+                        {
+                            _bitmap.Unlock();
+                        }
                     }
-                    finally
-                    {
-                        _bitmap.Unlock();
-                    }
+                }
+                finally
+                {
+                    Volatile.Write(ref _renderPending, 0);
                 }
             }, System.Windows.Threading.DispatcherPriority.Render);
         }

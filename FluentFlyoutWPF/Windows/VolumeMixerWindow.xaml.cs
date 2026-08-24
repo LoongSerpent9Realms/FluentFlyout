@@ -1,11 +1,11 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // Portions of this code are derived from:
 // - gpkgpk/HideVolumeOSD: https://github.com/gpkgpk/HideVolumeOSD
 //
 // Copyright (c) 2022 gpkgpk
-// Modifications copyright (c) 2026 The FluentFlyout Authors
+// Modifications copyright (c) 2026 The PulseFlyout Authors
 
 using FluentFlyout.Classes;
 using FluentFlyout.Classes.Settings;
@@ -107,7 +107,7 @@ public partial class VolumeMixerWindow : MicaWindow
             }
 
             Show();
-            //WindowHelper.SetNoActivate(this);
+            // Reassert both WPF and native topmost state after every show cycle.
             WindowHelper.SetTopmost(this);
         }
 

@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">Pengaturan FluentFlyout</system:String>
+    <system:String x:Key="TitleText">Pengaturan PulseFlyout</system:String>
     <system:String x:Key="MediaFlyoutTitle">Media Flyout</system:String>
     <system:String x:Key="MediaFlyoutDescription">Ketika mendengarkan sebuah media, tekan tombol media atau volume (Putar/Jeda, Volume Naik/Turun, dan Seterusnya) pada keyboard untuk menampilkan flyout. Menampilkan tampilan informasi media, bersamaan dengan kontrol pemutaran dan lain-lainnya.</system:String>
     <system:String x:Key="TextBlockText1">Aktifkan Media Flyout</system:String>
@@ -52,7 +52,7 @@ menyembunyikan tombol ulangi (repeat), acak (shuffle), serta informasi pemutar</
     <system:String x:Key="TaskbarWidgetHideCompletelyTitle">Tersembunyi secara seluruh apabila tidak ada media</system:String>
     <system:String x:Key="TaskbarWidgetHideCompletelyDescription">Menyembunyikan seluruh widget apabila media tidak ada, daripada menampilkan ikon media</system:String>
     <system:String x:Key="PremiumFeatureTitle">Fitur Premium</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Kontribusi sekali bayar Anda membantu saya menjaga FluentFlyout tetap aktif dan terupdate. Kontribusi ini langsung membuka semua fitur kustomisasi premium, selamanya.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Kontribusi sekali bayar Anda membantu saya menjaga PulseFlyout tetap aktif dan terupdate. Kontribusi ini langsung membuka semua fitur kustomisasi premium, selamanya.
 
 Catatan: Sebagai proyek open-source, fitur-fitur ini juga tersedia secara gratis melalui installer manual di GitHub. Satu-satunya perbedaan adalah pembaruan dan instalasi harus dilakukan secara manual.</system:String>
     <system:String x:Key="PremiumLockedMessage">Fitur ini merupakan bagian dari paket premium</system:String>
@@ -129,7 +129,7 @@ Anda dapat membantu berkontribusi dalam menerjemahkan di</system:String>
     <system:String x:Key="TrayIcon_SettingsOption">Pengaturan</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">Repositori</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">Laporkan bug</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">Keluar dari FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">Keluar dari PulseFlyout</system:String>
     <system:String x:Key="TaskbarWidgetPosition">Posisi Widget</system:String>
     <system:String x:Key="TaskbarWidgetControlsTitle">Kontrol Media Widget</system:String>
     <system:String x:Key="TaskbarWidgetControlsDescription">Tampilkan tombol kontrol media di widget</system:String>
@@ -142,7 +142,7 @@ Anda dapat membantu berkontribusi dalam menerjemahkan di</system:String>
     <system:String x:Key="TaskbarWidgetManualPaddingDescription">Tambahkan extra padding (default: 0px)</system:String>
     <system:String x:Key="TrayIcon_ViewLogsOption">Lihat log</system:String>
     <system:String x:Key="PixelsUnit">px</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout telah diperbarui!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout telah diperbarui!</system:String>
     <system:String x:Key="UpdateToastMessage">Anda sekarang di {0}.</system:String>
     <system:String x:Key="UpdateToastButton">Lihat Pembaruan</system:String>
     <system:String x:Key="Enabled">Diaktifkan</system:String>
@@ -156,9 +156,9 @@ Anda dapat membantu berkontribusi dalam menerjemahkan di</system:String>
     <system:String x:Key="SystemConfigure">Konfigurasi</system:String>
     <system:String x:Key="AboutTitle">Tentang</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ Bertemulah dengan kontributor kami</system:String>
-    <system:String x:Key="AboutContributorsDescription">Sebuah terima kasih besar untuk semua orang hebat yang sudah kontribusi pengembangan dan kesuksessan FluentFlyout!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Sebuah terima kasih besar untuk semua orang hebat yang sudah kontribusi pengembangan dan kesuksessan PulseFlyout!</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">Lisensi Sumber Terbuka</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout dibuat dengan paket sumber terbuka:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout dibuat dengan paket sumber terbuka:</system:String>
     <system:String x:Key="UpdateAvailable">Pembaruan tersedia</system:String>
     <system:String x:Key="UpToDate">Terbaru</system:String>
     <system:String x:Key="LastChecked">Terakhir di periksa: {0}</system:String>
@@ -191,8 +191,8 @@ Anda dapat membantu berkontribusi dalam menerjemahkan di</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Batas Puncak Audio</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">Seberapa keras suara audio harusnya agar bilah-bilah mencapai ketinggian maksimumnya</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">Perangkat Keluaran</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Ganti apa yang visualizer dengarkan dengan beralih perangkat keluaran pada FluentFlyout.</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Buka pengalaman penuh FluentFlyout:</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Ganti apa yang visualizer dengarkan dengan beralih perangkat keluaran pada PulseFlyout.</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Buka pengalaman penuh PulseFlyout:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">Aktifkan Widget Taskbar dan Visualizer</system:String>
     <system:String x:Key="AcrylicBlurOpacityPerk">Sesuaikan efek blur Acrylic</system:String>
     <system:String x:Key="HideTrayIconPerk">Sembunyikan ikon tray</system:String>

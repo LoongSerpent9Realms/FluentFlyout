@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">FluentFlyout विकल्प</system:String>
+    <system:String x:Key="TitleText">PulseFlyout विकल्प</system:String>
     <system:String x:Key="MediaFlyoutTitle">मीडिया फ्लाईआउट</system:String>
     <system:String x:Key="MediaFlyoutDescription">मुख्य फ्लाईआउट । मीडिया को सुनते समय, फ्लाईआउट प्रदर्शित करने के लिए अपने कीबोर्ड पर किसी भी मीडिया या वॉल्यूम कुंजी (प्ले / पॉज़, वॉल्यूम अप / डाउन, आदि) को दबाएं। प्लेबैक नियंत्रण के साथ मीडिया जानकारी प्रदर्शित करता है।</system:String>
     <system:String x:Key="TextBlockText1">मीडिया फ्लाईआउट सक्षम करें</system:String>
@@ -109,7 +109,7 @@
     <system:String x:Key="TrayIcon_SettingsOption">सेटिंग्स</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">कोष</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">रिपोर्ट बग</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">FluentFlyout छोड़ें</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">PulseFlyout छोड़ें</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationTitle">टास्कबार विजेट</system:String>
     <system:String x:Key="TaskbarWidgetDescription">एक कॉम्पैक्ट, अंतर्निर्मित विजेट जो आपके मीडिया तक त्वरित पहुंच के लिए सीधे आपके विंडोज टास्कबार पर रहता है। संपूर्ण मीडिया फ़्लाईआउट का विस्तार करने के लिए विजेट पर क्लिक करें।</system:String>
     <system:String x:Key="TaskbarWidgetEnabledTitle">टास्कबार विजेट सक्षम करें</system:String>
@@ -118,7 +118,7 @@
     <system:String x:Key="TaskbarWidgetPaddingTitle">विंडोज़ विजेट बटन के लिए स्वचालित पैडिंग</system:String>
     <system:String x:Key="TaskbarWidgetPaddingDescription">यदि आपके पास Windows विजेट सक्षम है तो इस सुविधा को चालू करें</system:String>
     <system:String x:Key="PremiumFeatureTitle">प्रीमियम सुविधा</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">आपका एक बार का योगदान FluentFlyout को चालू और अपडेटेड रखने में मेरी मदद करता है। इससे सभी प्रीमियम कस्टमाइज़ेशन फ़ीचर तुरंत और हमेशा के लिए अनलॉक हो जाते हैं।
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">आपका एक बार का योगदान PulseFlyout को चालू और अपडेटेड रखने में मेरी मदद करता है। इससे सभी प्रीमियम कस्टमाइज़ेशन फ़ीचर तुरंत और हमेशा के लिए अनलॉक हो जाते हैं।
 
 ध्यान दें: एक ओपन-सोर्स प्रोजेक्ट होने के नाते, ये फ़ीचर GitHub पर मैनुअल इंस्टॉलर के ज़रिए मुफ़्त में भी उपलब्ध हैं। बस इसमें एक बात का ध्यान रखना होगा कि अपडेट और इंस्टॉलेशन मैनुअली करने होंगे।</system:String>
     <system:String x:Key="PremiumLockedMessage">यह सुविधा प्रीमियम पैकेज का हिस्सा है</system:String>
@@ -148,7 +148,7 @@
     <system:String x:Key="TaskbarWidgetManualPaddingTitle">कस्टम पैडिंग</system:String>
     <system:String x:Key="TaskbarWidgetManualPaddingDescription">अतिरिक्त पैडिंग जोड़ें (डिफ़ॉल्ट: 0px)</system:String>
     <system:String x:Key="PixelsUnit">पिक्सल</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout अपडेट कर दिया गया है!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout अपडेट कर दिया गया है!</system:String>
     <system:String x:Key="UpdateToastMessage">अब आप {0} पर हैं।</system:String>
     <system:String x:Key="UpdateToastButton">अद्यतन देखें</system:String>
     <system:String x:Key="AcrylicBlurOpacityTitle">ऐक्रेलिक धुंधला अपारदर्शिता</system:String>
@@ -158,9 +158,9 @@
     <system:String x:Key="SystemConfigure">कॉन्फ़िगर</system:String>
     <system:String x:Key="AboutTitle">के बारे में</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ हमारे योगदानकर्ताओं से मिलें</system:String>
-    <system:String x:Key="AboutContributorsDescription">FluentFlyout के विकास और सफलता में योगदान देने वाले सभी अद्भुत लोगों को बहुत-बहुत धन्यवाद!</system:String>
+    <system:String x:Key="AboutContributorsDescription">PulseFlyout के विकास और सफलता में योगदान देने वाले सभी अद्भुत लोगों को बहुत-बहुत धन्यवाद!</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">ओपन सोर्स लाइसेंस</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout निम्नलिखित ओपन सोर्स पैकेज के साथ बनाया गया है:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout निम्नलिखित ओपन सोर्स पैकेज के साथ बनाया गया है:</system:String>
     <system:String x:Key="UpdateAvailable">उपलब्ध अद्यतन</system:String>
     <system:String x:Key="UpToDate">अप टू डेट</system:String>
     <system:String x:Key="LastChecked">अंतिम बार जाँच की गई: {0}</system:String>
@@ -181,7 +181,7 @@
     <system:String x:Key="TaskbarVisualizerBaselineDescription">जब ऑडियो स्तर शून्य पर हो तो एक पतली रेखा प्रदर्शित करता है</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">ऑडियो संवेदनशीलता</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">बार हिलना शुरू होने से पहले ऑडियो कितना तेज़ होना चाहिए</system:String>
-    <system:String x:Key="UnlockFullExperienceText">पूर्ण FluentFlyout अनुभव अनलॉक करें:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">पूर्ण PulseFlyout अनुभव अनलॉक करें:</system:String>
     <system:String x:Key="AllFuturePremiumFeatures">भविष्य की सभी प्रीमियम सुविधाएँ</system:String>
     <system:String x:Key="DevelopersTitle">डेवलपर्स</system:String>
     <system:String x:Key="TranslatorsTitle">अनुवादकों</system:String>
@@ -193,7 +193,7 @@
     <system:String x:Key="UpdatesSectionTitle">अपडेट</system:String>
     <system:String x:Key="ShowUpdateNotificationsTitle">नए अपडेट के लिए सूचनाएं दिखाएं</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">आउटपुट डिवाइस</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">FluentFlyout के आउटपुट डिवाइस को स्विच करके विज़ुअलाइज़र जो सुनता है उसे बदलें।</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">PulseFlyout के आउटपुट डिवाइस को स्विच करके विज़ुअलाइज़र जो सुनता है उसे बदलें।</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">ऑडियो पीक थ्रेशोल्ड</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">बार को अपनी अधिकतम ऊंचाई तक पहुंचने के लिए ऑडियो कितना तेज़ होना चाहिए</system:String>
     <system:String x:Key="ExportSettings">निर्यात सेटिंग्स</system:String>

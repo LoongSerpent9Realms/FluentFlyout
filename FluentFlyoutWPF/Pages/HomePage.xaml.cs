@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes;
@@ -166,6 +166,21 @@ public partial class HomePage : Page
         SettingsWindow.NavigateToPage(typeof(SystemPage));
     }
 
+    private void DesktopLyrics_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        SettingsWindow.NavigateToPage(typeof(DesktopLyricsPage));
+    }
+
+    private void AppFiltering_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        SettingsWindow.NavigateToPage(typeof(AppFilteringPage));
+    }
+
+    private void Advanced_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        SettingsWindow.NavigateToPage(typeof(AdvancedPage));
+    }
+
     // same as in AboutPage.xaml.cs
     private async void UnlockPremiumButton_Click(object sender, System.Windows.RoutedEventArgs e)
     {
@@ -206,7 +221,7 @@ public partial class HomePage : Page
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = "https://github.com/unchihugo/FluentFlyout/issues/new/choose",
+                FileName = "https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX",
                 UseShellExecute = true
             });
         }

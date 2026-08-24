@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -102,7 +102,7 @@ public partial class TaskbarWindow : Window
                 handled = true;
                 return IntPtr.Zero;
 
-                // Handle other known harmless messages that are sent when FluentFlyout starts, Windows locks, etc.
+                // Handle other known harmless messages that are sent when PulseFlyout starts, Windows locks, etc.
                 // Needs testing
                 //case 0x0047:
                 //case 0x02B1:
@@ -121,6 +121,13 @@ public partial class TaskbarWindow : Window
         SetupWindow();
         _mainWindow = (MainWindow)Application.Current.MainWindow;
         Widget.SetMainWindow(_mainWindow);
+    }
+
+    public void SetLikeVisual(bool liked) => Widget.SetLikeVisual(liked);
+    public void SetLikeVisibility(bool visible)
+    {
+        Widget.SetLikeVisibility(visible);
+        Dispatcher.BeginInvoke(() => UpdatePosition(), DispatcherPriority.Background);
     }
 
     private IntPtr GetSelectedTaskbarHandle(out bool isMainTaskbarSelected)
@@ -459,8 +466,8 @@ on_error:
         // Calculate widget size
         var (logicalWidth, logicalHeight) = Widget.CalculateSize(dpiScale);
 
-        int physicalWidth = (int)(logicalWidth * dpiScale * _scale);
-        int physicalHeight = (int)(logicalHeight * dpiScale);
+        int physicalWidth = Math.Max(1, (int)Math.Round(logicalWidth * dpiScale * _scale, MidpointRounding.AwayFromZero));
+        int physicalHeight = Math.Max(1, (int)Math.Round(logicalHeight * dpiScale, MidpointRounding.AwayFromZero));
 
         int taskbarHeight = taskbarRect.Bottom - taskbarRect.Top;
         int taskbarWidth = taskbarRect.Right - taskbarRect.Left;
@@ -765,11 +772,17 @@ on_error:
         // Update position after UI change
         Dispatcher.BeginInvoke(() => UpdatePosition(), DispatcherPriority.Background);
 
-        Dispatcher.Invoke(() =>
+        // Do not undo the delayed auto-hide when paused. UpdateUi can be
+        // called repeatedly for unchanged metadata while playback is paused.
+        bool shouldShow = !SettingsManager.Current.TaskbarWidgetAutoHide
+            || playbackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing;
+        if (shouldShow)
         {
-            Visibility = Visibility.Visible;
-        });
+            Dispatcher.Invoke(() => Visibility = Visibility.Visible);
+        }
     }
+
+    public void SetLyricsText(string text) => Widget.SetLyricsText(text);
 
     private (bool, Rect) GetTaskbarXamlElementRect(IntPtr taskbarHandle, ref AutomationElement? elementCache, string elementName)
     {

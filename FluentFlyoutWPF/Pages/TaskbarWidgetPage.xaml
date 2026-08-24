@@ -45,7 +45,7 @@
             </StackPanel>
 
             <!-- Premium Status InfoBar (only shown for Store versions) -->
-            <ui:InfoBar Grid.Row="1" Title="{DynamicResource PremiumUnlockedMessage}" Severity="Success" IsClosable="True" Margin="0,0,0,3">
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" Title="{DynamicResource PremiumUnlockedMessage}" Severity="Success" IsClosable="True" Margin="0,0,0,3">
                 <ui:InfoBar.Style>
                     <Style TargetType="ui:InfoBar" BasedOn="{StaticResource {x:Type ui:InfoBar}}">
                         <Setter Property="IsOpen" Value="False" />
@@ -63,7 +63,7 @@
             </ui:InfoBar>
 
             <!-- Premium Locked InfoBar (only shown for Store versions without premium) -->
-            <ui:InfoBar Grid.Row="1" IsOpen="True" Severity="Warning" IsClosable="False" Margin="0,0,0,3">
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" IsOpen="True" Severity="Warning" IsClosable="False" Margin="0,0,0,3">
                 <ui:InfoBar.Style>
                     <Style TargetType="ui:InfoBar">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -96,21 +96,29 @@
             </ui:InfoBar>
 
             <!-- GitHub Version InfoBar -->
-            <ui:InfoBar Grid.Row="1" Title="{DynamicResource PremiumGitHubMessage}" IsOpen="True" Severity="Informational" IsClosable="False" Margin="0,0,0,3" Visibility="{Binding IsStoreVersion, Converter={StaticResource BoolToCollapsedVisibleConverter}}" />
+            <ui:InfoBar Visibility="Collapsed" Grid.Row="1" Title="{DynamicResource PremiumGitHubMessage}" IsOpen="True" Severity="Informational" IsClosable="False" Margin="0,0,0,3" />
         </Grid>
 
         <StackPanel Opacity="{Binding IsPremiumUnlocked, Converter={StaticResource BoolToFullHalfOpacityConverter}}">
-                <ui:CardControl x:Name="TaskbarWidgetEnabledTitleCard" Tag="Indexable" Grid.Row="2" Icon="{ui:SymbolIcon TextboxAlignBottom24}" Margin="0,0,0,24">
+            <ui:CardControl x:Name="TaskbarWidgetEnabledTitleCard" Tag="Indexable" Grid.Row="2" Icon="{ui:SymbolIcon TextboxAlignBottom24}" Margin="0,0,0,24">
                 <ui:CardControl.Header>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource TaskbarWidgetEnabledTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
-                            <fluentflyoutcontrols:AccentBadge Margin="6,0,0,0" />
                         </StackPanel>
                         <TextBlock Text="{DynamicResource TaskbarWidgetEnabledDescription}" FontSize="12" Opacity="0.5" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPremiumUnlocked}" />
+            </ui:CardControl>
+            <ui:CardControl x:Name="TaskbarWidgetNeteaseLikeCard" Tag="Indexable" Icon="{ui:SymbolIcon Heart24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="显示网易云红心" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
+                        <TextBlock Text="仅在网易云音乐中显示任务栏红心按钮" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarWidgetNeteaseLikeEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPremiumUnlocked}" />
             </ui:CardControl>
             <ui:InfoBar Grid.Row="3" Title="{DynamicResource TaskbarWidgetVisualIssuesWarning}" IsOpen="True" Severity="Informational" IsClosable="False" Margin="0,0,0,3" />
 
@@ -298,7 +306,35 @@
                 </StackPanel>
             </ui:CardExpander>
 
-            <ui:CardControl x:Name="TaskbarWidgetShowPauseOverlayTitleCard" Tag="Indexable" Grid.Row="15" Icon="{ui:SymbolIcon Pause24}" Margin="0,0,0,76">
+            <ui:CardControl x:Name="TaskbarLyricsEnabledCard" Tag="Indexable" Grid.Row="15" Icon="{ui:SymbolIcon TextBulletListSquare24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="任务栏歌词" FontSize="14" FontWeight="Regular" />
+                        <TextBlock Text="在媒体浮窗和任务栏小组件中显示同步歌词" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarLyricsEnabled, Mode=TwoWay}" IsEnabled="{Binding IsPremiumUnlocked}" />
+            </ui:CardControl>
+            <ui:CardControl x:Name="TaskbarLyricsWordAnimationCard" Tag="Indexable" Grid.Row="16" Icon="{ui:SymbolIcon TextEditStyle24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="歌词逐词动画" FontSize="14" FontWeight="Regular" />
+                        <TextBlock Text="逐词或逐字显示歌词" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarLyricsWordAnimationEnabled, Mode=TwoWay}" IsEnabled="{Binding TaskbarLyricsEnabled}" />
+            </ui:CardControl>
+            <ui:CardControl x:Name="TaskbarLyricsScrollingCard" Tag="Indexable" Grid.Row="17" Icon="{ui:SymbolIcon TextDirectionHorizontalRight24}" Margin="0,0,0,3">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="长歌词自动滚动" FontSize="14" FontWeight="Regular" />
+                        <TextBlock Text="歌词超出任务栏宽度时自动横向滚动" FontSize="12" Opacity="0.5" />
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <ui:ToggleSwitch IsChecked="{Binding TaskbarLyricsScrollingEnabled, Mode=TwoWay}" IsEnabled="{Binding TaskbarLyricsEnabled}" />
+            </ui:CardControl>
+
+            <ui:CardControl x:Name="TaskbarWidgetShowPauseOverlayTitleCard" Tag="Indexable" Grid.Row="18" Icon="{ui:SymbolIcon Pause24}" Margin="0,0,0,76">
                 <ui:CardControl.Header>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{DynamicResource TaskbarWidgetShowPauseOverlayTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />

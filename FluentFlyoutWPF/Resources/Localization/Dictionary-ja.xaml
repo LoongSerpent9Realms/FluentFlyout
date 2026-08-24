@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">FluentFlyout の設定</system:String>
+    <system:String x:Key="TitleText">PulseFlyout の設定</system:String>
     <system:String x:Key="MediaFlyoutDescription">メディア再生中に、キーボードの任意のメディアキーまたは音量キー（再生/一時停止、音量アップ/ダウンなど）を押すと、このポップアップが表示されます。再生コントロールやその他の情報と共に、メディア情報が表示されます。</system:String>
     <system:String x:Key="MediaFlyoutTitle">メディアのポップアップ表示</system:String>
     <system:String x:Key="TextBlockText1">メディアのポップアップを有効化</system:String>
@@ -121,9 +121,9 @@
     <system:String x:Key="TrayIcon_SettingsOption">設定</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">リポジトリ</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">バグを報告</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">FluentFlyoutを終了</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">PulseFlyoutを終了</system:String>
     <system:String x:Key="LockWindow_InsertPressed">Insertキーが押されました</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">一度限りのご支援は、FluentFlyoutの継続的な開発と更新に役立てられます。ご支援いただくと、購入後、すべてのプレミアムカスタマイズ機能が永続的にご利用いただけます。
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">一度限りのご支援は、PulseFlyoutの継続的な開発と更新に役立てられます。ご支援いただくと、購入後、すべてのプレミアムカスタマイズ機能が永続的にご利用いただけます。
         
 注意:本プロジェクトはオープンソースであるため、これらの機能はGitHubの手動インストーラーを通じて無料で入手することも可能です。ただし、その場合は更新とインストールをすべて手動で行っていただく必要があります。</system:String>
     <system:String x:Key="AnimationEasingStyleDescription">(既定：二次関数)</system:String>
@@ -140,7 +140,7 @@
     <system:String x:Key="TaskbarWidgetControlsDescription">ウィジェットにメディアコントロールボタンを表示</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedTitle">ウィジェットアニメーション</system:String>
     <system:String x:Key="TaskbarWidgetAnimatedDescription">ウィジェットの微妙なアニメーションを有効化</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyoutがアップデートされました！</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyoutがアップデートされました！</system:String>
     <system:String x:Key="UpdateToastMessage">現在のバージョンは {0} です。</system:String>
     <system:String x:Key="UpdateToastButton">アップデートを見る</system:String>
     <system:String x:Key="HomeTitle">ホーム</system:String>
@@ -173,7 +173,7 @@
     <system:String x:Key="TaskbarVisualizerBaselineDescription">オーディオ レベルがゼロのときに細い線を表示します</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityTitle">オーディオ感度</system:String>
     <system:String x:Key="TaskbarVisualizerAudioSensitivityDescription">音量がどれくらい大きくなると、バーが動き始めるのかを設定します</system:String>
-    <system:String x:Key="UnlockFullExperienceText">FluentFlyout の完全なエクスペリエンスを体験しましょう:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">PulseFlyout の完全なエクスペリエンスを体験しましょう:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">タスク バー ウィジェットとビジュアライザーを有効化</system:String>
     <system:String x:Key="AcrylicBlurOpacityPerk">アクリルぼかしの透過度</system:String>
     <system:String x:Key="HideTrayIconPerk">トレイ アイコンを非表示</system:String>
@@ -187,11 +187,11 @@
     <system:String x:Key="SystemConfigure">構成</system:String>
     <system:String x:Key="AboutTitle">バージョン情報</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ 貢献者を紹介</system:String>
-    <system:String x:Key="AboutContributorsDescription">FluentFlyout の開発と成功に貢献してくださった素晴らしい方々に心より感謝申し上げます！</system:String>
+    <system:String x:Key="AboutContributorsDescription">PulseFlyout の開発と成功に貢献してくださった素晴らしい方々に心より感謝申し上げます！</system:String>
     <system:String x:Key="DevelopersTitle">開発者</system:String>
     <system:String x:Key="TranslatorsTitle">翻訳者</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">オープンソースライセンス</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout は、次のオープンソース パッケージを使用してビルドされています:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout は、次のオープンソース パッケージを使用してビルドされています:</system:String>
     <system:String x:Key="SponsorMeLink">スポンサーになりませんか</system:String>
     <system:String x:Key="BuyMeCoffeeLink">Buy me a coffee</system:String>
     <system:String x:Key="PositionRight">右</system:String>
@@ -209,7 +209,7 @@
     <system:String x:Key="TaskbarWidgetControlsPositionDescription">メディア操作ボタンを表示する位置を選択</system:String>
     <system:String x:Key="PositionLeft">左</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">バーが最大の高さに到達するのにどのくらいの大きさが必要かを設定します</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">FluentFlyoutの出力デバイスを切り替えることで、ビジュアライザーが監視する対象を変更できます。</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">PulseFlyoutの出力デバイスを切り替えることで、ビジュアライザーが監視する対象を変更できます。</system:String>
     <system:String x:Key="TaskbarVisualizerClickableTitle">クリックして設定を開く</system:String>
     <system:String x:Key="TaskbarVisualizerClickableDescription">ビジュアライザーをクリックすると、設定ページが開きます</system:String>
     <system:String x:Key="LockKeysCursorUITitle">推奨ターゲットディスプレイ</system:String>

@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyoutWPF.Classes.Clients;
@@ -42,7 +42,7 @@ public static class UpdateCheckerService
 
         try
         {
-            var response = await FluentFlyoutApiClient.GetStringAsync(ApiEndpoint);
+            var response = await PulseFlyoutApiClient.GetStringAsync(ApiEndpoint);
             var json = JsonDocument.Parse(response);
 
             result.NewestVersion = json.RootElement.GetProperty("version").GetString() ?? string.Empty;

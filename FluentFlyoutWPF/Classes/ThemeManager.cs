@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes.Settings;
@@ -106,13 +106,13 @@ internal static class ThemeManager
                 {
                     WindowsThemeDetector.GetWindowsTheme(out _, out var systemTheme);
                     var iconUri = new Uri(systemTheme == WindowsThemeDetector.ThemeMode.Dark
-                        ? "pack://application:,,,/Resources/TrayIcons/FluentFlyoutWhite.png"
-                        : "pack://application:,,,/Resources/TrayIcons/FluentFlyoutBlack.png");
+                        ? "pack://application:,,,/Resources/PulseFlyout.png"
+                        : "pack://application:,,,/Resources/PulseFlyout.png");
                     nIcon.Icon = new BitmapImage(iconUri);
                 }
                 else
                 {
-                    var iconUi = new Uri("pack://application:,,,/Resources/FluentFlyout2.ico");
+                    var iconUi = new Uri("pack://application:,,,/Resources/PulseFlyout.png");
                     nIcon.Icon = new BitmapImage(iconUi);
                 }
             }

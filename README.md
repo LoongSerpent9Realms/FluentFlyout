@@ -1,32 +1,32 @@
 <p align="center">
 	<picture>
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
-		<source width="65%" alt="fluentflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
-		<img width="65%" alt="fluentflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921" />
+		<source width="65%" alt="pulseflyout-title" media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3e75e514-b9a6-40e3-b170-af9d29a82bb4" />
+		<img width="65%" alt="pulseflyout-title" src="https://github.com/user-attachments/assets/daa2969f-8ad2-4832-8253-26133a50c921">
 	</picture>
 </p>
 
 <p align="center">
-	<img alt="GitHub Release" src="https://img.shields.io/github/v/release/unchihugo/FluentFlyout">
+	<img alt="GitHub Release" src="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
 	<img alt="Static Badge" src="https://img.shields.io/badge/downloads-500k%2B-blue?color=limegreen">
-	<a href="https://hosted.weblate.org/engage/fluentflyout/"><img src="https://hosted.weblate.org/widget/fluentflyout/svg-badge.svg" alt="Translation status"/></a>
-	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/fluentflyout?labelColor=midnightblue&color=goldenrod">
+	<a href="https://hosted.weblate.org/engage/pulseflyout/"><img src="https://hosted.weblate.org/widget/pulseflyout/svg-badge.svg" alt="Translation status"/></a>
+	<img alt="GitHub contributors" src="https://img.shields.io/github/contributors-anon/unchihugo/pulseflyout?labelColor=midnightblue&color=goldenrod">
 </p>
 <p align="center">
-  <strong>English</strong> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.zh.md">简体中文</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.nl.md">Nederlands</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.tr.md">Türkçe</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.ru.md">Русский</a> | <a href="https://github.com/unchihugo/FluentFlyout/blob/master/README.kr.md">한국어</a>
+  <strong>English</strong> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">简体中文</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Nederlands</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Türkçe</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">Русский</a> | <a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">한국어</a>
 </p>
 
 ---
-FluentFlyout is the modern Flyout app for Windows, built with Fluent 2 Design principles.  
+PulseFlyout is the modern Flyout app for Windows, built with Fluent 2 Design principles.  
 The UI seemingly blends in with Windows 11, providing you an uninterrupted, clean, and native-like experience when controlling your media, lock keys, and more.  
 
-FluentFlyout features smooth animations, blends with your system's color themes and includes a suite of personalization settings while providing media controls, information and more in nice and modern looking popup flyouts.
+PulseFlyout features smooth animations, blends with your system's color themes and includes a suite of personalization settings while providing media controls, information and more in nice and modern looking popup flyouts.
 
 <a href="https://apps.microsoft.com/detail/9n45nsm4tnbp?referrer=appbadge&cid=GitHub_README&mode=direct">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
 
-<img alt="FluentFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
+<img alt="PulseFlyoutHero-Cinemascope" src="https://github.com/user-attachments/assets/a7c7e2db-e21b-4435-9acc-0b2c5f38eb7d" />
 
 ## Features ✨
 - **Audio flyout: Displays Cover, Title, Artist and media controls**
@@ -87,33 +87,33 @@ Read more about the project's model in the [Sustainability & The Microsoft Store
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="300"/>
 </a>
 
-> Looking for FluentFlyout Settings? You can access it by clicking the system tray icon
+> Looking for PulseFlyout Settings? You can access it by clicking the system tray icon
 ### Using .msixbundle installer
-1. Go to the [latest release](https://github.com/unchihugo/FluentFlyout/releases/latest) page
+1. Go to the [latest release](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) page
 2. Download the **"*.cer"** file *(real certificates cost a lot of money)*
 3. Open the certificate and press **"Install Certificate..."**
 4. On the Certificate Import Wizard, select **"Local Machine"**, press **"Next"** and grant Admin Access
 5. Select **"Place all certificates in the following store"**, then **"Browse..."**, choose **"Trusted Root Certification Authorities"** and **"OK"**
 6. Finally, press **"Next"** and then **"Finish"**. It might ask you to confirm, press **Yes**
 7. Download the **"*.msixbundle"** file
-8. The App Installer will pop up, press **"Install"**, or **"Update"** if you've installed FluentFlyout before
+8. The App Installer will pop up, press **"Install"**, or **"Update"** if you've installed PulseFlyout before
 
 ## Contributing 💖
-Please feel free to contribute in any way you can! Check out [CONTRIBUTING.md](https://github.com/unchihugo/FluentFlyout/blob/master/.github/CONTRIBUTING.md) to get started.
-If you want to help with translations, please visit our [Weblate page](https://hosted.weblate.org/engage/fluentflyout/).
+Please feel free to contribute in any way you can! Check out [CONTRIBUTING.md](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) to get started.
+If you want to help with translations, please visit our [Weblate page](https://hosted.weblate.org/engage/pulseflyout/).
 
 ### Translation Status
-<a href="https://hosted.weblate.org/engage/fluentflyout/">
-<img src="https://hosted.weblate.org/widget/fluentflyout/multi-auto.svg" alt="Translation status" />
+<a href="https://hosted.weblate.org/engage/pulseflyout/">
+<img src="https://hosted.weblate.org/widget/pulseflyout/multi-auto.svg" alt="Translation status" />
 </a>
 
 ### Thanks to our amazing team of contributors!
-<a href="https://github.com/unchihugo/fluentflyout/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=unchihugo/fluentflyout&anon=1" />
+<a href="https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX">
+  <img src="https://contrib.rocks/image?repo=unchihugo/pulseflyout&anon=1" />
 </a>
 
 ## Sustainability & The Microsoft Store 💰
-FluentFlyout is and always will be free and open-source. You can download the latest builds from the [Releases](https://github.com/unchihugo/FluentFlyout/releases/latest) tab or compile the project yourself to access the full feature set without restrictions.
+PulseFlyout is and always will be free and open-source. You can download the latest builds from the [Releases](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX) tab or compile the project yourself to access the full feature set without restrictions.
 
 Maintaining a project of this scale takes time and effort. To support ongoing development, the Microsoft Store version offers a convenient way to install the app and includes a few optional features unlockable via a small payment (€2.99, varies by region).
 
@@ -128,7 +128,7 @@ Thank you for your support and understanding!
 - [AksharDP](https://github.com/AksharDP) - Code Contributor (media seekbar & duration)
 - [Hykerisme](https://github.com/Hykerisme) - CN Translation
 - [nopeless](https://github.com/nopeless) - Code Contributor (QoL features)
-- All our amazing contributors! Check the full list on our [GitHub Contributors page](https://github.com/unchihugo/FluentFlyout/graphs/contributors?all=1)
+- All our amazing contributors! Check the full list on our [GitHub Contributors page](https://github.com/LoongSerpent9Realms/FluentFlyout/tree/master/FluentFlyoutMSIX)
 
 ### Dependencies
 - [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet)

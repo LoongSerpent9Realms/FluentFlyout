@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using System.Runtime.InteropServices;
@@ -52,6 +52,7 @@ public static partial class NativeMethods
     internal const int WM_DISPLAYCHANGE = 0x007E;
     internal const int WM_DPICHANGED = 0x02E0;
     internal const int WM_DPICHANGED_AFTERPARENT = 0x02E3;
+    internal const int VK_LBUTTON = 0x01;
 
     // SystemParametersInfo Actions
     internal const int SPI_SETWORKAREA = 0x002F;
@@ -341,6 +342,9 @@ public static partial class NativeMethods
 
     [LibraryImport("user32.dll", SetLastError = true)]
     internal static partial IntPtr GetForegroundWindow();
+
+    [LibraryImport("user32.dll")]
+    internal static partial short GetAsyncKeyState(int vKey);
     #endregion
 
     #region gdi32.dll

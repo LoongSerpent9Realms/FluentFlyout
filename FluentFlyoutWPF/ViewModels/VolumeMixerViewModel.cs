@@ -1,4 +1,4 @@
-// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -78,7 +78,7 @@ public partial class VolumeMixerViewModel : ObservableObject, IDisposable
         RefreshSessions();
     }
 
-    private void OnDefaultDeviceChanged(object? sender, DefaultDeviceChangedEventArgs e)
+    private void OnDefaultDeviceChanged(object? sender, FluentFlyoutWPF.Classes.DefaultDeviceChangedEventArgs e)
     {
         Logger.Info("Default render device changed, reattaching volume mixer");
 
@@ -156,7 +156,7 @@ public partial class VolumeMixerViewModel : ObservableObject, IDisposable
 
                 string name = pid != 0 ? GetSessionDisplayName(session) : "System sounds";
 
-                if (name == "FluentFlyout") continue;
+                if (name == "PulseFlyout") continue;
 
                 var icon = MediaPlayerData.GetAndCacheProcessIcon(pid, name);
                 Sessions.Add(new AudioSessionModel(session, name, pid, sessionState, icon));

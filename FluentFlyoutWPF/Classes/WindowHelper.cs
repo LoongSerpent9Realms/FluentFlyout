@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2024-2026 The FluentFlyout Authors
+// Copyright (c) 2024-2026 The PulseFlyout Authors
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using FluentFlyout.Classes;
@@ -15,6 +15,10 @@ public static class WindowHelper
 
     public static void SetTopmost(Window window) // workaround to set window even more topmost
     {
+        // Keep WPF's z-order state aligned with the native z-order update. Without
+        // this, a later Show/Hide cycle can demote the window back below fullscreen
+        // borderless apps even though the native call succeeded earlier.
+        window.Topmost = true;
         var handle = new WindowInteropHelper(window).Handle;
         SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     }

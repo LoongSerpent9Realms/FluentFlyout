@@ -100,7 +100,6 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{DynamicResource VolumeMixerHighlightTitle}" FontSize="14" FontWeight="Regular" VerticalAlignment="Center" />
-                            <fluentflyoutcontrols:AccentBadge Margin="6,0,0,0" />
                         </StackPanel>
                         <TextBlock Text="{DynamicResource VolumeMixerHighlightDescription}" FontSize="12" Opacity="0.5" />
                     </StackPanel>

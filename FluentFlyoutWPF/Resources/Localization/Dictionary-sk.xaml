@@ -1,5 +1,5 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <system:String x:Key="TitleText">Nastavenia FluentFlyout</system:String>
+    <system:String x:Key="TitleText">Nastavenia PulseFlyout</system:String>
     <system:String x:Key="HomeTitle">Domov</system:String>
     <system:String x:Key="Enabled">Povolené</system:String>
     <system:String x:Key="Disabled">Vypnuté</system:String>
@@ -85,12 +85,12 @@ skrýva informácie o opakovaní, náhodnom prehrávaní a prehrávači</system:
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelTitle">Prahová Hodnota Zvukového Vrcholu</system:String>
     <system:String x:Key="TaskbarVisualizerAudioPeakLevelDescription">Aký hlasný musí byť zvuk, aby stĺpce dosiahli svoju maximálnu výšku</system:String>
     <system:String x:Key="TaskbarVisualizerOutputDeviceTitle">Výstupné Zariadenie</system:String>
-    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Zmeňte, čo vizualizér počúva, prepnutím výstupného zariadenia FluentFlyout.</system:String>
+    <system:String x:Key="TaskbarVisualizerOutputDeviceDescription">Zmeňte, čo vizualizér počúva, prepnutím výstupného zariadenia PulseFlyout.</system:String>
     <system:String x:Key="TaskbarWidgetControlsPositionTitle">Pozícia Ovládania Médií</system:String>
     <system:String x:Key="TaskbarVisualizerClickableTitle">Kliknutím otvoríte Nastavenia</system:String>
     <system:String x:Key="TaskbarVisualizerClickableDescription">Kliknutím na vizualizér sa otvorí jeho stránka s nastaveniami</system:String>
     <system:String x:Key="PremiumFeatureTitle">Prémiová Funkcia</system:String>
-    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Váš jednorazový príspevok mi pomôže udržiavať FluentFlyout aktívny a aktualizovaný. Okamžite odomkne všetky prémiové funkcie prispôsobenia, navždy.
+    <system:String x:Key="PremiumFeatureDescription" xml:space="preserve">Váš jednorazový príspevok mi pomôže udržiavať PulseFlyout aktívny a aktualizovaný. Okamžite odomkne všetky prémiové funkcie prispôsobenia, navždy.
         
 Poznámka: Keďže ide o open-source projekt, tieto funkcie sú k dispozícii aj bezplatne prostredníctvom manuálneho inštalátora na GitHub. Jedinou nevýhodou je, že aktualizácie a inštaláciu je potrebné vykonať manuálne.</system:String>
     <system:String x:Key="PremiumLockedMessage">Táto funkcia je súčasťou prémiového balíka</system:String>
@@ -100,7 +100,7 @@ Poznámka: Keďže ide o open-source projekt, tieto funkcie sú k dispozícii aj
     <system:String x:Key="PremiumPurchaseSuccess">Premium úspešne odomknuté!</system:String>
     <system:String x:Key="PremiumPurchaseFailed">Nákup zlyhal. Skúste to znova.</system:String>
     <system:String x:Key="PremiumPurchaseCancelled">Nákup zrušený.</system:String>
-    <system:String x:Key="UnlockFullExperienceText">Odomknite si plný zážitok z FluentFlyout:</system:String>
+    <system:String x:Key="UnlockFullExperienceText">Odomknite si plný zážitok z PulseFlyout:</system:String>
     <system:String x:Key="TaskbarWidgetCustomizationPerk">Povoliť Widget a Vizualizér na Paneli úloh</system:String>
     <system:String x:Key="AcrylicBlurOpacityPerk">Upravte Akrylový efekt rozmazania</system:String>
     <system:String x:Key="HideTrayIconPerk">Skryť ikonu v systémovej lište</system:String>
@@ -169,12 +169,12 @@ Poznámka: Keďže ide o open-source projekt, tieto funkcie sú k dispozícii aj
     <system:String x:Key="AboutTitle">O programe</system:String>
     <system:String x:Key="AboutContributorsTitle">❤️ Zoznámte sa s Našimi Prispievateľmi</system:String>
     <system:String x:Key="AppearanceBehaviorSectionTitle">Vzhľad a fungovanie</system:String>
-    <system:String x:Key="AboutContributorsDescription">Veľká vďaka všetkým úžasným ľuďom, ktorí prispeli k vývoju a úspechu FluentFlyout!</system:String>
+    <system:String x:Key="AboutContributorsDescription">Veľká vďaka všetkým úžasným ľuďom, ktorí prispeli k vývoju a úspechu PulseFlyout!</system:String>
     <system:String x:Key="DevelopersTitle">Vývojári</system:String>
     <system:String x:Key="TranslatorsTitle">Prekladatelia</system:String>
     <system:String x:Key="AboutPremiumTitle">O Premium</system:String>
     <system:String x:Key="AboutOpenSourceLicensesTitle">Open Source Licencie</system:String>
-    <system:String x:Key="AboutOpenSourceLicensesDescription">FluentFlyout je zostavený s nasledujúcimi open source balíkmi:</system:String>
+    <system:String x:Key="AboutOpenSourceLicensesDescription">PulseFlyout je zostavený s nasledujúcimi open source balíkmi:</system:String>
     <system:String x:Key="EnjoyingAppText" xml:space="preserve">Páči sa vám aplikácia? Označte ju hviezdičkou na GitHub,
 alebo zanechajte recenziu v obchode Microsoft Store!</system:String>
     <system:String x:Key="GitHubRepoLink">GitHub Repozitár</system:String>
@@ -196,9 +196,9 @@ Môžete pomôcť s prekladmi na</system:String>
     <system:String x:Key="TrayIcon_GitHubRepositoryOption">Repozitár</system:String>
     <system:String x:Key="TrayIcon_ViewLogsOption">Zobraziť logy</system:String>
     <system:String x:Key="TrayIcon_ReportBugOption">Nahlásiť chybu</system:String>
-    <system:String x:Key="TrayIcon_QuitOption">Ukončiť FluentFlyout</system:String>
+    <system:String x:Key="TrayIcon_QuitOption">Ukončiť PulseFlyout</system:String>
     <system:String x:Key="PixelsUnit">px</system:String>
-    <system:String x:Key="UpdateToastTitle">FluentFlyout bol aktualizovaný!</system:String>
+    <system:String x:Key="UpdateToastTitle">PulseFlyout bol aktualizovaný!</system:String>
     <system:String x:Key="UpdateToastMessage">Teraz ste na {0}.</system:String>
     <system:String x:Key="UpdateToastButton">Zobraziť Aktualizácie</system:String>
     <system:String x:Key="UpdateAvailable">K dispozícii je aktualizácia</system:String>
