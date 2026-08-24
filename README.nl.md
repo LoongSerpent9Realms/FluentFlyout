@@ -61,7 +61,7 @@ PulseFlyout biedt het mediabediening en informatie in een mooie en moderne pop-u
 
 ## Hoe te installeren
 1. Ga naar de pagina met de [nieuwste Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest).
-2. Download en voer **`PulseFlyout-2.14.0-Setup.exe`** uit.
+2. Download en voer **`PulseFlyout-2.15.0-Setup.exe`** uit.
 3. Volg de installatiestappen. Een bestaande installatie wordt automatisch bijgewerkt.
 
 > Op zoek naar PulseFlyout-instellingen? Klik op het systeemvakpictogram.

@@ -946,7 +946,15 @@ public partial class MainWindow : MicaWindow
         }
 
         _lastSelfUpdateTimestamp = DateTime.Now;
-        _ = PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent("timeline-changed", mediaSession.Id.ToString()));
+        var timelinePositionMs = Math.Max(0, (long)timelineProperties.Position.TotalMilliseconds);
+        var timelineDurationMs = timelineProperties.EndTime > TimeSpan.Zero
+            ? Math.Max(0, (long)timelineProperties.EndTime.TotalMilliseconds)
+            : (long?)null;
+        _ = PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent(
+            "timeline-changed",
+            mediaSession.Id.ToString(),
+            PositionMs: timelinePositionMs,
+            DurationMs: timelineDurationMs));
 
         if (GetActiveMediaSession() is not { } session || session.Id != mediaSession.Id) return;
 
@@ -1794,6 +1802,7 @@ public partial class MainWindow : MicaWindow
             _lyricsCacheKey = key;
             _activeLyricsTrack = cached;
             _activeLyricsTitle = title;
+            _ = PublishLyricsEventAsync(session, title, artist, cached);
             return;
         }
         if (_lyricsLoadKey == key && _lyricsLoadCts is { IsCancellationRequested: false }) return;
@@ -1823,6 +1832,7 @@ public partial class MainWindow : MicaWindow
                 _activeLyricsTitle = title;
                 if (_lyricsWindow is { IsVisible: true })
                     _lyricsWindow.UpdateTrack(title, artist, track, () => GetNativePlaybackPosition(session));
+                _ = PublishLyricsEventAsync(session, title, artist, track);
                 UpdateLyricsDisplay();
             }
         }
@@ -1839,6 +1849,17 @@ public partial class MainWindow : MicaWindow
             }
             requestCancellation.Dispose();
         }
+    }
+
+    private static Task PublishLyricsEventAsync(MediaSession session, string title, string artist, LyricsService.LyricsTrack? track)
+    {
+        return PluginManager.Current.PublishMediaEventAsync(new PluginMediaEvent(
+            "lyrics-updated",
+            session.Id.ToString(),
+            title,
+            artist,
+            track?.ToLrc(),
+            track is null ? null : "lrc"));
     }
 
     private void RefreshNeteaseLikeStateAfterLyricsLookup(MediaSession session, string title, string artist, string lyricsKey)

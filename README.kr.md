@@ -91,7 +91,7 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 
 ## 설치 방법 📥
 1. [최신 Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) 페이지로 이동합니다.
-2. **`PulseFlyout-2.14.0-Setup.exe`**를 다운로드하여 실행합니다.
+2. **`PulseFlyout-2.15.0-Setup.exe`**를 다운로드하여 실행합니다.
 3. 설치 마법사의 안내를 따르세요. 기존 설치가 있으면 자동으로 업데이트됩니다.
 
 > PulseFlyout 설정을 찾고 계신가요? 시스템 트레이 아이콘을 클릭하세요.

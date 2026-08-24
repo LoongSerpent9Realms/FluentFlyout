@@ -79,7 +79,7 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 
 ## Nasıl kurulur 📥
 1. [En son Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) sayfasını açın.
-2. **`PulseFlyout-2.14.0-Setup.exe`** dosyasını indirin ve çalıştırın.
+2. **`PulseFlyout-2.15.0-Setup.exe`** dosyasını indirin ve çalıştırın.
 3. Yükleyici adımlarını izleyin. Mevcut bir kurulum otomatik olarak güncellenir.
 
 > PulseFlyout Ayarlarını mı arıyorsunuz? Sistem tepsisi simgesine tıklayın.

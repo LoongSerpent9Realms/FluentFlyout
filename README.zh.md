@@ -68,7 +68,7 @@ https://github.com/user-attachments/assets/bfc7666f-1d59-4cbf-8d15-3855671cb147
 
 ## 怎么下载？
 1. 前往 [最新 Release](https://github.com/LoongSerpent9Realms/FluentFlyout/releases/latest) 页面。
-2. 下载并运行 **`PulseFlyout-2.14.0-Setup.exe`**。
+2. 下载并运行 **`PulseFlyout-2.15.0-Setup.exe`**。
 3. 按照安装向导完成安装；已安装的版本会自动更新。
 
 > 在寻找 PulseFlyout 设置吗？点击系统托盘图标即可访问。

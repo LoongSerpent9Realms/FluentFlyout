@@ -417,6 +417,7 @@ public static class LyricsService
         public IReadOnlyList<LyricsLine> Lines { get; }
         public LyricsTrack(IReadOnlyList<LyricsLine> lines) => Lines = lines;
         public string? GetCurrentLine(TimeSpan position) => Lines.LastOrDefault(x => x.Start <= position)?.Text;
+        public string ToLrc() => string.Join(Environment.NewLine, Lines.Select(line => $"[{(int)line.Start.TotalMinutes:00}:{line.Start.Seconds:00}.{line.Start.Milliseconds / 10:00}]{line.Text}"));
         public (string Current, string Next) GetCurrentAndNextLines(TimeSpan position)
         {
             if (Lines.Count == 0) return (string.Empty, string.Empty);

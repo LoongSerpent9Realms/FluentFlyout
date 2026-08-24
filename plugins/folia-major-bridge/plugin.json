@@ -1,0 +1,9 @@
+{
+  "Id": "folia-major-bridge",
+  "Name": "Folia Major 歌词动效",
+  "Version": "1.0.0",
+  "EntryAssembly": "folia-major-bridge.dll",
+  "EntryType": "FoliaMajorBridge.Entry",
+  "Description": "通过 Folia Major Stage API 推送当前歌曲歌词，由 Folia Major 渲染歌词动效。",
+  "Author": "PulseFlyout"
+}

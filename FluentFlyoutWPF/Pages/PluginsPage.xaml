@@ -16,6 +16,15 @@
                     </StackPanel>
                 </StackPanel>
             </ui:Card>
+            <ui:Card Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="插件文件检测" FontWeight="SemiBold" />
+                    <TextBlock x:Name="PluginStatusText" Margin="0,6,0,10" TextWrapping="Wrap" Opacity="0.72" />
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="检测插件文件" Click="CheckFoliaMajor_Click" HorizontalAlignment="Left" />
+                    </StackPanel>
+                </StackPanel>
+            </ui:Card>
             <TextBlock Text="已加载插件" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8" />
             <ListView x:Name="PluginList" MinHeight="120">
                 <ListView.ItemTemplate>

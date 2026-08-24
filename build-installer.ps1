@@ -4,7 +4,7 @@ $publish = Join-Path $root 'FluentFlyoutWPF\bin\Release\Publish'
 $out = Join-Path $root 'installer'
 $payload = Join-Path $out 'payload'
 $sed = Join-Path $out 'PulseFlyout-Setup.sed'
-$setup = Join-Path $out 'PulseFlyout-2.14.0-Setup.exe'
+$setup = Join-Path $out 'PulseFlyout-2.15.0-Setup.exe'
 
 if (-not (Test-Path (Join-Path $publish 'FluentFlyout.exe'))) { throw "Publish output not found: $publish" }
 New-Item -ItemType Directory -Force -Path $out | Out-Null
@@ -27,7 +27,7 @@ $shortcut.Save()
 $uninstall = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout"
 New-Item -Path $uninstall -Force | Out-Null
 New-ItemProperty -Path $uninstall -Name DisplayName -Value "PulseFlyout" -PropertyType String -Force | Out-Null
-New-ItemProperty -Path $uninstall -Name DisplayVersion -Value "2.14.0" -PropertyType String -Force | Out-Null
+New-ItemProperty -Path $uninstall -Name DisplayVersion -Value "2.15.0" -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $uninstall -Name InstallLocation -Value $installDir -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $uninstall -Name UninstallString -Value "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command \\"Remove-Item -LiteralPath '$installDir' -Recurse -Force; Remove-Item -LiteralPath '$start' -Force; Remove-Item -LiteralPath '$uninstall' -Recurse -Force\\"" -PropertyType String -Force | Out-Null
 Start-Process -FilePath (Join-Path $installDir "FluentFlyout.exe") -WorkingDirectory $installDir
@@ -48,7 +48,7 @@ if (Test-Path $setup) { Remove-Item -LiteralPath $setup -Force }
 if ($LASTEXITCODE -eq 0 -and (Test-Path $setup)) {
     Write-Host "Created: $setup"
 } else {
-    $zip = Join-Path $out 'PulseFlyout-2.14.0-Setup.zip'
+    $zip = Join-Path $out 'PulseFlyout-2.15.0-Setup.zip'
     if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
     Compress-Archive -Path (Join-Path $payload '*') -DestinationPath $zip -CompressionLevel Optimal
     Write-Warning 'IExpress could not create an EXE in this environment; created an installable ZIP instead.'

@@ -4,6 +4,8 @@
 using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Interop;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using FluentFlyout.Classes;
 using FluentFlyoutWPF.Classes;
 using FluentFlyoutWPF.Classes.Services;
@@ -35,6 +37,7 @@ public partial class LyricsWindow : Window
         _getPosition = getPosition;
         SettingsManager.Current.PropertyChanged += Settings_PropertyChanged;
         ApplyTheme(SettingsManager.Current.DesktopLyricsTheme);
+        ApplyLayout(SettingsManager.Current.DesktopLyricsLayout);
         WindowHelper.SetNoActivate(this);
         SourceInitialized += (_, _) =>
         {
@@ -104,19 +107,21 @@ public partial class LyricsWindow : Window
         try { DragMove(); } catch (InvalidOperationException) { }
     }
 
+    private void DragHandle_DragDelta(object sender, DragDeltaEventArgs e)
+    {
+        if (SettingsManager.Current.DesktopLyricsClickThrough) return;
+        Left += e.HorizontalChange;
+        Top += e.VerticalChange;
+    }
+
     private void LyricsBorder_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
     {
-        if (!SettingsManager.Current.DesktopLyricsClickThrough)
-        {
-            LockButton.Visibility = Visibility.Visible;
-            CloseButton.Visibility = Visibility.Visible;
-        }
+        UpdateControlVisibility(pointerInside: true);
     }
 
     private void LyricsBorder_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
     {
-        LockButton.Visibility = Visibility.Collapsed;
-        CloseButton.Visibility = Visibility.Collapsed;
+        UpdateControlVisibility(pointerInside: false);
     }
 
     private void LockButton_Click(object sender, RoutedEventArgs e)
@@ -165,17 +170,22 @@ public partial class LyricsWindow : Window
 
     private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SettingsManager.Current.DesktopLyricsTheme))
+        if (e.PropertyName is nameof(SettingsManager.Current.DesktopLyricsTheme)
+            or nameof(SettingsManager.Current.DesktopLyricsTransparentBackground))
         {
             Dispatcher.Invoke(() => ApplyTheme(SettingsManager.Current.DesktopLyricsTheme));
+            return;
+        }
+        if (e.PropertyName == nameof(SettingsManager.Current.DesktopLyricsLayout))
+        {
+            Dispatcher.Invoke(() => ApplyLayout(SettingsManager.Current.DesktopLyricsLayout));
             return;
         }
         if (e.PropertyName != nameof(SettingsManager.Current.DesktopLyricsClickThrough)) return;
         Dispatcher.Invoke(() =>
         {
             SetMouseThrough(SettingsManager.Current.DesktopLyricsClickThrough);
-            LockButton.Visibility = SettingsManager.Current.DesktopLyricsClickThrough ? Visibility.Collapsed : Visibility.Visible;
-            CloseButton.Visibility = SettingsManager.Current.DesktopLyricsClickThrough ? Visibility.Collapsed : Visibility.Visible;
+            UpdateControlVisibility(pointerInside: true);
         });
     }
 
@@ -194,13 +204,56 @@ public partial class LyricsWindow : Window
             1 => (Surface: "#F2F7FC", Border: "#5590A4B8", Title: "#17212B", Artist: "#882C3E50", Current: "#17212B", Next: "#8832475A", Divider: "#334A6278"),
             2 => (Surface: "#E9141024", Border: "#887E5CFF", Title: "#FFFFFFFF", Artist: "#B8E7DEFF", Current: "#FFFFD166", Next: "#A8FFFFFF", Divider: "#557E5CFF"),
             3 => (Surface: "#E9000000", Border: "#66FFFFFF", Title: "#FFFFFFFF", Artist: "#99999999", Current: "#FFFFFFFF", Next: "#77777777", Divider: "#33333333"),
+            4 => (Surface: "#E70D2A3A", Border: "#6672D4F2", Title: "#FFE9FBFF", Artist: "#A8BDECF8", Current: "#FF8DEBFF", Next: "#A8E1F7FF", Divider: "#556CCCEB"),
+            5 => (Surface: "#E73A1B10", Border: "#66FFB15C", Title: "#FFFFF1DD", Artist: "#A8FFD3A0", Current: "#FFFFB35A", Next: "#A8FFE1BF", Divider: "#55FF9A4D"),
+            6 => (Surface: "#E7102A20", Border: "#6687D98B", Title: "#FFE9F8E8", Artist: "#A8B7E7BC", Current: "#FF8EE7A1", Next: "#A8D4F3D7", Divider: "#5585D694"),
+            7 => (Surface: "#E7351930", Border: "#66FF9DCB", Title: "#FFFFEAF5", Artist: "#A8FFBFDD", Current: "#FFFF9ACC", Next: "#A8FFD5E9", Divider: "#55FF8ABD"),
             _ => (Surface: "#E91B1B1B", Border: "#55FFFFFF", Title: "#FFFFFFFF", Artist: "#B8FFFFFF", Current: "#FFFFFFFF", Next: "#99FFFFFF", Divider: "#44FFFFFF")
         };
-        LyricsSurface.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Surface));
-        LyricsSurface.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Border));
+        var transparent = SettingsManager.Current.DesktopLyricsTransparentBackground;
+        LyricsSurface.Background = transparent ? Brushes.Transparent : new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Surface));
+        LyricsSurface.BorderBrush = transparent ? Brushes.Transparent : new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Border));
+        LyricsSurface.BorderThickness = transparent ? new Thickness(0) : new Thickness(1);
+        UpdateControlVisibility(pointerInside: false);
         SongTitleText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Title));
         SongArtistText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Artist));
         CurrentLineText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Current));
         NextLineText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Next));
+        LyricsDivider.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Divider));
+    }
+
+    private void UpdateControlVisibility(bool pointerInside)
+    {
+        var clickThrough = SettingsManager.Current.DesktopLyricsClickThrough;
+        var transparent = SettingsManager.Current.DesktopLyricsTransparentBackground;
+        var showWindowControls = !clickThrough && (pointerInside || transparent);
+
+        LockButton.Visibility = showWindowControls ? Visibility.Visible : Visibility.Collapsed;
+        CloseButton.Visibility = showWindowControls ? Visibility.Visible : Visibility.Collapsed;
+        DragHandleButton.Visibility = !clickThrough && transparent ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void ApplyLayout(int layout)
+    {
+        var stacked = layout == 1;
+        LyricsLinesGrid.RowDefinitions[1].Height = stacked ? new GridLength(8) : new GridLength(0);
+        LyricsLinesGrid.ColumnDefinitions[1].Width = stacked ? new GridLength(0) : new GridLength(18);
+
+        Grid.SetRow(CurrentLineText, stacked ? 0 : 0);
+        Grid.SetColumn(CurrentLineText, 0);
+        Grid.SetRowSpan(CurrentLineText, stacked ? 1 : 3);
+        Grid.SetColumnSpan(CurrentLineText, stacked ? 3 : 1);
+
+        Grid.SetRow(NextLineText, stacked ? 2 : 0);
+        Grid.SetColumn(NextLineText, stacked ? 0 : 2);
+        Grid.SetRowSpan(NextLineText, stacked ? 1 : 3);
+        Grid.SetColumnSpan(NextLineText, stacked ? 3 : 1);
+
+        Grid.SetRow(LyricsDivider, stacked ? 1 : 0);
+        Grid.SetColumn(LyricsDivider, stacked ? 0 : 1);
+        Grid.SetRowSpan(LyricsDivider, stacked ? 1 : 3);
+        Grid.SetColumnSpan(LyricsDivider, stacked ? 3 : 1);
+        LyricsDivider.Width = stacked ? double.NaN : 1;
+        LyricsDivider.Height = stacked ? 1 : double.NaN;
     }
 }

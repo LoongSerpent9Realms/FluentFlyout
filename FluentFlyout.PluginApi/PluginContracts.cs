@@ -25,4 +25,12 @@ public interface IPluginContext
 
 public sealed record PluginPage(string Id, string Title, Func<FrameworkElement> CreateView);
 public sealed record PluginTrayItem(string Id, string Header, Func<Task> Activate, string? ToolTip = null);
-public sealed record PluginMediaEvent(string Kind, string? AppUserModelId = null, string? Title = null, string? Artist = null);
+public sealed record PluginMediaEvent(
+    string Kind,
+    string? AppUserModelId = null,
+    string? Title = null,
+    string? Artist = null,
+    string? LyricsText = null,
+    string? LyricsFormat = null,
+    long? PositionMs = null,
+    long? DurationMs = null);

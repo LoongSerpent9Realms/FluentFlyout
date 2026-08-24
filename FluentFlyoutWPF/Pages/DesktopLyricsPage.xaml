@@ -9,7 +9,7 @@
       d:DataContext="{d:DesignInstance viewModels:UserSettings}">
     <StackPanel MaxWidth="1000" Margin="16">
         <TextBlock Text="桌面歌词" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20" />
-        <TextBlock Text="独立的双栏歌词窗口，可手动打开，也可在全屏应用时自动显示。" Opacity="0.65" Margin="0,0,0,18" TextWrapping="Wrap" />
+        <TextBlock Text="独立歌词窗口，可手动打开，也可在全屏应用时自动显示。" Opacity="0.65" Margin="0,0,0,18" TextWrapping="Wrap" />
         <ui:Button Content="立即打开桌面歌词" Appearance="Primary" HorizontalAlignment="Left" Padding="18,8" Margin="0,0,0,16" Click="OpenLyrics_Click" />
         <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon TextBulletListSquare24}" Margin="0,0,0,3">
             <ui:CardControl.Header><StackPanel><TextBlock Text="启用桌面歌词" FontSize="14" /><TextBlock Text="允许通过媒体栏歌词按钮手动打开窗口。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
@@ -19,9 +19,20 @@
             <ui:CardControl.Header><StackPanel><TextBlock Text="全屏时自动显示" FontSize="14" /><TextBlock Text="检测到独占全屏应用时自动打开，退出全屏后自动关闭。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
             <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsAutoShow, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" />
         </ui:CardControl>
-        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon CursorClick24}" Margin="0,0,0,12">
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon CursorClick24}" Margin="0,0,0,3">
             <ui:CardControl.Header><StackPanel><TextBlock Text="鼠标穿透" FontSize="14" /><TextBlock Text="歌词窗口不拦截底层应用的鼠标操作。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
             <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsClickThrough, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" />
+        </ui:CardControl>
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon SquareMultiple24}" Margin="0,0,0,3">
+            <ui:CardControl.Header><StackPanel><TextBlock Text="透明背景" FontSize="14" /><TextBlock Text="仅显示歌词文字，隐藏窗口底板和边框。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding DesktopLyricsTransparentBackground, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" />
+        </ui:CardControl>
+        <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon TextAlignJustify24}" Margin="0,0,0,12">
+            <ui:CardControl.Header><StackPanel><TextBlock Text="歌词排版" FontSize="14" /><TextBlock Text="选择当前歌词与下一句的显示方向。" FontSize="12" Opacity="0.5" /></StackPanel></ui:CardControl.Header>
+            <ComboBox SelectedIndex="{Binding DesktopLyricsLayout, Mode=TwoWay}" IsEnabled="{Binding DesktopLyricsEnabled}" Width="180">
+                <ComboBoxItem Content="左右歌词" />
+                <ComboBoxItem Content="上下歌词" />
+            </ComboBox>
         </ui:CardControl>
         <ui:CardControl Tag="Indexable" Icon="{ui:SymbolIcon ColorBackground24}" Margin="0,0,0,3">
             <ui:CardControl.Header>
@@ -32,6 +43,10 @@
                 <ComboBoxItem Content="浅色纸张" />
                 <ComboBoxItem Content="霓虹夜色" />
                 <ComboBoxItem Content="极简黑白" />
+                <ComboBoxItem Content="海盐蓝" />
+                <ComboBoxItem Content="日落暖橙" />
+                <ComboBoxItem Content="森林绿" />
+                <ComboBoxItem Content="樱花粉" />
             </ComboBox>
         </ui:CardControl>
     </StackPanel>

@@ -502,6 +502,14 @@ public partial class UserSettings : ObservableObject
     [ObservableProperty]
     public partial int DesktopLyricsTheme { get; set; }
 
+    /// <summary>Whether the desktop lyric surface has no visible background.</summary>
+    [ObservableProperty]
+    public partial bool DesktopLyricsTransparentBackground { get; set; }
+
+    /// <summary>Desktop lyrics layout. 0 is side-by-side and 1 is stacked.</summary>
+    [ObservableProperty]
+    public partial int DesktopLyricsLayout { get; set; }
+
     /// <summary>Base URL used for lyric search and lyric retrieval.</summary>
     [ObservableProperty]
     public partial string LyricsApiBaseUrl { get; set; }
@@ -801,6 +809,8 @@ public partial class UserSettings : ObservableObject
         DesktopLyricsAutoShow = false;
         DesktopLyricsClickThrough = false;
         DesktopLyricsTheme = 0;
+        DesktopLyricsTransparentBackground = false;
+        DesktopLyricsLayout = 0;
         LyricsApiBaseUrl = "https://music.loongst.com/";
         TaskbarVisualizerEnabled = false;
         AppFilteringEnabled = false;

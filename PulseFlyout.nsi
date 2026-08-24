@@ -1,16 +1,16 @@
 Unicode true
 Name "PulseFlyout"
-OutFile "installer\PulseFlyout-2.14.0-Setup.exe"
+OutFile "installer\PulseFlyout-2.15.0-Setup.exe"
 InstallDir "$PROGRAMFILES64\PulseFlyout"
 InstallDirRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "InstallLocation"
 RequestExecutionLevel admin
 SetCompressor /SOLID lzma
 Icon "FluentFlyoutWPF\Resources\FluentFlyout2.ico"
-VIProductVersion "2.14.0.0"
+VIProductVersion "2.15.0.0"
 VIAddVersionKey /LANG=1033 "ProductName" "PulseFlyout"
 VIAddVersionKey /LANG=1033 "CompanyName" "PulseFlyout Contributors"
 VIAddVersionKey /LANG=1033 "FileDescription" "PulseFlyout installer"
-VIAddVersionKey /LANG=1033 "FileVersion" "2.14.0"
+VIAddVersionKey /LANG=1033 "FileVersion" "2.15.0"
 
 Page directory
 Page instfiles
@@ -26,7 +26,7 @@ Section "PulseFlyout" SecMain
   CreateShortcut "$DESKTOP\PulseFlyout.lnk" "$INSTDIR\FluentFlyout.exe" "" "$INSTDIR\Resources\PulseFlyout.ico"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "DisplayName" "PulseFlyout"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "DisplayVersion" "2.14.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "DisplayVersion" "2.15.0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "Publisher" "PulseFlyout Contributors"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\PulseFlyout" "UninstallString" '"$INSTDIR\Uninstall.exe"'

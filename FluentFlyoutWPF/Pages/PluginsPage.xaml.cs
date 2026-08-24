@@ -9,6 +9,8 @@ namespace FluentFlyoutWPF.Pages;
 
 public partial class PluginsPage : System.Windows.Controls.Page
 {
+    private const string RestartMarker = "--plugin-files-restart";
+
     public PluginsPage()
     {
         InitializeComponent();
@@ -16,6 +18,71 @@ public partial class PluginsPage : System.Windows.Controls.Page
         var plugins = PluginManager.Current.LoadedPlugins;
         PluginList.ItemsSource = plugins;
         EmptyText.Visibility = plugins.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+        CheckPluginFiles(false);
+    }
+
+    private void CheckFoliaMajor_Click(object sender, RoutedEventArgs e) => CheckPluginFiles(true);
+
+    private void CheckPluginFiles(bool autoRestart)
+    {
+        var root = PluginManager.Current.PluginDirectory;
+        if (!Directory.Exists(root))
+        {
+            PluginStatusText.Text = "插件目录不存在，尚未检测到插件。";
+            return;
+        }
+
+        var complete = new List<string>();
+        var incomplete = new List<string>();
+        foreach (var directory in Directory.EnumerateDirectories(root))
+        {
+            var manifestPath = Path.Combine(directory, "plugin.json");
+            if (!File.Exists(manifestPath)) continue;
+            try
+            {
+                var manifest = System.Text.Json.JsonSerializer.Deserialize<FluentFlyout.PluginApi.PluginManifest>(File.ReadAllText(manifestPath));
+                if (manifest is null || string.IsNullOrWhiteSpace(manifest.Id) || string.IsNullOrWhiteSpace(manifest.EntryAssembly))
+                {
+                    incomplete.Add(Path.GetFileName(directory));
+                    continue;
+                }
+                var assemblyPath = Path.Combine(directory, manifest.EntryAssembly);
+                if (File.Exists(assemblyPath)) complete.Add(manifest.Id);
+                else incomplete.Add($"{manifest.Id}（缺少 {manifest.EntryAssembly}）");
+            }
+            catch { incomplete.Add(Path.GetFileName(directory) + "（plugin.json 无法读取）"); }
+        }
+
+        var loadedIds = PluginManager.Current.LoadedPlugins.Select(plugin => plugin.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var pending = complete.Where(id => !loadedIds.Contains(id)).ToList();
+        var details = new List<string>();
+        if (complete.Count > 0) details.Add($"完整 {complete.Count} 个");
+        if (incomplete.Count > 0) details.Add($"不完整 {incomplete.Count} 个：{string.Join("、", incomplete)}");
+        PluginStatusText.Text = details.Count == 0
+            ? "未检测到带 plugin.json 的插件目录。"
+            : string.Join("；", details) + (pending.Count > 0 ? $"。待加载：{string.Join("、", pending)}" : "。全部完整插件均已加载。");
+
+        if (autoRestart && pending.Count > 0 && !Environment.GetCommandLineArgs().Contains(RestartMarker, StringComparer.OrdinalIgnoreCase))
+            RestartPulseFlyout(true);
+    }
+
+    private void RestartPulseFlyout_Click(object sender, RoutedEventArgs e)
+        => RestartPulseFlyout(false);
+
+    private void RestartPulseFlyout(bool automatic)
+    {
+        try
+        {
+            var executable = Process.GetCurrentProcess().MainModule?.FileName;
+            if (string.IsNullOrWhiteSpace(executable)) return;
+            var args = string.Join(" ", Environment.GetCommandLineArgs().Skip(1).Append(automatic ? RestartMarker : string.Empty).Where(value => !string.IsNullOrWhiteSpace(value)));
+            Process.Start(new ProcessStartInfo(executable, args) { UseShellExecute = true });
+            Application.Current.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"重启 PulseFlyout 失败：{ex.Message}", "重启失败", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void OpenPluginDirectory_Click(object sender, RoutedEventArgs e)

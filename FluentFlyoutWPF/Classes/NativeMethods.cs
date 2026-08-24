@@ -345,6 +345,7 @@ public static partial class NativeMethods
 
     [LibraryImport("user32.dll")]
     internal static partial short GetAsyncKeyState(int vKey);
+
     #endregion
 
     #region gdi32.dll
